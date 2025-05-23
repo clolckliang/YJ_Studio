@@ -47,3 +47,217 @@
 2025-05-23 20:50:36,725-INFO-logger-log_info-应用程序正在关闭。
 2025-05-23 20:50:36,737-INFO-logger-log_info-配置已保存。
 2025-05-23 20:50:36,737-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 21:10:48,670-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 21:10:48,670-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 21:10:48,680-INFO-logger-log_info-应用程序启动。
+2025-05-23 21:11:49,454-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 21:11:49,457-INFO-logger-log_info-配置已保存。
+2025-05-23 21:11:49,457-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 21:51:45,691-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 21:51:45,692-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 21:51:45,705-INFO-logger-log_info-应用程序启动。
+2025-05-23 21:53:18,893-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 21:53:18,894-INFO-logger-log_info-添加接收容器 1
+2025-05-23 21:53:19,557-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 21:53:19,557-INFO-logger-log_info-添加接收容器 2
+2025-05-23 21:53:20,256-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 21:53:20,256-INFO-logger-log_info-添加接收容器 3
+2025-05-23 21:54:07,305-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 21:54:07,305-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 21:54:07,305-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 21:54:07,310-INFO-logger-log_info-添加新波形图: ID=2, Name='jb226'
+2025-05-23 21:54:18,769-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 21:54:20,317-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 21:54:33,066-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 21:57:40,435-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 21:57:40,447-INFO-logger-log_info-配置已保存。
+2025-05-23 21:57:40,447-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 22:04:51,713-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:04:51,717-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:04:51,717-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:04:51,721-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:04:51,725-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:04:51,726-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:04:51,726-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:04:51,726-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:04:51,726-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:04:51,726-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:04:51,736-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:04:51,736-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:04:51,737-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:04:51,737-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:04:51,737-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:13:24,196-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 22:13:24,200-INFO-logger-log_info-配置已保存。
+2025-05-23 22:13:24,200-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 22:24:03,654-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:24:03,659-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:03,659-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:03,662-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:24:03,666-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:24:03,666-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:03,666-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:03,666-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:24:03,666-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:24:03,666-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:24:03,679-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:03,679-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:03,679-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:24:03,679-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:24:03,679-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:24:09,921-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:15,113-INFO-logger-log_info-所有波形图已清空。
+2025-05-23 22:24:19,592-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:38,098-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:38,098-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:38,098-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:24:38,099-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:24:38,103-INFO-logger-log_info-添加新波形图: ID=3, Name='波形图 3'
+2025-05-23 22:24:40,973-INFO-logger-log_info-接收容器 1 目标波形图更改为 3
+2025-05-23 22:24:44,711-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:24:44,711-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:24:44,711-INFO-logger-log_info-接收容器 3 目标波形图更改为 1
+2025-05-23 22:24:44,712-INFO-logger-log_info-Permanently removed plot widget ID: 3, Name: '波形图 3'
+2025-05-23 22:24:47,704-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:24:52,739-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 22:24:52,752-INFO-logger-log_info-配置已保存。
+2025-05-23 22:24:52,752-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 22:25:20,392-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 22:25:20,407-INFO-logger-log_info-主题已应用: light
+2025-05-23 22:25:20,407-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:25:20,417-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:25:30,043-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:26:40,547-INFO-logger-log_info-添加发送容器 1
+2025-05-23 22:26:43,005-INFO-logger-log_info-移除发送容器 1
+2025-05-23 22:26:59,884-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:26:59,884-INFO-logger-log_info-添加接收容器 1
+2025-05-23 22:27:01,508-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:27:01,508-INFO-logger-log_info-添加接收容器 2
+2025-05-23 22:27:11,816-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:27:11,817-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:27:11,821-INFO-logger-log_info-添加新波形图: ID=2, Name='15666'
+2025-05-23 22:27:17,057-INFO-logger-log_info-接收容器 1 目标波形图更改为 2
+2025-05-23 22:27:21,905-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:27:21,905-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:27:21,905-INFO-logger-log_info-Permanently removed plot widget ID: 2, Name: '15666'
+2025-05-23 22:37:52,711-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 22:37:52,712-INFO-logger-log_info-配置已保存。
+2025-05-23 22:37:52,713-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 22:44:32,158-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:44:32,205-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:44:32,205-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:44:32,246-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:44:32,246-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '默认解析面板 (旧)'
+2025-05-23 22:44:32,253-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:44:32,258-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:44:32,268-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:44:32,269-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:44:32,269-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:44:32,270-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:44:32,270-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:44:32,270-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:44:32,283-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:44:32,283-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:44:32,283-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:45:14,081-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:45:14,103-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:45:14,103-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:45:14,136-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:45:14,136-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '默认解析面板 (旧)'
+2025-05-23 22:45:14,142-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:45:14,145-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:45:14,156-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:45:14,156-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:45:14,157-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:45:14,157-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:45:14,157-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:45:14,157-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:45:14,167-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:45:14,168-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:45:14,168-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:47:20,999-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:47:21,186-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:47:21,187-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:47:21,267-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:47:21,267-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '默认解析面板 (旧)'
+2025-05-23 22:47:21,281-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:47:21,288-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:47:21,316-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:47:21,316-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:47:21,319-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:47:21,319-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:47:21,320-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:47:21,320-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:47:21,337-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 22:47:21,338-INFO-logger-log_info-接收容器 2 目标波形图更改为 1
+2025-05-23 22:47:21,338-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:48:12,926-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:48:12,947-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 22:48:12,963-INFO-logger-log_info-主题已应用: light
+2025-05-23 22:48:12,963-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '默认解析面板 (旧)'
+2025-05-23 22:48:12,970-INFO-logger-log_info-Added Parse Panel: ID=1, Name='默认解析面板 (旧)'
+2025-05-23 22:48:12,970-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:48:12,980-INFO-logger-log_info-应用程序启动。
+2025-05-23 22:48:24,654-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '默认解析面板 (旧)'
+2025-05-23 22:48:40,891-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:48:53,228-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2'
+2025-05-23 22:49:06,083-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 22:49:06,086-INFO-logger-log_info-配置已保存。
+2025-05-23 22:49:06,086-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 22:52:06,713-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 2'
+2025-05-23 22:52:06,762-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 22:52:06,762-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 2'
+2025-05-23 22:52:06,771-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 2'
+2025-05-23 22:52:06,771-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 22:52:06,783-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:03:34,745-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 23:03:34,747-INFO-logger-log_info-配置已保存。
+2025-05-23 23:03:34,747-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 23:10:50,459-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:10:50,483-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 23:10:50,498-INFO-logger-log_info-主题已应用: light
+2025-05-23 23:10:50,498-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:10:50,501-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:10:50,501-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 23:10:50,512-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:11:07,444-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 23:13:04,833-INFO-logger-log_info-Send Panel 1: Added send data container 1
+2025-05-23 23:13:05,306-INFO-logger-log_info-Send Panel 1: Added send data container 2
+2025-05-23 23:13:05,791-INFO-logger-log_info-Send Panel 1: Added send data container 3
+2025-05-23 23:13:48,576-INFO-logger-log_info-Permanently removed plot widget ID: 1, Name: '主波形图'
+2025-05-23 23:14:01,496-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:14:03,201-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 23:14:03,214-INFO-logger-log_info-配置已保存。
+2025-05-23 23:14:03,214-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 23:24:45,190-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:24:45,195-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:24:45,242-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 23:24:45,277-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 23:24:45,277-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:24:45,283-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:24:45,283-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:24:45,287-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:24:45,287-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 23:24:45,300-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:25:16,508-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:25:16,511-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:25:16,530-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 23:25:16,545-INFO-logger-log_info-主题已应用: light
+2025-05-23 23:25:16,545-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:25:16,551-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:25:16,551-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:25:16,554-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:25:16,554-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 23:25:16,564-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:25:24,781-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-23 23:25:42,356-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 23:26:04,735-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:26:19,091-INFO-logger-log_info-Permanently removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-23 23:26:23,743-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:26:34,265-INFO-logger-log_info-Added Parse Panel: ID=3, Name='解析面板 3 (ID: C3)'
+2025-05-23 23:26:45,307-INFO-logger-log_info-接收容器 1 目标波形图更改为 1
+2025-05-23 23:26:45,307-INFO-logger-log_info-Parse Panel 3: Added receive container 1
+2025-05-23 23:32:12,336-INFO-logger-log_info-Permanently removed parse panel ID: 3, Name: '解析面板 3 (ID: C3)'
+2025-05-23 23:33:00,180-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 23:33:00,183-INFO-logger-log_info-配置已保存。
+2025-05-23 23:33:00,183-INFO-logger-log_info-配置已在退出时自动保存。

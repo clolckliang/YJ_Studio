@@ -1,0 +1,49 @@
+2025-05-23 12:38:30,916-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 12:38:30,934-INFO-logger-log_info-主题已应用: light
+2025-05-23 12:38:30,934-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 12:38:30,957-INFO-logger-log_info-应用程序启动。
+2025-05-23 12:39:04,365-INFO-logger-log_info-主题已应用: dark
+2025-05-23 12:39:24,737-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 12:39:24,749-INFO-logger-log_info-配置已保存。
+2025-05-23 12:39:24,749-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 12:59:41,669-INFO-logger-log_info-主题已应用: dark
+2025-05-23 12:59:41,669-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 12:59:41,678-INFO-logger-log_info-应用程序启动。
+2025-05-23 12:59:57,879-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 12:59:57,881-INFO-logger-log_info-配置已保存。
+2025-05-23 12:59:57,881-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 13:00:40,808-INFO-logger-log_info-主题已应用: dark
+2025-05-23 13:00:40,809-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 13:00:40,817-INFO-logger-log_info-应用程序启动。
+2025-05-23 13:00:52,904-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 13:01:24,599-INFO-logger-log_info-主题已应用: custom_image_theme
+2025-05-23 13:01:50,681-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 13:03:32,491-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 13:03:32,492-INFO-logger-log_info-配置已保存。
+2025-05-23 13:03:32,492-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 13:03:43,108-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 13:03:43,108-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 13:03:43,118-INFO-logger-log_info-应用程序启动。
+2025-05-23 13:03:52,920-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 13:03:52,921-INFO-logger-log_info-配置已保存。
+2025-05-23 13:03:52,921-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 19:48:40,381-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 19:48:40,381-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 19:48:40,391-INFO-logger-log_info-应用程序启动。
+2025-05-23 19:49:21,634-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 19:49:21,637-INFO-logger-log_info-配置已保存。
+2025-05-23 19:49:21,637-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 20:07:12,151-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 20:07:12,152-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 20:07:12,162-INFO-logger-log_info-应用程序启动。
+2025-05-23 20:07:44,597-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 20:07:44,599-INFO-logger-log_info-配置已保存。
+2025-05-23 20:07:44,599-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 20:49:43,753-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 20:49:43,753-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 20:49:43,765-INFO-logger-log_info-应用程序启动。
+2025-05-23 20:50:24,028-INFO-logger-log_info-开始原始数据录制。
+2025-05-23 20:50:27,338-INFO-logger-log_info-停止原始数据录制。
+2025-05-23 20:50:36,725-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 20:50:36,737-INFO-logger-log_info-配置已保存。
+2025-05-23 20:50:36,737-INFO-logger-log_info-配置已在退出时自动保存。

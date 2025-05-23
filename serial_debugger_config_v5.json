@@ -1,0 +1,33 @@
+{
+  "serial_port": {
+    "port_name": "COM28",
+    "baud_rate": 115200,
+    "data_bits": 8,
+    "parity": "None",
+    "stop_bits": 1
+  },
+  "frame_definition": {
+    "head": "AB",
+    "s_addr": "01",
+    "d_addr": "02",
+    "func_id": "C1"
+  },
+  "ui_theme_info": {
+    "type": "external",
+    "name": "my_custom_style.qss",
+    "path": "E:/MY_projects/YJ_toolV4/my_custom_style.qss"
+  },
+  "receive_containers": [],
+  "send_containers": [],
+  "parse_func_id": "C1",
+  "data_mapping_mode": "顺序填充 (Sequential)",
+  "window_geometry": "AdnQywADAAAAAAAA////+QAAA5IAAAQUAAACMQAAABYAAAXDAAAEAQAAAAACAAAABqsAAAAAAAAAFwAAA5IAAAQU",
+  "window_state": "AAAA/wAAAAD9AAAAAwAAAAAAAAHIAAACpvwCAAAAAvsAAAAYAFMAZQBuAGQARABhAHQAYQBEAG8AYwBrAQAAACEAAADFAAAAxQD////7AAAAIABTAGUAcgBpAGEAbABDAG8AbgBmAGkAZwBEAG8AYwBrAQAAAOoAAAHdAAAB4QD///8AAAABAAABxwAAAqb8AgAAAAL7AAAAHgBSAGUAYwBlAGkAdgBlAEQAYQB0AGEARABvAGMAawEAAAAhAAABVAAAANwA////+wAAABQAUABsAG8AdABEAG8AYwBrAF8AMQEAAAF5AAABTgAAAE0A////AAAAAwAAA5MAAAEe/AEAAAAB/AAAAAAAAAOTAAABGwD////6AAAAAQEAAAAC+wAAACoAQwB1AHMAdABvAG0AUAByAG8AdABvAGMAbwBsAEwAbwBnAEQAbwBjAGsBAAAAAP////8AAAEbAP////sAAAAeAEIAYQBzAGkAYwBTAGUAcgBpAGEAbABEAG8AYwBrAQAAAAD/////AAABGwD///8AAAAAAAACpwAAAAQAAAAEAAAACAAAAAj8AAAAAA==",
+  "plot_configs": [
+    {
+      "id": 1,
+      "name": "主波形图"
+    }
+  ],
+  "checksum_mode": "CRC16_CCITT_FALSE"
+}

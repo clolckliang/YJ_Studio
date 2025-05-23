@@ -1,0 +1,171 @@
+/*
+ * external_background_theme.qss
+ *
+ * 这是一个用于加载外部图片作为主窗口背景的QSS样式文件。
+ * 请将 'url("path/to/your/image.png")' 替换为你的实际图片路径。
+ *
+ * 图片路径可以是：
+ * 1. 相对于QSS文件本身的路径（例如：如果图片和QSS在同一目录，则为 'image.png'）
+ * 2. 相对于应用程序启动目录的路径（例如：如果图片在应用程序目录的 'images' 子文件夹中，则为 'images/background.jpg'）
+ * 3. Qt资源系统路径（如果图片已编译到资源文件中，例如 ':/images/my_background.png'）
+ *
+ * 提示：
+ * - 调整 rgba() 中的最后一个值（alpha通道，0.0-1.0）来控制控件的透明度。
+ * - 根据你的背景图片调整文本颜色（color），以确保可读性。
+ */
+
+QMainWindow {
+    /* 主窗口背景图片设置 */
+    background-image: url("./image.png"); /* <<<<<<< 在这里修改为你的图片路径！ */
+    background-repeat: no-repeat;  /* 图片不重复平铺 */
+    background-position: center;   /* 图片居中显示 */
+    background-size: 100% 100%;        /* 调整图片大小以覆盖整个窗口，可能会裁剪图片 */
+    /*
+     * 也可以尝试其他 background-size 值：
+     * background-size: contain;   // 调整图片大小以完全包含在窗口内，可能会留白
+     * background-size: 100% 100%; // 横向和纵向都拉伸到100%，可能会导致图片变形
+     * background-size: auto;      // 保持图片原始大小
+     */
+    background-attachment: fixed;  /* 图片固定，不随内容滚动 */
+}
+
+/* --- 通用控件样式 (半透明以显示背景) --- */
+
+/* 默认所有QWidget都带有一些半透明背景和白色文本 */
+QWidget {
+    background-color: rgba(43, 43, 43, 0.3); /* 深色半透明背景 */
+    color: #ffffff; /* 白色文本 */
+}
+
+/* 带有边框的GroupBox，标题颜色为亮色 */
+QGroupBox {
+    border: 1px solid rgba(85, 85, 85, 0.3); /* 半透明边框 */
+    margin-top: 0.5em;
+    background-color: rgba(50, 50, 50, 0.5); /* 稍微深一点的半透明 */
+    border-radius: 5px; /* 圆角边框 */
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+    color: #64ffda; /* 亮青色标题 */
+}
+
+/* 输入框、文本编辑框、下拉框（背景更亮一些的半透明） */
+QLineEdit, QTextEdit, QComboBox, QPlainTextEdit {
+    background-color: rgba(60, 63, 65, 0.3); /* 稍亮的半透明背景 */
+    color: #bbbbbb; /* 浅灰色文本 */
+    border: 1px solid rgba(85, 85, 85, 0.3); /* 边框颜色 */
+    border-radius: 3px;
+    padding: 2px;
+}
+QComboBox::drop-down {
+    border: none;
+}
+QComboBox::down-arrow {
+    image: url(":/icons/arrow_down.png"); /* 如果有自定义图标可以放这里 */
+    width: 12px;
+    height: 12px;
+}
+
+/* 按钮样式 */
+QPushButton {
+    background-color: rgba(31, 64, 104, 0.5); /* 蓝色调半透明 */
+    border: 1px solid rgba(40, 80, 130, 0.5);
+    padding: 6px 12px;
+    color: #ffffff;
+    border-radius: 4px;
+}
+QPushButton:hover {
+    background-color: rgba(42, 74, 122, 0.5); /* 悬停效果 */
+}
+QPushButton:pressed {
+    background-color: rgba(25, 50, 80, 0.5); /* 按下效果 */
+}
+
+/* 菜单栏和状态栏 */
+QMenuBar {
+    background-color: rgba(23, 42, 65, 0.5);
+    color: #ccd6f6;
+    border-bottom: 1px solid rgba(50, 50, 50, 0.5);
+}
+QMenuBar::item:selected {
+    background-color: rgba(35, 55, 80, 0.5);
+}
+QMenu {
+    background-color: rgba(23, 42, 65, 0.5); /* 弹出菜单背景 */
+    border: 1px solid rgba(50, 50, 50, 0.5);
+    color: #ccd6f6;
+}
+QMenu::item:selected {
+    background-color: rgba(35, 55, 80, 0.65);
+}
+
+QStatusBar {
+    background-color: rgba(23, 42, 65, 0.8);
+    color: #ccd6f6;
+    border-top: 1px solid rgba(50, 50, 50, 0.7);
+}
+QStatusBar::item {
+    border: none;
+}
+
+/* DockWidget 标题栏 */
+QDockWidget::title {
+    background-color: rgba(31, 64, 104, 0.7); /* 与按钮相似的蓝色调 */
+    padding: 4px;
+    color: white;
+    border-bottom: 1px solid rgba(40, 80, 130, 0.5);
+}
+QDockWidget {
+    border: 1px solid rgba(50, 50, 50, 0.7);
+}
+
+/* TabWidget 面板和标签页 */
+QTabWidget::pane {
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    background-color: rgba(43, 43, 43, 0.3); /* 内容区半透明 */
+}
+QTabBar::tab {
+    background-color: rgba(60, 63, 65, 0.3);
+    padding: 6px 12px;
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: #ccd6f6;
+}
+QTabBar::tab:selected {
+    background-color: rgba(43, 43, 43, 0.3); /* 选中标签页更透明，接近内容区背景 */
+    border-color: rgba(80, 80, 80, 0.3);
+    border-bottom-color: rgba(43, 43, 43, 0.3); /* 匹配内容区背景，看起来无边框 */
+}
+QTabBar::tab:hover {
+    background-color: rgba(70, 73, 75, 0.3);
+}
+
+/* ScrollArea 背景，确保滚动区域内容也能透出背景 */
+QScrollArea > QWidget { /* 滚动区域内部的widget */
+    background-color: transparent; /* 或者 rgba(0,0,0,0) */
+}
+
+/* 其他可能需要调整的控件 */
+QCheckBox {
+    color: #ffffff;
+}
+QCheckBox::indicator {
+    width: 14px;
+    height: 14px;
+    /* 可以设置自定义的选中/未选中图片 */
+    /* image: url(./checkbox_unchecked.png); */
+}
+QCheckBox::indicator:checked {
+    /* image: url(./checkbox_checked.png); */
+}
+
+/* 针对 pyqtgraph PlotWidget 的一些调整，如果它也是QWidget */
+/* 注意：pyqtgraph 内部的绘制可能不会完全遵守QSS，这仅是外层容器 */
+PGPlotWidget {
+    background-color: rgba(0, 0, 0, 0.3); /* 波形图背景可以更透明 */
+    border-radius: 5px;
+}

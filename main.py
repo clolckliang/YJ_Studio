@@ -692,9 +692,12 @@ class SerialDebugger(QMainWindow):
             }, from_config=True, is_migration=True)
             migrated_old_parse = True
         elif parse_panel_configs:
-            for panel_cfg in parse_panel_configs: self.add_new_parse_panel_action(config=panel_cfg, from_config=True)
+            for panel_cfg in parse_panel_configs:
+                self.add_new_parse_panel_action(config=panel_cfg, from_config=True)
+
+        # 如果没有从配置加载或迁移解析面板，则创建一个默认的，并不再弹出对话框
         if not self.parse_panel_docks and not migrated_old_parse:
-            self.add_new_parse_panel_action(panel_name_suggestion="默认解析面板 1")
+            self.add_new_parse_panel_action(panel_name_suggestion="默认解析面板 1", from_config=True)
 
         send_panel_configs = self.current_config.get("send_panels", [])
         migrated_old_send = False
@@ -706,10 +709,14 @@ class SerialDebugger(QMainWindow):
             self.add_new_send_panel_action(config=migrated_send_panel_cfg, from_config=True, is_migration=True)
             migrated_old_send = True
         elif send_panel_configs:
-            for panel_cfg in send_panel_configs: self.add_new_send_panel_action(config=panel_cfg, from_config=True)
-        if not self.send_panel_docks and not migrated_old_send:
-            self.add_new_send_panel_action(panel_name_suggestion="默认发送面板 1")
+            for panel_cfg in send_panel_configs:
+                self.add_new_send_panel_action(config=panel_cfg, from_config=True)
 
+        # 如果没有从配置加载或迁移发送面板，则创建一个默认的，并不再弹出对话框
+        if not self.send_panel_docks and not migrated_old_send:
+            self.add_new_send_panel_action(panel_name_suggestion="默认发送面板 1", from_config=True)
+
+        # Tabify serial config with the first send panel dock if any send panel exists
         if self.dw_serial_config and self.send_panel_docks:
             first_send_dock_id = min(self.send_panel_docks.keys(), default=None)
             if first_send_dock_id is not None:
@@ -725,9 +732,12 @@ class SerialDebugger(QMainWindow):
                 except AttributeError as e:
                     self.error_logger.log_warning(f"无法标签页化停靠窗口 (串口/解析): {e}")
 
+        # Load/Create Plot Panels
         plot_configs = self.current_config.get("plot_configs", [])
         if not plot_configs and PYQTGRAPH_AVAILABLE:
-            self.add_new_plot_widget_action(name="主波形图", from_config=False)
+            # 对于默认创建的波形图，from_config 应该为 False，因为它通常需要用户命名
+            # 或者，如果也想禁止对话框，则也传递 from_config=True 并提供默认名
+            self.add_new_plot_widget_action(name="主波形图", from_config=False)  # 保持原样，让用户命名或按需修改
         elif plot_configs and PYQTGRAPH_AVAILABLE:
             for plot_cfg in plot_configs:
                 self.add_new_plot_widget_action(name=plot_cfg.get("name", f"波形图 {self._next_plot_id}"),
@@ -735,7 +745,6 @@ class SerialDebugger(QMainWindow):
 
         self.status_bar_label = QLabel("未连接")
         self.statusBar().addWidget(self.status_bar_label)
-
     def create_menus(self) -> None:
         file_menu = self.menuBar().addMenu("文件(&F)")
         load_config_action = QAction("加载配置...", self)

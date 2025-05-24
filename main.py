@@ -568,10 +568,8 @@ class BasicCommPanelWidget(QWidget):
 
     @Slot()
     def _on_send_clicked(self):
-        # 首先检查串口连接状态
-        if not self.main_window_ref.serial_manager.is_connected:
-            QMessageBox.warning(self.main_window_ref, "警告", "串口未打开，无法发送数据。")
-            return  # 如果未连接，则不执行后续操作
+        if not self.main_window_ref.serial_manager.is_connected: QMessageBox.warning(self.main_window_ref, "警告",
+                                                                                     "串口未打开。"); return
 
         # 如果串口已连接，再发射信号请求发送数据
         text_to_send = self.send_text_edit.text()
@@ -601,7 +599,7 @@ class SerialDebugger(QMainWindow):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
         self._setup_application_icon(self,"image.png")
-        self.setWindowTitle("YJ_tool (Modular Panels)")
+        self.setWindowTitle("big_DICK")
         self.active_checksum_mode = ChecksumMode.ORIGINAL_SUM_ADD
         self.app_instance = QApplication.instance()
         self.error_logger = ErrorLogger()
@@ -1431,15 +1429,15 @@ class SerialDebugger(QMainWindow):
         len_val = data_content_ba.size()  # Use .size() for QByteArray
         len_ba = QByteArray(struct.pack('<H', len_val))
         frame_part_for_checksum = QByteArray()
-        frame_part_for_checksum.append(head_ba);
-        frame_part_for_checksum.append(saddr_ba);
+        frame_part_for_checksum.append(head_ba)
+        frame_part_for_checksum.append(saddr_ba)
         frame_part_for_checksum.append(daddr_ba)
-        frame_part_for_checksum.append(id_ba);
-        frame_part_for_checksum.append(len_ba);
+        frame_part_for_checksum.append(id_ba)
+        frame_part_for_checksum.append(len_ba)
         frame_part_for_checksum.append(data_content_ba)
         checksum_bytes_to_append = QByteArray()
         active_mode = self.active_checksum_mode
-        sum_check_text = "";
+        sum_check_text = ""
         add_check_text = ""
         if active_mode == ChecksumMode.CRC16_CCITT_FALSE:
             crc_val = calculate_frame_crc16(frame_part_for_checksum)
@@ -1447,7 +1445,7 @@ class SerialDebugger(QMainWindow):
             sum_check_text = f"0x{crc_val:04X}"
         else:
             sc_val, ac_val = calculate_original_checksums_python(frame_part_for_checksum)
-            checksum_bytes_to_append.append(bytes([sc_val]));
+            checksum_bytes_to_append.append(bytes([sc_val]))
             checksum_bytes_to_append.append(bytes([ac_val]))
             sum_check_text = f"0x{sc_val:02X}";
             add_check_text = f"0x{ac_val:02X}"

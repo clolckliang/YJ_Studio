@@ -300,7 +300,7 @@ class DataProcessor(QThread):
 
     def run(self):
         self._running = True
-        self._stats['start_time'] = datetime.datetime.now()
+        self._stats['start_time'] = datetime.now()
         if hasattr(self, 'main_window_ref') and self.main_window_ref.error_logger:  # Check if logger accessible
             self.main_window_ref.error_logger.log_info("DataProcessor thread started.")
         else:
@@ -329,15 +329,7 @@ class DataProcessor(QThread):
                         func_id, data_payload = item_to_process
                         try:
                             # --- ACTUAL DATA PROCESSING LOGIC GOES HERE ---
-                            # This is where you'd put your computationally intensive task.
-                            # For this example, let's just log it and emit the original data.
-                            # You could, for example, perform complex calculations,
-                            # write to a database, make a network request (non-blocking if possible), etc.
-
-                            # Example: Simulate some work and create a "result"
-                            # QThread.msleep(5) # Simulate work
                             processed_result_payload = QByteArray(data_payload)  # Make a copy or transform
-                            # processed_result_payload.append(" [Processed]".encode())
 
                             self.processed_data_signal.emit(func_id, processed_result_payload)
                             self._stats['processed_count'] += 1
@@ -348,8 +340,7 @@ class DataProcessor(QThread):
                             self._stats['error_count'] += 1
 
                 if processed_in_this_cycle > 0:
-                    self._stats['last_activity'] = datetime.datetime.now()
-                    # Optionally emit stats less frequently
+                    self._stats['last_activity'] = datetime.now()
                     if self._stats['processed_count'] % 10 == 0:  # Emit stats every 10 items
                         self.processing_stats_signal.emit(self.get_stats())
 
@@ -383,7 +374,47 @@ class DataProcessor(QThread):
         # Don't call self.wait() from within the thread's own methods if called by main thread.
         # SerialDebugger will call self.wait() on the thread instance.
 
-# 脚本引擎相关异常类
+
+from datetime import datetime
+from typing import Optional, Any, List, Dict, Callable, Tuple
+from contextlib import contextmanager
+import struct
+import json
+import time
+import math
+import re
+import sys
+import traceback
+import threading
+import signal
+import ast  # For potential future advanced validation
+
+# Assuming PySide6 is available as per the original imports.
+# If not, QMutex might need a standard library alternative for broader use.
+try:
+    from PySide6.QtCore import QMutex
+except ImportError:
+    # Fallback if PySide6 is not available, for basic threading lock
+    class QMutex:
+        def __init__(self):
+            self._lock = threading.Lock()
+
+        def lock(self):
+            self._lock.acquire()
+
+        def unlock(self):
+            self._lock.release()
+
+        def tryLock(self, timeout: Optional[int] = None) -> bool:
+            if timeout is None:
+                return self._lock.acquire(blocking=False)
+            elif timeout == 0:  # Qt's tryLock with 0 timeout
+                return self._lock.acquire(blocking=False)
+            else:  # Qt's tryLock with timeout in ms
+                return self._lock.acquire(blocking=True, timeout=timeout / 1000.0)
+
+
+# --- Script Engine Related Exception Classes ---
 class ScriptExecutionTimeout(Exception):
     """脚本执行超时异常"""
     pass
@@ -394,371 +425,523 @@ class ScriptSecurityError(Exception):
     pass
 
 
+class ScriptExecutionError(Exception):
+    """脚本执行期间发生的一般错误"""
+    pass
+
+
+# --- Security and Environment Helpers ---
 class RestrictedImport:
     """受限制的导入处理器"""
-
     ALLOWED_MODULES = {
         'datetime', 'struct', 'json', 'time', 'math', 're',
         'random', 'itertools', 'collections', 'functools',
-        'decimal', 'fractions', 'statistics'
+        'decimal', 'fractions', 'statistics',
     }
 
-    def __init__(self, original_import):
-        self.original_import = original_import
+    def __init__(self, original_import_func: Callable):
+        self.original_import = original_import_func
 
-    def __call__(self, name, *args, **kwargs):
-        # 允许子模块导入
+    def __call__(self, name: str, globals_dict: Optional[Dict] = None, locals_dict: Optional[Dict] = None,
+                 fromlist: Tuple[str, ...] = (), level: int = 0):
         base_module = name.split('.')[0]
         if base_module not in self.ALLOWED_MODULES:
-            raise ScriptSecurityError(f"Import of module '{name}' is not allowed")
-        return self.original_import(name, *args, **kwargs)
+            raise ScriptSecurityError(f"Import of module '{name}' (base: '{base_module}') is not allowed.")
+        return self.original_import(name, globals_dict, locals_dict, fromlist, level)
 
 
 class SafeBuiltins:
     """提供安全的内置函数集合"""
-
-    SAFE_BUILTINS = {
-        'abs', 'all', 'any', 'bin', 'bool', 'chr', 'dict', 'dir', 'divmod',
-        'enumerate', 'filter', 'float', 'format', 'frozenset', 'getattr',
-        'hasattr', 'hash', 'hex', 'int', 'isinstance', 'issubclass', 'iter',
-        'len', 'list', 'map', 'max', 'min', 'oct', 'ord', 'pow', 'print',
-        'range', 'repr', 'reversed', 'round', 'set', 'sorted', 'str', 'sum',
-        'tuple', 'type', 'zip', 'vars'
+    SAFE_BUILTINS_NAMES = {
+        'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes', 'callable', 'chr',
+        'complex', 'dict', 'dir', 'divmod', 'enumerate', 'filter', 'float', 'format',
+        'frozenset', 'getattr', 'hasattr', 'hash', 'hex', 'id', 'int', 'isinstance',
+        'issubclass', 'iter', 'len', 'list', 'map', 'max', 'min', 'next', 'object',
+        'oct', 'ord', 'pow', 'print', 'range', 'repr', 'reversed', 'round', 'set',
+        'slice', 'sorted', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip',
     }
 
     @classmethod
-    def get_safe_builtins(cls):
-        """返回安全内置函数字典"""
+    def get_safe_builtins(cls) -> Dict[str, Callable]:
         import builtins
-        safe_builtins = {}
-        for name in cls.SAFE_BUILTINS:
+        safe_builtins_dict = {}
+        for name in cls.SAFE_BUILTINS_NAMES:
             if hasattr(builtins, name):
-                safe_builtins[name] = getattr(builtins, name)
-        return safe_builtins
+                safe_builtins_dict[name] = getattr(builtins, name)
+
+        if hasattr(builtins, '__import__'):
+            safe_builtins_dict['__import__'] = RestrictedImport(getattr(builtins, '__import__'))
+        else:
+            try:
+                original_import = __import__.__class__.__bases__[0].__import__  # type: ignore
+                safe_builtins_dict['__import__'] = RestrictedImport(original_import)
+            except Exception:
+                pass
+
+        return safe_builtins_dict
 
 
 class ScriptEngine:
-    """增强的脚本执行引擎"""
+    """
+    增强的脚本执行引擎，支持函数定义、调用、安全执行环境和与宿主应用的交互。
+    使用统一的 `execute` 方法。
+    """
 
-    def __init__(self, debugger_instance: Any, config: Optional[Dict] = None):
-        """
-        初始化脚本引擎
-        Args:
-            debugger_instance: 调试器实例
-            config: 配置字典
-        """
+    def __init__(self, debugger_instance: Optional[Any] = None, config: Optional[Dict] = None):
         self.debugger = debugger_instance
-        self.config = config if config is not None else {}  # 确保 config 是字典
+        self.config = config if config is not None else {}
 
-        # 执行设置
-        self.timeout = self.config.get('timeout', 30)
-        self.max_iterations = self.config.get('max_iterations', 1000000)  # 当前未直接使用，但可保留
-        self.enable_debugging = self.config.get('enable_debugging', True)
+        self.timeout: int = self.config.get('timeout', 30)  # seconds
+        self.max_total_output_length: int = self.config.get('max_output_length', 10000)
+        self.max_line_length: int = self.config.get('max_line_length', 1000)
+        self.max_history: int = self.config.get('max_history', 100)
 
-        # 输出限制 (这些是在我之前的建议中添加的，确保它们在这里)
-        self.max_total_output_length = self.config.get('max_output_length', 10000)  # 旧称 max_output_length
-        self.max_line_length = self.config.get('max_line_length', 1000)
+        self._script_output_buffer: List[str] = []
 
-        self._script_output_buffer: List[str] = []  # 新增：用于捕获脚本的print输出
-
-        # 可用模块 (与您提供的版本一致)
-        self.available_modules = {
-            'datetime': datetime,  # 确保 datetime 已导入
-            'struct': struct,  # 确保 struct 已导入
-            'json': json,  # 确保 json 已导入
-            'time': time,  # 确保 time 已导入
-            'math': math,  # 确保 math 已导入
-            're': re,  # 确保 re 已导入
+        self.available_modules: Dict[str, Any] = {
+            'datetime': datetime, 'struct': struct, 'json': json,
+            'time': time, 'math': math, 're': re,
         }
-        if 'additional_modules' in self.config:
-            self.available_modules.update(self.config['additional_modules'])
+        if 'initial_modules' in self.config and isinstance(self.config['initial_modules'], dict):
+            self.available_modules.update(self.config['initial_modules'])
 
-        # 执行历史 (与您提供的版本一致)
+        self.host_functions: Dict[str, Callable] = {}
+        if 'initial_host_functions' in self.config and isinstance(self.config['initial_host_functions'], dict):
+            self.host_functions.update(self.config['initial_host_functions'])
+
         self.execution_history: List[Dict] = []
-        self.max_history = self.config.get('max_history', 100)
+        self._execution_lock = QMutex()
 
-        # 线程安全 (与您提供的版本一致)
-        self._execution_lock = threading.Lock()  # 确保 threading 已导入
+        self.pre_execution_hooks: List[Callable[[str], None]] = []
+        self.post_execution_hooks: List[Callable[[Dict], None]] = []
 
-        # 钩子函数 (与您提供的版本一致)
-        self.pre_execution_hooks: List[Callable] = []  # 确保 Callable 已从 typing 导入
-        self.post_execution_hooks: List[Callable] = []
+        self._stats: Dict[str, Any] = {
+            'total_executions': 0, 'successful_executions': 0,
+            'failed_executions': 0, 'total_execution_time_seconds': 0.0
+        }
 
-        # 统计信息 (与您提供的版本一致)
+    def add_module(self, name: str, module_instance: Any):
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', name):
+            raise ValueError("Invalid module name.")
+        self.available_modules[name] = module_instance
+        self._log_message('info', f"Module '{name}' added.")
+
+    def remove_module(self, name: str) -> bool:
+        if name in self.available_modules:
+            del self.available_modules[name]
+            self._log_message('info', f"Module '{name}' removed.")
+            return True
+        self._log_message('warning', f"Module '{name}' not found for removal.")
+        return False
+
+    def register_host_function(self, name: str, func: Callable):
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', name):
+            raise ValueError("Invalid host function name.")
+        if not callable(func):
+            raise ValueError("Provided host function is not callable.")
+        self.host_functions[name] = func
+        self._log_message('info', f"Host function '{name}' registered.")
+
+    def unregister_host_function(self, name: str) -> bool:
+        if name in self.host_functions:
+            del self.host_functions[name]
+            self._log_message('info', f"Host function '{name}' unregistered.")
+            return True
+        self._log_message('warning', f"Host function '{name}' not found for unregistration.")
+        return False
+
+    def add_pre_execution_hook(self, hook: Callable[[str], None]):
+        if callable(hook): self.pre_execution_hooks.append(hook)
+
+    def add_post_execution_hook(self, hook: Callable[[Dict], None]):
+        if callable(hook): self.post_execution_hooks.append(hook)
+
+    def get_stats(self) -> Dict[str, Any]:
+        return self._stats.copy()
+
+    def reset_stats(self):
         self._stats = {
-            'total_executions': 0,
-            'successful_executions': 0,
-            'failed_executions': 0,
-            'total_execution_time': 0.0
+            'total_executions': 0, 'successful_executions': 0,
+            'failed_executions': 0, 'total_execution_time_seconds': 0.0
         }
-
-    # ... (add_module, remove_module, add_pre_execution_hook, add_post_execution_hook, _timeout_context, _create_safe_environment 保持不变) ...
-    # ... (_log_message, _add_to_history, validate_script 保持不变) ...
-
-    def _create_safe_environment(self) -> tuple:  # 与您提供的版本一致
-        """创建安全的执行环境"""
-        safe_builtins = SafeBuiltins.get_safe_builtins()
-        if '__builtins__' in globals() and hasattr(__builtins__, '__import__'):
-            original_import = __builtins__.__import__
-        else:
-            import builtins  # Python 3
-            original_import = builtins.__import__
-        safe_builtins['__import__'] = RestrictedImport(original_import)
-        local_scope = {
-            'debugger': self.debugger,
-            'print': self._safe_print,  # 关键：使用我们自定义的 _safe_print
-            **self.available_modules,
-            'sleep': time.sleep,  # 确保 time 已导入
-            'now': datetime.datetime.now,  # 确保 datetime 已导入
-        }
-        global_scope = {
-            '__builtins__': safe_builtins,
-            '__name__': '__script__',
-        }
-        return global_scope, local_scope
+        self._log_message('info', "Execution statistics reset.")
 
     def _safe_print(self, *args, **kwargs):
-        """
-        安全的打印函数，捕获输出到缓冲区，并可选地记录到日志。
-        """
         try:
-            message = ' '.join(str(arg) for arg in args)  # kwargs 在 print 中通常是 sep, end, file, flush
-
-            # 考虑 kwargs 中的 end 和 sep (尽管脚本中的简单 print 可能不会用复杂kwargs)
-            # end = kwargs.get('end', '\n')
-            # sep = kwargs.get('sep', ' ')
-            # message = sep.join(str(arg) for arg in args) + end # 更精确的模拟
+            sep = kwargs.get('sep', ' ')
+            end = kwargs.get('end', '\n')
+            message_parts = [str(arg) for arg in args]
+            message = sep.join(message_parts)
 
             if len(message) > self.max_line_length:
                 message = message[:self.max_line_length] + "... [行已截断]"
 
-            current_buffer_len = sum(len(s) + 1 for s in self._script_output_buffer)  # +1 for newline
-            if current_buffer_len + len(message) < self.max_total_output_length:
+            current_buffer_len = sum(len(s) + len(end) for s in self._script_output_buffer)
+            if current_buffer_len + len(message) + len(end) < self.max_total_output_length:
                 self._script_output_buffer.append(message)
             elif not self._script_output_buffer or not self._script_output_buffer[-1].endswith("... [总输出已截断]"):
-                self._script_output_buffer.append("... [总输出已截断]")
-
-            # 仍然可以记录到应用的日志以供调试，但主要输出通过缓冲区返回
-            if hasattr(self.debugger, 'error_logger') and self.debugger.error_logger:
-                # 避免重复记录或选择性记录
-                # self.debugger.error_logger.log_info(f"Script Printed: {message}", "SCRIPT_PRINT")
-                pass  # 主要通过返回的 output 字段在UI显示
-            else:
-                print(f"[SCRIPT (via _safe_print)] {message}")  # 控制台回显（如果需要）
+                if self._script_output_buffer and current_buffer_len < self.max_total_output_length:
+                    self._script_output_buffer.append("... [总输出已截断]")
+                elif not self._script_output_buffer:
+                    self._script_output_buffer.append("... [总输出已截断]")
         except Exception as e:
-            self._script_output_buffer.append(f"[Print Error: {e}]")
+            err_msg = f"[Error during script print: {e}]"
+            if sum(len(s) for s in self._script_output_buffer) + len(err_msg) < self.max_total_output_length:
+                self._script_output_buffer.append(err_msg)
 
-    def validate_script(self, script_text: str) -> Tuple[bool, Optional[str]]:
-        """验证脚本安全性
-        Args:
-            script_text: 要验证的脚本代码
-        Returns:
-            Tuple[是否有效, 错误信息(如果有)]
-        """
-        if not script_text or not script_text.strip():
-            return False, "Empty script"
+    def _create_safe_environment(self) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        safe_builtins_dict = SafeBuiltins.get_safe_builtins()
+        safe_builtins_dict['print'] = self._safe_print
 
-        # 检查禁止的关键字
-        banned_keywords = {
-            'import', 'eval', 'exec', 'open', 'os.', 'sys.',
-            'subprocess', '__import__', 'compile', 'globals'
+        global_scope = {'__builtins__': safe_builtins_dict}
+        local_scope = {
+            **self.available_modules, **self.host_functions,
+            'sleep': time.sleep, 'now': datetime.now,
         }
-        for keyword in banned_keywords:
-            if keyword in script_text:
-                return False, f"Script contains banned keyword: {keyword}"
-
-        return True, None
-
-    def _log_message(self, level: str, message: str, category: Optional[str] = None):
-        """内部日志记录方法
-        Args:
-            level: 日志级别 (info/warning/error)
-            message: 日志消息
-            category: 可选分类标签
-        """
-        log_msg = f"[ScriptEngine] {message}"
-        if category:
-            log_msg = f"[{category}] {log_msg}"
-
-        if hasattr(self.debugger, 'error_logger') and self.debugger.error_logger:
-            getattr(self.debugger.error_logger, f'log_{level}')(log_msg)
-        else:
-            print(f"[{level.upper()}] {log_msg}")
+        if self.debugger: local_scope['debugger'] = self.debugger
+        return global_scope, local_scope
 
     @contextmanager
-    def _timeout_context(self, timeout):
-        """超时控制上下文管理器"""
-        if timeout <= 0:
-            yield  # 无超时限制
+    def _timeout_context(self, seconds: int):
+        if seconds <= 0 or not hasattr(signal, 'SIGALRM'):
+            if seconds > 0 and not hasattr(signal, 'SIGALRM'):
+                self._log_message('warning', "Timeout via signal.SIGALRM not supported. Timeout will not be enforced.")
+            yield
             return
 
         def signal_handler(signum, frame):
-            raise ScriptExecutionTimeout(f"Execution timed out after {timeout} seconds")
+            raise ScriptExecutionTimeout(f"Execution timed out after {seconds} seconds.")
 
-        signal.signal(signal.SIGALRM, signal_handler)
-        signal.alarm(timeout)
+        original_handler = signal.getsignal(signal.SIGALRM)
         try:
+            signal.signal(signal.SIGALRM, signal_handler)
+            signal.alarm(seconds)
             yield
         finally:
-            signal.alarm(0)  # 取消超时
-    def _add_to_history(self, script_text: str, success: bool, result: Optional[str] = None, error: Optional[str] = None):
-        """添加执行记录到历史"""
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, original_handler)
+
+    def _log_message(self, level: str, message: str, category: Optional[str] = "ScriptEngine"):
+        log_entry = f"[{level.upper()}] [{category}] {message}"
+        print(log_entry, file=sys.stderr)
+        if self.debugger and hasattr(self.debugger, 'log_message'):
+            self.debugger.log_message(level, message, category)
+
+    def _add_to_history(self, script_text_snippet: str, success: bool, result_summary: Optional[str] = None,
+                        error_message: Optional[str] = None, output_summary: Optional[str] = None):
+        if len(self.execution_history) >= self.max_history: self.execution_history.pop(0)
         entry = {
-            'script': script_text[:500] + '...' if len(script_text) > 500 else script_text,
-            'timestamp': datetime.datetime.now(),
-            'success': success,
-            'result': result,
-            'error': error
+            'timestamp': datetime.now().isoformat(),
+            'script_snippet': script_text_snippet[:200] + ('...' if len(script_text_snippet) > 200 else ''),
+            'success': success, 'result_summary': result_summary,
+            'output_summary': output_summary, 'error': error_message,
         }
         self.execution_history.append(entry)
-        if len(self.execution_history) > self.max_history:
-            self.execution_history.pop(0)
 
+    def _prepare_execution_result(self, success: bool, script_text: str,
+                                  return_value: Optional[Any] = None,
+                                  error: Optional[Exception] = None,
+                                  execution_time_sec: float = 0.0,
+                                  custom_message: Optional[str] = None) -> Dict:
+        error_str, error_type = None, None
+        if error:
+            success = False
+            if isinstance(error, ScriptExecutionTimeout):
+                error_str, error_type = f"TimeoutError: {error}", "TimeoutError"
+            elif isinstance(error, ScriptSecurityError):
+                error_str, error_type = f"SecurityError: {error}", "SecurityError"
+            elif isinstance(error, SyntaxError):
+                error_str, error_type = f"SyntaxError: {error.msg} (line {error.lineno}, offset {error.offset})\n{error.text}", "SyntaxError"
+            else:
+                error_str, error_type = f"ExecutionError: {type(error).__name__}: {error}\n{traceback.format_exc(limit=5)}", type(
+                    error).__name__
 
-
-    def add_pre_execution_hook(self, hook: Callable):
-        """添加预执行钩子函数"""
-        if hook not in self.pre_execution_hooks:
-            self.pre_execution_hooks.append(hook)
-
-    def add_post_execution_hook(self, hook: Callable):
-        """添加后执行钩子函数"""
-        if hook not in self.post_execution_hooks:
-            self.post_execution_hooks.append(hook)
-
-    def execute(self, script_text: str, timeout: Optional[int] = None) -> Dict:
-        """
-        执行脚本文本
-        Args:
-            script_text: 要执行的脚本代码
-            timeout: 执行超时时间（覆盖默认值）
-        Returns:
-            包含执行结果、输出和元数据的字典
-        """
-        self._script_output_buffer = []  # 为本次执行清空输出缓冲区
-        execution_timeout = timeout if timeout is not None else self.timeout
-        start_time = datetime.datetime.now()  # 确保 datetime 已导入
-
+        captured_output = "\n".join(self._script_output_buffer)
         self._stats['total_executions'] += 1
-        final_result: Dict[str, Any] = {}  # 初始化
+        self._stats['total_execution_time_seconds'] += execution_time_sec
+        if success:
+            self._stats['successful_executions'] += 1
+        else:
+            self._stats['failed_executions'] += 1
 
-        with self._execution_lock:
-            is_valid, error_msg_validation = self.validate_script(script_text)
-            if not is_valid:
-                self._log_message('error', f"Script validation failed: {error_msg_validation}")
-                final_result = {'success': False, 'output': "\n".join(self._script_output_buffer),
-                                'error': error_msg_validation, 'execution_time': 0, 'timestamp': start_time}
-                self._add_to_history(script_text, False, error=error_msg_validation)
-                self._stats['failed_executions'] += 1
-                return final_result
-
+        result_dict = {
+            "success": success, "return_value": return_value, "output": captured_output,
+            "error_message": error_str, "error_type": error_type,
+            "execution_time_seconds": round(execution_time_sec, 4),
+            "custom_message": custom_message
+        }
+        self._add_to_history(script_text, success, str(return_value)[:100] if return_value is not None else None,
+                             error_str[:200] if error_str else None, captured_output[:100] if captured_output else None)
+        for hook in self.post_execution_hooks:
             try:
-                for hook in self.pre_execution_hooks: hook(script_text)
-            except Exception as e:
-                self._log_message('warning', f"Pre-execution hook failed: {e}")
+                hook(result_dict.copy())
+            except Exception as hook_e:
+                self._log_message('error', f"Post-execution hook failed: {hook_e}")
+        return result_dict
 
-            global_scope, local_scope = self._create_safe_environment()
-            execution_error = None
+    def validate_script_syntax(self, script_text: str) -> Tuple[bool, Optional[str]]:
+        try:
+            ast.parse(script_text)
+            return True, None
+        except SyntaxError as e:
+            return False, f"SyntaxError: {e.msg} (line {e.lineno}, offset {e.offset})\nNear: {e.text}"
+        except Exception as e:
+            return False, f"Validation Error: {e}"
 
-            try:
-                if sys.platform != 'win32':  # 确保 sys 已导入
-                    with self._timeout_context(execution_timeout):  # 确保 contextmanager 已导入
-                        exec(script_text, global_scope, local_scope)
-                else:
-                    result_container = {'exception': None, 'completed': False}
+    # --- Internal Execution Logic Methods ---
+    def _execute_statements_internal(self, script_text: str) -> Dict:
+        start_time = time.perf_counter()
+        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(script_text)
+        if not is_valid_syntax:
+            exec_time = time.perf_counter() - start_time
+            return self._prepare_execution_result(False, script_text, error=SyntaxError(syntax_error_msg),
+                                                  execution_time_sec=exec_time)
 
-                    def execute_script_thread_target():
-                        try:
-                            exec(script_text, global_scope, local_scope)
-                            result_container['completed'] = True
-                        except Exception as e_thread:
-                            result_container['exception'] = e_thread
+        global_scope, local_scope = self._create_safe_environment()
+        execution_error = None
+        try:
+            with self._timeout_context(self.timeout):
+                compiled_code = compile(script_text, '<script_exec>', 'exec')
+                exec(compiled_code, global_scope, local_scope)
+        except Exception as e:
+            execution_error = e
+        exec_time = time.perf_counter() - start_time
+        return self._prepare_execution_result(True if execution_error is None else False, script_text,
+                                              error=execution_error, execution_time_sec=exec_time)
 
-                    thread = threading.Thread(target=execute_script_thread_target);
-                    thread.daemon = True  # 确保 threading 已导入
-                    thread.start();
-                    thread.join(timeout=execution_timeout)
-                    if thread.is_alive(): raise ScriptExecutionTimeout(
-                        f"Script execution timed out after {execution_timeout} seconds")
-                    if result_container['exception']: raise result_container['exception']
-                    if not result_container['completed']: raise Exception(
-                        "Script execution did not complete (Windows thread).")
+    def _evaluate_expression_internal(self, expression_text: str) -> Dict:
+        start_time = time.perf_counter()
+        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(expression_text)
+        if not is_valid_syntax:  # eval can also raise SyntaxError, this is a pre-check.
+            exec_time = time.perf_counter() - start_time
+            return self._prepare_execution_result(False, expression_text, error=SyntaxError(syntax_error_msg),
+                                                  execution_time_sec=exec_time)
 
-                execution_time = (datetime.datetime.now() - start_time).total_seconds()
-                self._log_message('info', f"Script executed successfully in {execution_time:.2f} seconds")
-                final_result = {'success': True, 'output': "\n".join(self._script_output_buffer), 'error': None,
-                                'execution_time': execution_time, 'timestamp': start_time}
-                self._stats['successful_executions'] += 1;
-                self._stats['total_execution_time'] += execution_time
-                self._add_to_history(script_text, True, result=f"Executed in {execution_time:.2f}s")
+        global_scope, local_scope = self._create_safe_environment()
+        return_val, execution_error = None, None
+        try:
+            with self._timeout_context(self.timeout):
+                compiled_code = compile(expression_text, '<script_eval>', 'eval')
+                return_val = eval(compiled_code, global_scope, local_scope)
+        except Exception as e:
+            execution_error = e
+        exec_time = time.perf_counter() - start_time
+        return self._prepare_execution_result(True if execution_error is None else False, expression_text,
+                                              return_value=return_val, error=execution_error,
+                                              execution_time_sec=exec_time)
 
-            except ScriptExecutionTimeout as e_timeout:
-                execution_error = str(e_timeout);
-                self._log_message('error', execution_error, "SCRIPT_TIMEOUT");
-                self._stats['failed_executions'] += 1
-                final_result = {'success': False, 'output': "\n".join(self._script_output_buffer),
-                                'error': execution_error, 'execution_time': execution_timeout, 'timestamp': start_time}
-                self._add_to_history(script_text, False, error=execution_error)
-            except ScriptSecurityError as e_security:
-                execution_error = f"Security violation: {e_security}";
-                self._log_message('error', execution_error, "SCRIPT_SECURITY");
-                self._stats['failed_executions'] += 1
-                final_result = {'success': False, 'output': "\n".join(self._script_output_buffer),
-                                'error': execution_error,
-                                'execution_time': (datetime.datetime.now() - start_time).total_seconds(),
-                                'timestamp': start_time}
-                self._add_to_history(script_text, False, error=execution_error)
-            except Exception as e_general:
-                execution_error = f"Script execution error: {e_general}"
-                if self.enable_debugging: execution_error += f"\n{traceback.format_exc()}"  # 确保 traceback 已导入
-                self._log_message('error', execution_error, "SCRIPT_ERROR");
-                self._stats['failed_executions'] += 1
-                final_result = {'success': False, 'output': "\n".join(self._script_output_buffer),
-                                'error': execution_error,
-                                'execution_time': (datetime.datetime.now() - start_time).total_seconds(),
-                                'timestamp': start_time}
-                self._add_to_history(script_text, False, error=execution_error)
+    def _run_function_internal(self, script_text: str, function_name: str, args: Tuple, kwargs: Dict) -> Dict:
+        start_time = time.perf_counter()
+        full_context_script_text = f"{script_text}\n# Attempting to call: {function_name}"
+        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(script_text)
+        if not is_valid_syntax:
+            exec_time = time.perf_counter() - start_time
+            return self._prepare_execution_result(False, full_context_script_text, error=SyntaxError(syntax_error_msg),
+                                                  execution_time_sec=exec_time)
 
-            try:
-                for hook in self.post_execution_hooks: hook(script_text, final_result)
-            except Exception as e:
-                self._log_message('warning', f"Post-execution hook failed: {e}")
+        global_scope, local_scope = self._create_safe_environment()
+        return_val, execution_error = None, None
+        try:
+            with self._timeout_context(self.timeout):
+                script_compiled_code = compile(script_text, '<script_defs>', 'exec')
+                exec(script_compiled_code, global_scope, local_scope)
+                if function_name not in local_scope: raise NameError(f"Function '{function_name}' not defined.")
+                target_func = local_scope[function_name]
+                if not callable(target_func): raise TypeError(f"'{function_name}' is not callable.")
+                return_val = target_func(*args, **kwargs)
+        except Exception as e:
+            execution_error = e
+        exec_time = time.perf_counter() - start_time
+        return self._prepare_execution_result(True if execution_error is None else False, full_context_script_text,
+                                              return_value=return_val, error=execution_error,
+                                              execution_time_sec=exec_time)
 
-            return final_result
-def create_script_engine(debugger_instance, **kwargs):
-    """工厂函数创建配置好的ScriptEngine
-    
-    Args:
-        debugger_instance: 调试器实例
-        **kwargs: 可选配置参数
-            timeout: 执行超时时间(秒)
-            max_iterations: 最大迭代次数 
-            enable_debugging: 是否启用调试
-            max_history: 最大历史记录数
-            max_output_length: 最大输出长度
-            additional_modules: 额外可用模块字典
-            add_example_hooks: 是否添加示例钩子
-    Returns:
-        ScriptEngine: 配置好的脚本引擎实例
-    """
-    config = {
-        'timeout': kwargs.get('timeout', 30),
-        'max_iterations': kwargs.get('max_iterations', 1000000),
-        'enable_debugging': kwargs.get('enable_debugging', True),
-        'max_history': kwargs.get('max_history', 100),
-        'max_output_length': kwargs.get('max_output_length', 10000),
-        'additional_modules': kwargs.get('additional_modules', {}),
+    # --- Unified Public Execution Method ---
+    def execute(self, script_text: str,
+                mode: str = 'exec',
+                function_name: Optional[str] = None,
+                args: Optional[Tuple] = None,
+                kwargs: Optional[Dict] = None) -> Dict:
+        """
+        Executes a script or evaluates an expression based on the specified mode.
+
+        Args:
+            script_text (str): The Python script or expression to execute.
+            mode (str): Execution mode. One of 'exec', 'eval', 'run_function'.
+                        Defaults to 'exec'.
+            function_name (Optional[str]): Name of the function to call if mode is 'run_function'.
+            args (Optional[Tuple]): Positional arguments for the function if mode is 'run_function'.
+            kwargs (Optional[Dict]): Keyword arguments for the function if mode is 'run_function'.
+
+        Returns:
+            Dict: A dictionary containing execution results including success status,
+                  output, return value (for 'eval' and 'run_function'), error details,
+                  and execution time.
+        """
+        self._execution_lock.lock()
+        try:
+            self._script_output_buffer.clear()
+
+            # Ensure args and kwargs are not None if mode is 'run_function'
+            _args = args if args is not None else tuple()
+            _kwargs = kwargs if kwargs is not None else {}
+
+            # Pre-execution hooks (pass relevant info based on mode)
+            hook_script_info = script_text
+            if mode == 'run_function' and function_name:
+                hook_script_info = f"{script_text}\n# Mode: run_function, Target: {function_name}"
+            elif mode == 'eval':
+                hook_script_info = f"# Mode: eval\n{script_text}"
+
+            for hook in self.pre_execution_hooks:
+                try:
+                    hook(hook_script_info)
+                except Exception as hook_e:
+                    self._log_message('error', f"Pre-execution hook failed: {hook_e}")
+
+            if mode == 'exec':
+                return self._execute_statements_internal(script_text)
+            elif mode == 'eval':
+                return self._evaluate_expression_internal(script_text)
+            elif mode == 'run_function':
+                if not function_name:
+                    start_time = time.perf_counter()  # Minimal time for pre-check
+                    exec_time = time.perf_counter() - start_time
+                    return self._prepare_execution_result(False, script_text,
+                                                          error=ValueError(
+                                                              "function_name must be provided for 'run_function' mode."),
+                                                          execution_time_sec=exec_time)
+                return self._run_function_internal(script_text, function_name, _args, _kwargs)
+            else:
+                start_time = time.perf_counter()  # Minimal time for pre-check
+                exec_time = time.perf_counter() - start_time
+                return self._prepare_execution_result(False, script_text,
+                                                      error=ValueError(
+                                                          f"Invalid execution mode: {mode}. Must be 'exec', 'eval', or 'run_function'."),
+                                                      execution_time_sec=exec_time)
+        finally:
+            self._execution_lock.unlock()
+
+
+def create_script_engine(debugger_instance: Optional[Any] = None, **kwargs_config) -> ScriptEngine:
+    default_config = {
+        'timeout': 30, 'max_output_length': 10000, 'max_line_length': 1000,
+        'max_history': 100, 'initial_modules': {}, 'initial_host_functions': {}
     }
+    final_config = {**default_config, **kwargs_config}
+    engine = ScriptEngine(debugger_instance, final_config)
 
-    engine = ScriptEngine(debugger_instance, config)
+    if final_config.get('add_example_logging_hooks', False):
+        def log_pre_exec(script_info: str):
+            short_info = script_info[:150]
+            clean_info = short_info.replace('\n', ' ')  # 先在变量中处理转义
+            engine._log_message('info', f"Executing (info: {clean_info})...")
 
-    # 添加示例钩子
-    if kwargs.get('add_example_hooks', False):
-        engine.add_pre_execution_hook(
-            lambda script: print(f"About to execute: {script[:50]}...")
-        )
-        engine.add_post_execution_hook(
-            lambda script, result: print(f"Execution completed with status: {'Success' if result['success'] else 'Failed'}")
-        )
-    
+        def log_post_exec(result: Dict):
+            status = "SUCCESS" if result['success'] else "FAILED"
+            engine._log_message('info',
+                              f"Execution {status}. Time: {result['execution_time_seconds']:.4f}s. Error: {result['error_message'] if result['error_message'] else 'None'}")
+
+        engine.add_pre_execution_hook(log_pre_exec)
+        engine.add_post_execution_hook(log_post_exec)
+        engine._log_message('info', "Added example logging hooks to ScriptEngine.")
     return engine
+
+
+# --- Example Usage (Illustrative) ---
+if __name__ == '__main__':
+    print("--- ScriptEngine Refactored Example Usage ---")
+
+
+    class MyDebugger:
+        def __init__(self): self.data_store, self.call_count = {"value": 100}, 0
+
+        def get_host_value(self, key: str) -> Any: self.call_count += 1; return self.data_store.get(key, None)
+
+        def set_host_value(self, key: str, value: Any):
+            self.call_count += 1;
+            self.data_store[key] = value;
+            print(f"[MyDebugger] Set '{key}' to '{value}'")
+
+        def log_message(self, level: str, message: str, category: Optional[str] = None):
+            print(f"[DebuggerLOG-{level.upper()}-{category or 'APP'}] {message}")
+
+
+    my_debugger_instance = MyDebugger()
+    engine_config = {
+        'timeout': 5,
+        'initial_host_functions': {'read_data': my_debugger_instance.get_host_value,
+                                   'write_data': my_debugger_instance.set_host_value},
+        'add_example_logging_hooks': True
+    }
+    script_engine = create_script_engine(my_debugger_instance, **engine_config)
+
+    print("\n--- Test 1: Execute Script (mode='exec') ---")
+    script1 = """
+print("Hello from script1!")
+a = 10; b = 20; print(f"a + b = {a + b}")
+def my_script_func(x, y): print(f"my_script_func called with {x}, {y}"); return x * y + read_data("value")
+write_data("script_run_time", now().strftime("%Y-%m-%d %H:%M:%S"))
+"""
+    result1 = script_engine.execute(script1, mode='exec')  # Explicitly 'exec', or default
+    # result1 = script_engine.execute(script1) # Also works, 'exec' is default
+    print(f"Result1 Success: {result1['success']}\nResult1 Output:\n{result1['output']}")
+    if result1['error_message']: print(f"Result1 Error: {result1['error_message']}")
+    print(f"Debugger call count: {my_debugger_instance.call_count}, data_store: {my_debugger_instance.data_store}")
+
+    print("\n--- Test 2: Evaluate Expression (mode='eval') ---")
+    expr1 = "100 * 2 + read_data('value')"
+    result2 = script_engine.execute(expr1, mode='eval')
+    print(f"Result2 Success: {result2['success']}, Return Value: {result2['return_value']}")
+    if result2['error_message']: print(f"Result2 Error: {result2['error_message']}")
+
+    print("\n--- Test 3: Run Function in Script (mode='run_function') ---")
+    script_with_func = """
+def complex_calculation(a, b, factor=1):
+    print(f"Performing complex_calculation with a={a}, b={b}, factor={factor}")
+    intermediate = (a + b) * factor; host_val = read_data("value") 
+    if host_val is None: host_val = 0
+    print(f"Read host_val: {host_val}"); return intermediate + host_val
+"""
+    result3 = script_engine.execute(script_with_func, mode='run_function', function_name="complex_calculation",
+                                    args=(5, 10), kwargs={'factor': 3})
+    print(
+        f"Result3 Success: {result3['success']}, Return Value: {result3['return_value']}\nResult3 Output:\n{result3['output']}")
+    if result3['error_message']: print(f"Result3 Error: {result3['error_message']}")
+
+    print("\n--- Test 4: Function Not Found (mode='run_function') ---")
+    result4 = script_engine.execute(script_with_func, mode='run_function', function_name="non_existent_function")
+    print(f"Result4 Success: {result4['success']}, Error: {result4['error_message']}")
+
+    print("\n--- Test 5: Timeout (mode='exec') ---")
+    script_timeout = "print('Starting long loop...'); import time; c = 0\nwhile True: c += 1; time.sleep(0.0001)"
+    if hasattr(signal, 'SIGALRM'):
+        result5 = script_engine.execute(script_timeout, mode='exec')
+        print(
+            f"Result5 Success: {result5['success']}, Error Type: {result5['error_type']}, Error: {result5['error_message']}")
+    else:
+        print("Skipping timeout test as signal.SIGALRM is not available.")
+
+    print("\n--- Test 6: Disallowed Import (mode='exec') ---")
+    result6 = script_engine.execute("import os; print(os.getcwd())", mode='exec')
+    print(
+        f"Result6 Success: {result6['success']}, Error Type: {result6['error_type']}, Error: {result6['error_message']}")
+
+    print("\n--- Test 7: Syntax Error (mode='exec') ---")
+    result7 = script_engine.execute("print('Hello'", mode='exec')  # Syntax error
+    print(
+        f"Result7 Success: {result7['success']}, Error Type: {result7['error_type']}, Error: {result7['error_message']}")
+
+    print("\n--- Test 8: Invalid Mode ---")
+    result8 = script_engine.execute("print('test')", mode='invalid_mode')
+    print(
+        f"Result8 Success: {result8['success']}, Error Type: {result8['error_type']}, Error: {result8['error_message']}")
+
+    print("\n--- Execution History ---")
+    for i, entry in enumerate(script_engine.execution_history):
+        print(
+            f"{i + 1}. [{entry['timestamp']}] Success: {entry['success']}, Script: '{entry['script_snippet']}', Error: {entry['error']}")
+    print("\n--- Execution Stats ---");
+    stats = script_engine.get_stats()
+    for k, v in stats.items(): print(f"{k}: {v}")
+

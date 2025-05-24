@@ -16,7 +16,7 @@
 
 QMainWindow {
     /* 主窗口背景图片设置 */
-    background-image: url("./image.png"); /* <<<<<<< 在这里修改为你的图片路径！ */
+    background-image: url("./yp_juk.jpg"); /* <<<<<<< 在这里修改为你的图片路径！ */
     background-repeat: no-repeat;  /* 图片不重复平铺 */
     background-position: center;   /* 图片居中显示 */
     background-size: 100% 100%;        /* 调整图片大小以覆盖整个窗口，可能会裁剪图片 */

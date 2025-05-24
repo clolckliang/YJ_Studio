@@ -1,0 +1,162 @@
+/*
+ * modern_background_theme.qss
+ *
+ * 现代化的外部背景图片主题样式文件
+ * 特色：玻璃拟态效果、现代渐变、优雅动画过渡
+ *
+ * 使用说明：
+ * 1. 将 'url("path/to/your/image.png")' 替换为你的实际图片路径
+ * 2. 可调整各控件的 backdrop-filter 和透明度值来适配你的背景图片
+ * 3. 颜色方案采用现代深色主题，可根据需要调整
+ */
+
+/* === 主窗口背景设置 === */
+QMainWindow {
+    background-image: url("./yp_juk.jpg"); /* <<<<<<< 在这里修改为你的图片路径！ */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* 覆盖整个窗口，保持比例 */
+    background-attachment: fixed;
+    transition: background-color 0.3s ease-in-out; /* 添加平滑过渡 */
+}
+
+/* === 全局基础样式 === */
+QWidget {
+    background-color: rgba(15, 23, 42, 0.75); /* 增加背景透明度 */
+    color: #ffffff;
+    font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif;
+    font-size: 10pt;
+    border: none;
+    transition: background-color 0.3s ease-in-out; /* 平滑过渡 */
+}
+
+/* === 群组框样式 === */
+QGroupBox {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 rgba(51, 65, 85, 0.85),
+                stop:1 rgba(30, 41, 59, 0.85));
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    margin-top: 12px;
+    padding-top: 8px;
+    font-weight: 500;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+}
+
+/* === 输入控件样式 === */
+QLineEdit, QTextEdit, QPlainTextEdit {
+    background: rgba(30, 41, 59, 0.85);
+    border: 2px solid rgba(71, 85, 105, 0.5);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-size: 9pt;
+    selection-background-color: rgba(59, 130, 246, 0.5);
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out; /* 添加平滑过渡 */
+}
+
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid rgba(59, 130, 246, 0.6);
+    background: rgba(30, 41, 59, 0.9);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* === 下拉框样式 === */
+QComboBox {
+    background: rgba(30, 41, 59, 0.85);
+    border: 2px solid rgba(71, 85, 105, 0.5);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    min-width: 100px;
+    transition: background-color 0.3s ease-in-out; /* 平滑过渡 */
+}
+
+QComboBox:hover {
+    background: rgba(30, 41, 59, 0.75);
+}
+
+QComboBox:focus {
+    border: 2px solid rgba(59, 130, 246, 0.6);
+}
+
+/* === 按钮样式 === */
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 rgba(59, 130, 246, 0.8),
+                stop:1 rgba(37, 99, 235, 0.8));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 9pt;
+    transition: background 0.3s ease, transform 0.2s ease-in-out; /* 按钮过渡效果 */
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 rgba(79, 150, 255, 0.9),
+                stop:1 rgba(59, 130, 246, 0.9));
+    transform: translateY(-2px);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 rgba(37, 99, 235, 0.9),
+                stop:1 rgba(29, 78, 216, 0.9));
+    transform: translateY(2px);
+}
+
+/* === 滚动区域样式 === */
+QScrollArea {
+    background: transparent;
+    border: 1px solid rgba(71, 85, 105, 0.2);
+    border-radius: 8px;
+}
+
+/* === 滚动条样式 === */
+QScrollBar:vertical {
+    background: rgba(30, 41, 59, 0.4);
+    width: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(71, 85, 105, 0.6);
+    border-radius: 6px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(94, 234, 212, 0.6);
+}
+
+/* === 进度条样式 === */
+QProgressBar {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+QProgressBar::chunk {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                stop:0 rgba(59, 130, 246, 0.8),
+                stop:1 rgba(147, 51, 234, 0.8));
+    border-radius: 8px;
+}
+
+/* === 工具提示样式 === */
+QToolTip {
+    background: rgba(15, 23, 42, 0.95);
+    color: #e2e8f0;
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 8pt;
+    opacity: 0.9; /* 提升透明度 */
+}

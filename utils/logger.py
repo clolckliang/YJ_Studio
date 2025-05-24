@@ -20,3 +20,6 @@ class ErrorLogger:
 
     def log_warning(self, warn_msg: str) -> None:
         self.logger.warning(warn_msg)
+
+    def log_debug(self, debug_msg: str) -> None:
+        self.logger.debug(debug_msg)

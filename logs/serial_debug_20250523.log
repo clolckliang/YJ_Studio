@@ -261,3 +261,29 @@
 2025-05-23 23:33:00,180-INFO-logger-log_info-应用程序正在关闭。
 2025-05-23 23:33:00,183-INFO-logger-log_info-配置已保存。
 2025-05-23 23:33:00,183-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-23 23:43:26,229-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:43:26,232-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:43:26,282-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 23:43:26,283-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:43:26,288-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:43:26,288-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:43:26,294-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:43:26,294-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 23:43:26,305-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:43:53,767-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:43:53,771-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:43:53,789-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-23 23:43:53,801-INFO-logger-log_info-主题已应用: light
+2025-05-23 23:43:53,801-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:43:53,807-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-23 23:43:53,807-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:43:53,811-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-23 23:43:53,811-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-23 23:43:53,820-INFO-logger-log_info-应用程序启动。
+2025-05-23 23:43:59,640-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-23 23:44:01,821-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-23 23:44:09,893-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-23 23:45:03,280-INFO-logger-log_info-Added Send Panel: ID=2, Name='发送面板 2 (ID: CA)'
+2025-05-23 23:46:17,023-INFO-logger-log_info-应用程序正在关闭。
+2025-05-23 23:46:17,024-INFO-logger-log_info-配置已保存。
+2025-05-23 23:46:17,024-INFO-logger-log_info-配置已在退出时自动保存。

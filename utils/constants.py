@@ -40,6 +40,19 @@ class Constants:
     }
     PLOT_COLORS: List[Any] = ['b', 'g', 'r', 'c', 'm', 'y', (255, 165, 0), (128, 0, 128), 'k', (200, 200, 0),
                               (0, 200, 200)]
+    THEME_OPTIONS = [
+        "light",
+        "dark",
+        "pink",
+        "forest",
+        "ocean",
+        "amethyst",
+        "sunset",
+        "midnight",
+        "custom_image_theme"
+        # This list should match the themes your ThemeManager can apply.
+        # The names here will be used to generate the menu items.
+    ]
 
     # Offsets for frame parsing (example, if frame structure is fixed)
     # These might be better in protocol_handler.py if FrameConfig drives them

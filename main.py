@@ -1,5 +1,6 @@
 import struct
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List, Any
@@ -11,8 +12,10 @@ from PySide6.QtWidgets import (
     QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QTextEdit,
     QCheckBox, QMessageBox, QGroupBox, QScrollArea, QFileDialog,
     QInputDialog,
-    QDockWidget
+    QDockWidget, QPlainTextEdit
 )
+
+from core.placeholders import DataProcessor, create_script_engine
 
 try:
     import pyqtgraph as pg
@@ -196,6 +199,75 @@ class ParsePanelWidget(QWidget):  # Placeholder - Use your full class definition
             if container.plot_checkbox and container.plot_target_combo: container.plot_target_combo.setEnabled(
                 container.plot_checkbox.isChecked() and bool(targets))
 
+
+class ScriptingPanelWidget(QWidget):
+    execute_script_requested = Signal(str)  # Emits the script text to be executed
+
+    def __init__(self, main_window_ref: 'SerialDebugger', parent: Optional[QWidget] = None):
+        super().__init__(parent)
+        self.main_window_ref = main_window_ref  # To potentially access error_logger or other shared resources
+        self._init_ui()
+
+    def _init_ui(self):
+        panel_layout = QVBoxLayout(self)
+
+        script_group = QGroupBox("脚本引擎")  # GroupBox title
+        group_layout = QVBoxLayout()
+
+        group_layout.addWidget(QLabel("脚本输入:"))
+        self.script_input_edit = QPlainTextEdit()
+        self.script_input_edit.setPlaceholderText(
+            "在此输入Python脚本...\n"
+            "例如:\n"
+            "# debugger.script_api_log_message('来自脚本的你好!')\n"
+            "# success = debugger.script_api_send_basic_data('AA BB CC', True)\n"
+            "# print(f'基本数据发送状态: {success}')"
+        )
+        # self.script_input_edit.setFontFamily("Courier New")
+        group_layout.addWidget(self.script_input_edit, 1)  # Stretch factor for input
+
+        self.run_script_button = QPushButton("执行脚本 (Run Script)")
+        self.run_script_button.clicked.connect(self._on_run_script_clicked)
+        group_layout.addWidget(self.run_script_button)
+
+        group_layout.addWidget(QLabel("脚本输出/结果:"))
+        self.script_output_edit = QPlainTextEdit()
+        self.script_output_edit.setReadOnly(True)
+        self.script_output_edit.setPlaceholderText("脚本输出和结果将显示在此处...")
+        # self.script_output_edit.setFontFamily("Courier New")
+        group_layout.addWidget(self.script_output_edit, 1)  # Stretch factor for output
+
+        clear_output_button = QPushButton("清空输出")
+        clear_output_button.clicked.connect(self.script_output_edit.clear)
+        group_layout.addWidget(clear_output_button)
+
+        script_group.setLayout(group_layout)
+        panel_layout.addWidget(script_group)
+        self.setLayout(panel_layout)
+
+    @Slot()
+    def _on_run_script_clicked(self):
+        script_text = self.script_input_edit.toPlainText()
+        if script_text.strip():
+            self.execute_script_requested.emit(script_text)
+        elif self.main_window_ref.error_logger:  # Log if script is empty
+            self.main_window_ref.error_logger.log_warning("尝试执行空脚本。")
+            self.display_script_result("错误：脚本内容为空。")
+
+    @Slot(str)
+    def display_script_result(self, result_text: str):
+        """公共槽，用于显示脚本执行结果"""
+        self.script_output_edit.setPlainText(result_text)
+
+    def get_config(self) -> Dict[str, str]:
+        """获取此面板的配置 (例如，当前脚本内容)"""
+        return {
+            "current_script": self.script_input_edit.toPlainText()
+        }
+
+    def apply_config(self, config: Dict[str, str]):
+        """应用加载的配置到此面板"""
+        self.script_input_edit.setPlainText(config.get("current_script", ""))
 
 class SendPanelWidget(QWidget):  # Placeholder - Use your full class definition
     def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger', initial_config: Optional[Dict] = None,
@@ -684,6 +756,7 @@ class BasicCommPanelWidget(QWidget):
 class SerialDebugger(QMainWindow):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
+        self.execute_script_requested = None
         self._setup_application_icon(self,"image.png")
         self.setWindowTitle("big_DICK")
         self.active_checksum_mode = ChecksumMode.ORIGINAL_SUM_ADD
@@ -707,6 +780,34 @@ class SerialDebugger(QMainWindow):
         self.setDockNestingEnabled(True)
         self._parsed_frame_count: int = 0
 
+        self.data_processor = DataProcessor(parent=self)  # parent=self for Qt object tree management
+        self.data_processor.processed_data_signal.connect(self.on_data_processor_processed_data)
+        self.data_processor.processing_error_signal.connect(self.on_data_processor_error)
+        self.data_processor.processing_stats_signal.connect(self.on_data_processor_stats)
+        self.data_processor.start()  # Start the thread
+
+        # ScriptEngine 初始化
+        script_engine_config = self.current_config.get("script_engine_settings", {  # 从配置加载脚本引擎设置
+            'timeout': 15,  # 秒
+            'max_history': 50,
+            'enable_debugging': True,  # True 会在脚本错误时包含完整 traceback
+            'max_output_length': 20000,
+            'max_line_length': 2000
+            # 'additional_modules': {} # 如果有其他想暴露给脚本的模块
+        })
+        self.script_engine = create_script_engine(debugger_instance=self, config=script_engine_config)
+
+        # 为脚本定义可调用的API方法 (这些方法需要在SerialDebugger中实现)
+        self.script_api = {
+            "send_custom_frame": self.script_api_send_custom_frame,
+            "send_basic_data": self.script_api_send_basic_data,
+            "log_message": self.script_api_log_message,
+            "get_parsed_value": self.script_api_get_receive_container_value,  # 重命名以更清晰
+            "show_message": self.script_api_show_message_box,  # 重命名以更清晰
+            "sleep": time.sleep,  # 直接暴露 time.sleep 给脚本使用
+            # 更多API...
+        }
+
         self.parse_panel_widgets: Dict[int, ParsePanelWidget] = {}
         self.parse_panel_docks: Dict[int, QDockWidget] = {}
         self._next_parse_panel_id: int = 1
@@ -726,6 +827,9 @@ class SerialDebugger(QMainWindow):
         self.dw_custom_log: Optional[QDockWidget] = None
         self.basic_comm_panel_widget: Optional[BasicCommPanelWidget] = None
         self.dw_basic_serial: Optional[QDockWidget] = None
+
+        self.scripting_panel_widget: Optional[ScriptingPanelWidget] = None  # 为脚本面板添加属性
+        self.dw_scripting_panel: Optional[QDockWidget] = None  # 为脚本面板添加Dock属性
 
         self._init_ui_dockable_layout()
         self.create_menus()
@@ -777,6 +881,19 @@ class SerialDebugger(QMainWindow):
         self.dw_basic_serial.setWidget(self.basic_comm_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_basic_serial)
         self.basic_comm_panel_widget.send_basic_data_requested.connect(self.send_basic_serial_data_action)
+
+        # --- 创建并集成脚本面板 ---
+        self.scripting_panel_widget = ScriptingPanelWidget(main_window_ref=self, parent=self)
+        self.dw_scripting_panel = QDockWidget("脚本引擎", self)
+        self.dw_scripting_panel.setObjectName("ScriptingPanelDock")
+        self.dw_scripting_panel.setWidget(self.scripting_panel_widget)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dw_scripting_panel)  # 或其他希望的区域
+
+        # 连接 ScriptingPanelWidget 发出的信号到 SerialDebugger 中的槽
+        if self.scripting_panel_widget:  # 确保实例化成功
+            self.scripting_panel_widget.execute_script_requested.connect(self._handle_script_execution_request)
+
+
 
         try:
             self.tabifyDockWidget(self.dw_custom_log, self.dw_basic_serial)
@@ -865,6 +982,8 @@ class SerialDebugger(QMainWindow):
         if self.dw_serial_config: self.view_menu.addAction(self.dw_serial_config.toggleViewAction())
         if self.dw_custom_log: self.view_menu.addAction(self.dw_custom_log.toggleViewAction())
         if self.dw_basic_serial: self.view_menu.addAction(self.dw_basic_serial.toggleViewAction())
+        if self.dw_scripting_panel:self.view_menu.addAction(self.dw_scripting_panel.toggleViewAction())
+
         self.view_menu.addSeparator()
 
         theme_menu = self.view_menu.addMenu("背景样式")
@@ -988,10 +1107,15 @@ class SerialDebugger(QMainWindow):
         if not self.send_panel_docks and not migrated_old_send:
             self.add_new_send_panel_action(panel_name_suggestion="默认发送面板 1", from_config=True)
 
+
+        if self.scripting_panel_widget:
+            self.scripting_panel_widget.apply_config(self.current_config.get("scripting_panel", {}))
+
         # Plots are loaded in _init_ui_dockable_layout
         # We just need to make sure their plot targets are updated after parse panels are loaded
         self.update_all_parse_panels_plot_targets()
         if self.error_logger: self.error_logger.log_info("配置已加载并应用到UI。")
+
 
     def gather_current_ui_config(self) -> Dict[str, Any]:
         # Get latest values from the SerialConfigDefinitionPanelWidget
@@ -1026,6 +1150,8 @@ class SerialDebugger(QMainWindow):
             "window_geometry": self.saveGeometry().toBase64().data().decode(),
             "window_state": self.saveState().toBase64().data().decode(),
         }
+        if self.scripting_panel_widget:
+            config_data["scripting_panel"] = self.scripting_panel_widget.get_config()
         return config_data
 
     @Slot(bool)
@@ -1296,6 +1422,202 @@ class SerialDebugger(QMainWindow):
                            f"总接收字节: {stats['rx_byte_count']} B"]
         QMessageBox.information(self, "协议统计信息", "\n".join(stats_str_parts))
 
+    # In ScriptingPanelWidget (this should already be there)
+    @Slot()
+    def _on_run_script_clicked(self):
+        script_text = self.script_input_edit.toPlainText()
+        if script_text.strip():
+            self.execute_script_requested.emit(script_text)  # Panel emits a signal
+        # ... (else handling for empty script) ...
+
+    # In SerialDebugger class:
+    @Slot(str)
+    def _handle_script_execution_request(self, script_text: str):
+        if not self.scripting_panel_widget: return
+        if self.script_engine:
+            self.scripting_panel_widget.display_script_result(
+                f"正在执行脚本 (超时: {self.script_engine.config.get('timeout', 'N/A')}s)...\n"
+                "--------------------------------------------------\n"
+            )
+            QApplication.processEvents()
+            result = self.script_engine.execute(script_text)
+            output_parts = []
+            output_parts.append(f"执行完毕 (耗时: {result.get('execution_time', 0):.3f} 秒)")
+            output_parts.append(f"状态: {'成功' if result['success'] else '失败'}")
+            script_stdout = result.get('output', "")
+            if script_stdout:
+                output_parts.append("脚本打印输出:")
+                output_parts.append(script_stdout)
+            error_info = result.get('error')
+            if error_info:
+                output_parts.append("错误信息:")
+                output_parts.append(error_info)
+            self.scripting_panel_widget.display_script_result("\n".join(output_parts))
+        else:
+            self.scripting_panel_widget.display_script_result("错误：脚本引擎未初始化。")
+
+    @Slot(str, list)  # 参数类型可能需要根据您的 script_api_send_custom_frame 实际设计调整
+    def script_api_send_custom_frame(self, panel_target_func_id_str: str, data_list: List[Dict]) -> bool:
+        """
+        允许脚本通过模拟SendPanelWidget发送自定义协议帧。
+        data_list: [{'name': 'd1', 'type': 'uint8_t', 'value': '10'}, ...]
+        """
+        if not self.serial_manager.is_connected:
+            self.script_api_log_message("发送自定义帧失败：串口未连接。", "error")
+            return False
+
+        temp_send_containers: List[SendDataContainerWidget] = []
+        valid_data = True
+        try:
+            for i, item_conf in enumerate(data_list):
+                # 创建临时的 SendDataContainerWidget 来验证和获取字节
+                # 注意：这里不直接添加到任何UI布局中
+                container = SendDataContainerWidget(container_id=i,
+                                                    parent=self)  # parent 设为 self (SerialDebugger) 或 None
+                container.name_edit.setText(item_conf.get("name", f"item_{i}"))
+                container.type_combo.setCurrentText(item_conf.get("type", "uint8_t"))
+                container.value_edit.setText(str(item_conf.get("value", "")))  # 确保value是字符串
+
+                if container.get_bytes() is None:  # 验证数据
+                    self.script_api_log_message(
+                        f"发送自定义帧数据无效：项 '{container.name_edit.text()}' (类型: {container.type_combo.currentText()}, 值: {container.value_edit.text()})。",
+                        "error")
+                    valid_data = False
+                    break
+                temp_send_containers.append(container)
+        except Exception as e:
+            self.script_api_log_message(f"创建临时发送容器时出错: {e}", "error")
+            return False
+
+        if not valid_data:
+            return False
+
+        # 确保主窗口的帧配置是最新的 (从 SerialConfigDefinitionPanelWidget 同步)
+        self.update_current_configs_from_ui_panel()
+
+        final_frame = self._assemble_custom_frame(panel_target_func_id_str, temp_send_containers)
+
+        if final_frame:
+            bytes_written = self.serial_manager.write_data(final_frame)
+            if bytes_written == final_frame.size():
+                log_msg = f"脚本发送自定义帧 (ID:{panel_target_func_id_str}) 成功: {final_frame.toHex(' ').data().decode()}"
+                self.script_api_log_message(log_msg, "info")
+                # 日志记录到UI和文件
+                self._append_to_custom_protocol_log_formatted(datetime.now(),
+                                                              f"TX Script ID:{panel_target_func_id_str}",
+                                                              final_frame.toHex(' ').data().decode(), True)
+                self.protocol_analyzer.analyze_frame(final_frame, 'tx')
+                self.data_recorder.record_raw_frame(datetime.now(), final_frame.data(),
+                                                    f"TX (Script ID:{panel_target_func_id_str})")
+                return True
+            else:
+                self.script_api_log_message(f"脚本发送自定义帧 (ID:{panel_target_func_id_str}) 失败: 未完全写入。",
+                                            "error")
+        else:
+            self.script_api_log_message(f"脚本发送自定义帧 (ID:{panel_target_func_id_str}) 失败: 帧组装错误。", "error")
+        return False
+
+    @Slot(str, bool)
+    def script_api_send_basic_data(self, text_to_send: str, is_hex: bool) -> bool:
+        """允许脚本发送基本串行数据"""
+        if not self.serial_manager.is_connected:
+            self.script_api_log_message("发送基本数据失败：串口未连接。", "error")
+            return False
+
+        data_to_write = QByteArray()
+        if is_hex:
+            hex_clean = "".join(text_to_send.replace("0x", "").replace("0X", "").split())
+            if len(hex_clean) % 2 != 0: hex_clean = "0" + hex_clean
+            try:
+                data_to_write = QByteArray.fromHex(hex_clean.encode('ascii'))
+            except ValueError:
+                self.script_api_log_message(f"发送基本数据失败：Hex格式错误 '{text_to_send}'", "error")
+                return False
+        else:
+            data_to_write.append(text_to_send.encode('utf-8', errors='replace'))
+
+        if data_to_write:
+            bytes_written = self.serial_manager.write_data(data_to_write)
+            if bytes_written == data_to_write.size():
+                log_content = data_to_write.toHex(' ').data().decode() if is_hex else text_to_send
+                self.script_api_log_message(f"脚本发送基本数据 ({'Hex' if is_hex else 'Text'}) 成功: {log_content}",
+                                            "info")
+                self._append_to_basic_receive(data_to_write, source="TX Script")
+                self.data_recorder.record_raw_frame(datetime.now(), data_to_write.data(), "TX (Script Basic)")
+                return True
+            else:
+                self.script_api_log_message(f"脚本发送基本数据失败：未完全写入。", "error")
+        return False
+
+    @Slot(str, str)
+    def script_api_log_message(self, message: str, level: str = "info"):
+        """允许脚本记录消息 (info, warning, error) 到应用日志"""
+        log_prefix = "[SCRIPT]"
+        if self.error_logger:
+            full_message = f"{log_prefix} {message}"
+            if level.lower() == "info":
+                self.error_logger.log_info(full_message)
+            elif level.lower() == "warning":
+                self.error_logger.log_warning(full_message)
+            elif level.lower() == "error":
+                self.error_logger.log_error(full_message, "SCRIPT_API")
+            else:  # Default to info for unknown levels
+                self.error_logger.log_info(f"{log_prefix} [{level.upper()}] {message}")
+        else:  # Fallback to console if no logger
+            print(f"{log_prefix} [{level.upper()}] {message}")
+
+    @Slot(int, object)  # Using object for container_name_or_id to match previous definition
+    def script_api_get_receive_container_value(self, parse_panel_id: int, container_name_or_id: Any) -> Optional[str]:
+        """
+        允许脚本获取特定解析面板中某个数据容器的当前值 (字符串形式)。
+        container_name_or_id: 可以是容器的名称 (str) 或其全局 ID (int)。
+        """
+        panel = self.parse_panel_widgets.get(parse_panel_id)
+        if not panel:
+            self.script_api_log_message(f"获取容器值失败：未找到解析面板 ID {parse_panel_id}", "error")
+            return None
+
+        found_container: Optional[ReceiveDataContainerWidget] = None
+        if isinstance(container_name_or_id, str):  # Search by name
+            for container in panel.receive_data_containers:
+                if container.name_edit.text() == container_name_or_id:
+                    found_container = container
+                    break
+        elif isinstance(container_name_or_id, int):  # Search by global ID
+            # Need to iterate all panels if ID is global and panel_id isn't strictly needed for lookup
+            # For now, assuming container_id within a specific panel
+            for container in panel.receive_data_containers:  # This assumes container_id is unique WITHIN the panel
+                if container.container_id == container_name_or_id:
+                    found_container = container
+                    break
+
+        if found_container:
+            return found_container.value_edit.text()
+        else:
+            self.script_api_log_message(
+                f"获取容器值失败：在解析面板 {parse_panel_id} 中未找到容器 '{container_name_or_id}'", "error")
+            return None
+
+    @Slot(str, str, str)
+    def script_api_show_message_box(self, title: str, message: str, level: str = "info"):
+        """允许脚本显示消息框 (info, warning, critical, question)"""
+        # Ensure this runs on the main thread if called from a script in another thread (not current setup)
+        if level.lower() == "info":
+            QMessageBox.information(self, title, message)
+        elif level.lower() == "warning":
+            QMessageBox.warning(self, title, message)
+        elif level.lower() == "critical":
+            QMessageBox.critical(self, title, message)
+        elif level.lower() == "question":  # question returns a StandardButton
+            QMessageBox.question(self, title, message)  # Script cannot directly use the return value this way
+            self.script_api_log_message(
+                "Question dialog shown. Script cannot process return value directly via this API.", "info")
+        else:
+            QMessageBox.information(self, title, f"[{level}]\n{message}")
+
+
+
+
     @Slot(int, int)
     def handle_recv_container_plot_target_change(self, container_id: int, target_plot_id: int) -> None:
         if self.error_logger: self.error_logger.log_info(f"接收容器 {container_id} 目标图更改为 {target_plot_id}")
@@ -1385,12 +1707,20 @@ class SerialDebugger(QMainWindow):
                     self.save_raw_recorded_data_action()
 
     def closeEvent(self, event: Any) -> None:
-        if self.error_logger: self.error_logger.log_info("关闭应用程序。")
+        if self.error_logger: self.error_logger.log_info("关闭应用程序，正在停止后台线程...")
+        # Stop DataProcessor thread
+        if hasattr(self, 'data_processor') and self.data_processor.isRunning():
+            self.data_processor.stop()  # Request stop
+            if not self.data_processor.wait(2000):  # Wait for it to finish
+                if self.error_logger: self.error_logger.log_warning(
+                    "DataProcessor thread did not stop gracefully, terminating.")
+                self.data_processor.terminate()  # Force if it doesn't stop
+                self.data_processor.wait()  # Wait again after terminate
         if self.serial_manager.is_connected: self.serial_manager.disconnect_port()
         if self.data_recorder.recording_raw: self.data_recorder.stop_raw_recording()
         current_ui_cfg = self.gather_current_ui_config()
         self.config_manager.save_config(current_ui_cfg)
-        if self.error_logger: self.error_logger.log_info("配置已自动保存。")
+        if self.error_logger: self.error_logger.log_info("配置已自动保存。应用程序退出。")
         event.accept()
 
     def _clear_all_parse_panels(self):
@@ -1483,6 +1813,77 @@ class SerialDebugger(QMainWindow):
             f"Added Parse Panel: ID={panel_id_to_use}, Name='{actual_panel_name}'")
 
     # ... (ensure _assemble_custom_frame is complete as per previous fix)
+
+    @Slot(str, QByteArray)
+    def on_frame_successfully_parsed(self, func_id_hex: str, data_payload_ba: QByteArray):
+        self._parsed_frame_count += 1
+        hex_payload_str = data_payload_ba.toHex(' ').data().decode('ascii').upper()
+
+        # Log to custom protocol log (UI)
+        self._append_to_custom_protocol_log_formatted(datetime.now(), "RX Parsed",
+                                                      f"FID:{func_id_hex} Payload:{hex_payload_str}", True)
+
+        msg = f"成功解析帧: #{self._parsed_frame_count}, FID: {func_id_hex.upper()}"
+        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(msg)
+        if self.error_logger: self.error_logger.log_info(f"{msg} Payload len: {data_payload_ba.size()}")
+
+        self.protocol_analyzer.analyze_frame(data_payload_ba, 'rx')  # Or full frame if available
+
+        # 1. Dispatch to UI Parse Panels for immediate display (as before)
+        dispatched_to_ui_panel = False
+        for panel_widget in self.parse_panel_widgets.values():
+            if func_id_hex.upper() == panel_widget.get_target_func_id().upper():
+                panel_widget.dispatch_data(data_payload_ba)  # This updates ReceiveDataContainerWidgets
+                dispatched_to_ui_panel = True
+
+        if not dispatched_to_ui_panel and self.error_logger:
+            self.error_logger.log_debug(f"Frame FID {func_id_hex} no target UI parse panel.")
+
+        # 2. Additionally, send data to DataProcessor for background tasks
+        # Pass a copy of the data if it might be modified by DataProcessor or if DataProcessor runs much slower
+        self.data_processor.add_data(func_id_hex, QByteArray(data_payload_ba))
+        if self.error_logger:
+            self.error_logger.log_debug(
+                f"Data FID {func_id_hex} (size {data_payload_ba.size()}) added to DataProcessor queue.")
+
+    # --- New Slots to handle signals from DataProcessor ---
+    @Slot(str, QByteArray)  # Corresponds to DataProcessor.processed_data_signal
+    def on_data_processor_processed_data(self, original_func_id: str, processed_payload: QByteArray):
+        """
+        Handles data that has been processed by the DataProcessor thread.
+        You can use this for secondary UI updates, advanced logging, triggering other actions, etc.
+        """
+        if self.error_logger:
+            self.error_logger.log_info(
+                f"DataProcessor result for FID {original_func_id}: Processed payload size {processed_payload.size()}"
+            )
+        # Example: Maybe log this processed_payload to a special file, or update a different UI element.
+        # For now, just logging.
+        # If you need to update primary UI (like ReceiveDataContainers) from here, ensure thread-safety
+        # or use QueuedConnection if this slot updates QWidgets directly.
+        # However, primary display is already handled by ParsePanelWidget.dispatch_data.
+
+    @Slot(str)
+    def on_data_processor_error(self, error_message: str):
+        if self.error_logger:
+            self.error_logger.log_error(f"DataProcessor Error: {error_message}", "DATA_PROCESSOR")
+        if hasattr(self, 'status_bar_label'):
+            self.status_bar_label.setText(f"数据处理错误: {error_message[:50]}...")  # Show truncated error
+        # QMessageBox.warning(self, "数据处理错误", error_message) # Optional: Show user
+
+    @Slot(dict)
+    def on_data_processor_stats(self, stats: dict):
+        if self.error_logger:
+            self.error_logger.log_debug(f"DataProcessor Stats: {stats}")
+        # You could display these stats in a status bar or a dedicated diagnostics panel.
+        # Example:
+        # queue_size = stats.get('current_queue_size', 0)
+        # processed = stats.get('processed_count', 0)
+        # if hasattr(self, 'status_bar_label'):
+        # self.status_bar_label.showMessage(f"DP Queue: {queue_size}, Processed: {processed}", 2000)
+
+
+
     def _assemble_custom_frame(self, panel_target_func_id_str: str,
                                panel_send_data_containers: List[SendDataContainerWidget]) -> Optional[QByteArray]:
         # This should be the full implementation from the previous fix

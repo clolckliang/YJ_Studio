@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Dict, List, Any
 
 from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal
-from PySide6.QtGui import QAction, QTextCursor, QIcon
+from PySide6.QtGui import QAction, QTextCursor, QIcon, QIntValidator
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QTextEdit,
@@ -330,140 +330,230 @@ class SerialConfigDefinitionPanelWidget(QWidget):
     def __init__(self, parent_main_window: 'SerialDebugger', parent: Optional[QWidget] = None):
         super().__init__(parent)
         self.main_window_ref = parent_main_window
+        # Configs (self._serial_config, self._frame_config, self._active_checksum_mode)
+        # will be synced via update_ui_from_main_configs from SerialDebugger's master versions.
         self._init_ui()
 
     def _init_ui(self):
-        layout = QVBoxLayout(self)
+        main_panel_layout = QVBoxLayout(self)  # Main layout for this widget
+
+        # --- 串口配置 Group ---
         config_group = QGroupBox("串口配置")
-        config_layout = QGridLayout()
-        config_layout.addWidget(QLabel("端口:"), 0, 0)
+        config_layout = QGridLayout()  # Layout for serial port settings
+
+        config_layout.addWidget(QLabel("端口:"), 0, 0, Qt.AlignmentFlag.AlignLeft)
         self.port_combo = QComboBox()
         config_layout.addWidget(self.port_combo, 0, 1)
-        config_layout.addWidget(QLabel("波特率:"), 1, 0)
+
+        config_layout.addWidget(QLabel("波特率:"), 1, 0, Qt.AlignmentFlag.AlignLeft)
         self.baud_combo = QComboBox()
         self.baud_combo.addItems(["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"])
-        self.baud_combo.currentTextChanged.connect(self._emit_config_changed)
+        self.baud_combo.setEditable(True)
+        if self.baud_combo.lineEdit():  # Check if lineEdit exists (it should after setEditable(True))
+            self.baud_combo.lineEdit().setValidator(QIntValidator(0, 4000000, self))  # Allow up to 4M baud
+        self.baud_combo.currentTextChanged.connect(
+            self._emit_config_changed)  # Use currentTextChanged for editable combo
         config_layout.addWidget(self.baud_combo, 1, 1)
-        config_layout.addWidget(QLabel("数据位:"), 2, 0)
+
+        config_layout.addWidget(QLabel("数据位:"), 2, 0, Qt.AlignmentFlag.AlignLeft)
         self.data_bits_combo = QComboBox()
         self.data_bits_combo.addItems(["8", "7", "6", "5"])
         self.data_bits_combo.currentTextChanged.connect(self._emit_config_changed)
         config_layout.addWidget(self.data_bits_combo, 2, 1)
-        config_layout.addWidget(QLabel("校验位:"), 3, 0)
+
+        config_layout.addWidget(QLabel("校验位:"), 3, 0, Qt.AlignmentFlag.AlignLeft)
         self.parity_combo = QComboBox()
         self.parity_combo.addItems(["None", "Even", "Odd", "Space", "Mark"])
         self.parity_combo.currentTextChanged.connect(self._emit_config_changed)
         config_layout.addWidget(self.parity_combo, 3, 1)
-        config_layout.addWidget(QLabel("停止位:"), 4, 0)
+
+        config_layout.addWidget(QLabel("停止位:"), 4, 0, Qt.AlignmentFlag.AlignLeft)
         self.stop_bits_combo = QComboBox()
         self.stop_bits_combo.addItems(["1", "1.5", "2"])
         self.stop_bits_combo.currentTextChanged.connect(self._emit_config_changed)
         config_layout.addWidget(self.stop_bits_combo, 4, 1)
+
         self.refresh_ports_button = QPushButton("刷新")
         self.refresh_ports_button.clicked.connect(self.refresh_ports_requested.emit)
         config_layout.addWidget(self.refresh_ports_button, 5, 0)
+
         self.connect_button = QPushButton("打开串口")
         self.connect_button.setCheckable(True)
         self.connect_button.clicked.connect(lambda checked: self.connect_button_toggled.emit(checked))
         config_layout.addWidget(self.connect_button, 5, 1)
-        config_group.setLayout(config_layout)
-        layout.addWidget(config_group)
 
+        # --- Control column stretch for config_layout (Serial Config Group) ---
+        config_layout.setColumnStretch(0, 0)  # Column 0 (Labels, Refresh button) - No stretch
+        config_layout.setColumnStretch(1, 1)  # Column 1 (Inputs, Connect button) - No stretch
+        config_layout.setColumnStretch(2, 0)  # Column 2 (Empty) - Takes all horizontal stretch
+
+        config_group.setLayout(config_layout)
+        main_panel_layout.addWidget(config_group)
+
+        # --- 全局帧结构定义 Group ---
         frame_def_group = QGroupBox("全局帧结构定义 (发送用)")
         frame_def_layout = QGridLayout()
-        frame_def_layout.addWidget(QLabel("帧头(H)[Hex,1B]:"), 0, 0)
+
+        frame_def_layout.addWidget(QLabel("帧头(H)[Hex,1B]:"), 0, 0, Qt.AlignmentFlag.AlignLeft)
         self.head_edit = QLineEdit()
         self.head_edit.editingFinished.connect(self._emit_config_changed)
         frame_def_layout.addWidget(self.head_edit, 0, 1)
-        frame_def_layout.addWidget(QLabel("源地址(S)[Hex,1B]:"), 1, 0)
+
+        frame_def_layout.addWidget(QLabel("源地址(S)[Hex,1B]:"), 1, 0, Qt.AlignmentFlag.AlignLeft)
         self.saddr_edit = QLineEdit()
         self.saddr_edit.editingFinished.connect(self._emit_config_changed)
         frame_def_layout.addWidget(self.saddr_edit, 1, 1)
-        frame_def_layout.addWidget(QLabel("目标地址(D)[Hex,1B]:"), 2, 0)
+
+        frame_def_layout.addWidget(QLabel("目标地址(D)[Hex,1B]:"), 2, 0, Qt.AlignmentFlag.AlignLeft)
         self.daddr_edit = QLineEdit()
         self.daddr_edit.editingFinished.connect(self._emit_config_changed)
         frame_def_layout.addWidget(self.daddr_edit, 2, 1)
-        frame_def_layout.addWidget(QLabel("默认发送功能码(ID):"), 3, 0)
+
+        frame_def_layout.addWidget(QLabel("默认发送功能码(ID):"), 3, 0, Qt.AlignmentFlag.AlignLeft)
         self.id_edit = QLineEdit()
         self.id_edit.setPlaceholderText("面板可覆盖")
         self.id_edit.editingFinished.connect(self._emit_config_changed)
         frame_def_layout.addWidget(self.id_edit, 3, 1)
-        frame_def_layout.addWidget(QLabel("校验模式:"), 6, 0)
-        self.checksum_mode_combo = QComboBox()
-        self.checksum_mode_combo.addItem("原始校验 (Sum/Add)", ChecksumMode.ORIGINAL_SUM_ADD)
-        self.checksum_mode_combo.addItem("CRC-16/CCITT-FALSE", ChecksumMode.CRC16_CCITT_FALSE)
-        self.checksum_mode_combo.currentIndexChanged.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.checksum_mode_combo, 6, 1)
-        frame_def_layout.addWidget(QLabel("最后帧校验1/CRC高:"), 4, 0)
+
+        frame_def_layout.addWidget(QLabel("最后帧校验1/CRC高:"), 4, 0, Qt.AlignmentFlag.AlignLeft)
         self.sum_check_display = QLineEdit()
         self.sum_check_display.setPlaceholderText("自动")
         self.sum_check_display.setReadOnly(True)
         frame_def_layout.addWidget(self.sum_check_display, 4, 1)
-        frame_def_layout.addWidget(QLabel("最后帧校验2/CRC低:"), 5, 0)
+
+        frame_def_layout.addWidget(QLabel("最后帧校验2/CRC低:"), 5, 0, Qt.AlignmentFlag.AlignLeft)
         self.add_check_display = QLineEdit()
         self.add_check_display.setPlaceholderText("自动")
         self.add_check_display.setReadOnly(True)
         frame_def_layout.addWidget(self.add_check_display, 5, 1)
+
+        frame_def_layout.addWidget(QLabel("校验模式:"), 6, 0, Qt.AlignmentFlag.AlignLeft)
+        self.checksum_mode_combo = QComboBox()
+        # Ensure ChecksumMode is imported where Constants is defined
+        self.checksum_mode_combo.addItem("原始校验 (Sum/Add)", ChecksumMode.ORIGINAL_SUM_ADD)
+        self.checksum_mode_combo.addItem("CRC-16/CCITT-FALSE", ChecksumMode.CRC16_CCITT_FALSE)
+        self.checksum_mode_combo.currentIndexChanged.connect(self._emit_config_changed)
+        frame_def_layout.addWidget(self.checksum_mode_combo, 6, 1)
+
+        # Optional: Apply similar column stretch to frame_def_layout if desired
+        frame_def_layout.setColumnStretch(0, 0)  # Labels
+        frame_def_layout.setColumnStretch(1, 1)  # Input fields in this group CAN stretch if desired
+        # Or set to 0 if you want them fixed, and add stretch to col 2
+        # frame_def_layout.setColumnStretch(2, 1) # If column 1 is set to 0 stretch
+
         frame_def_group.setLayout(frame_def_layout)
-        layout.addWidget(frame_def_group)
-        layout.addStretch()
-        self.setLayout(layout)
+        main_panel_layout.addWidget(frame_def_group)
+
+        main_panel_layout.addStretch(1)  # Pushes both group boxes to the top
+        self.setLayout(main_panel_layout)
 
     def _emit_config_changed(self):
         self.config_changed.emit()
 
     def update_ui_from_main_configs(self, serial_cfg: SerialPortConfig, frame_cfg: FrameConfig,
-                                    active_checksum: ChecksumMode):  # As defined
-        self.baud_combo.setCurrentText(str(serial_cfg.baud_rate))
+                                    active_checksum: ChecksumMode):
+        # Block signals temporarily to prevent multiple config_changed emissions during update
+        self.baud_combo.blockSignals(True)
+        self.data_bits_combo.blockSignals(True)
+        self.parity_combo.blockSignals(True)
+        self.stop_bits_combo.blockSignals(True)
+        self.head_edit.blockSignals(True)
+        self.saddr_edit.blockSignals(True)
+        self.daddr_edit.blockSignals(True)
+        self.id_edit.blockSignals(True)
+        self.checksum_mode_combo.blockSignals(True)
+
+        baud_rate_str = str(serial_cfg.baud_rate)
+        if self.baud_combo.findText(baud_rate_str) == -1:
+            self.baud_combo.addItem(baud_rate_str)
+        self.baud_combo.setCurrentText(baud_rate_str)
+
         self.data_bits_combo.setCurrentText(str(serial_cfg.data_bits))
         self.parity_combo.setCurrentText(serial_cfg.parity)
         self.stop_bits_combo.setCurrentText(str(serial_cfg.stop_bits))
+
+        # Port combo is updated via update_port_combo_display
         if serial_cfg.port_name:
             idx = self.port_combo.findData(serial_cfg.port_name)
-            if idx != -1: self.port_combo.setCurrentIndex(idx)
+            if idx != -1:
+                self.port_combo.setCurrentIndex(idx)
+            # Consider else if port_name is not in combo (e.g. after refresh)
+
         self.head_edit.setText(frame_cfg.head)
         self.saddr_edit.setText(frame_cfg.s_addr)
         self.daddr_edit.setText(frame_cfg.d_addr)
         self.id_edit.setText(frame_cfg.func_id)
+
         idx_cs = self.checksum_mode_combo.findData(active_checksum)
         if idx_cs != -1:
             self.checksum_mode_combo.setCurrentIndex(idx_cs)
         else:
-            idx_def = self.checksum_mode_combo.findData(Constants.DEFAULT_CHECKSUM_MODE)
-            if idx_def != -1: self.checksum_mode_combo.setCurrentIndex(idx_def)
+            idx_def = self.checksum_mode_combo.findData(Constants.DEFAULT_CHECKSUM_MODE)  # Ensure Constants is imported
+            if idx_def != -1:
+                self.checksum_mode_combo.setCurrentIndex(idx_def)
 
-    def get_serial_config_from_ui(self) -> SerialPortConfig:  # As defined
-        pn = self.port_combo.currentData()
-        port_name = pn if pn is not None else (
+        # Unblock signals
+        self.baud_combo.blockSignals(False)
+        self.data_bits_combo.blockSignals(False)
+        self.parity_combo.blockSignals(False)
+        self.stop_bits_combo.blockSignals(False)
+        self.head_edit.blockSignals(False)
+        self.saddr_edit.blockSignals(False)
+        self.daddr_edit.blockSignals(False)
+        self.id_edit.blockSignals(False)
+        self.checksum_mode_combo.blockSignals(False)
+
+    def get_serial_config_from_ui(self) -> SerialPortConfig:
+        pn_data = self.port_combo.currentData()
+        port_name = pn_data if pn_data is not None else (
             self.port_combo.currentText() if self.port_combo.currentText() != "无可用端口" else None)
-        return SerialPortConfig(port_name, int(self.baud_combo.currentText()), int(self.data_bits_combo.currentText()),
-                                self.parity_combo.currentText(), float(
-                self.stop_bits_combo.currentText()) if self.stop_bits_combo.currentText() == "1.5" else int(
-                self.stop_bits_combo.currentText()))
 
-    def get_frame_config_from_ui(self) -> FrameConfig:  # As defined
+        try:
+            baud_rate = int(self.baud_combo.currentText())
+        except ValueError:
+            # Handle error or use default, inform user?
+            baud_rate = Constants.DEFAULT_BAUD_RATE  # Ensure Constants is imported
+            if self.main_window_ref.error_logger:
+                self.main_window_ref.error_logger.log_warning(
+                    f"无效的波特率输入: '{self.baud_combo.currentText()}', 使用默认值 {baud_rate}")
+            self.baud_combo.setCurrentText(str(baud_rate))  # Reset to a valid value
+
+        data_bits = int(self.data_bits_combo.currentText())
+        parity = self.parity_combo.currentText()
+        s_bits_str = self.stop_bits_combo.currentText()
+        stop_bits = float(s_bits_str) if s_bits_str == "1.5" else int(s_bits_str)
+        return SerialPortConfig(port_name, baud_rate, data_bits, parity, stop_bits)
+
+    def get_frame_config_from_ui(self) -> FrameConfig:
         return FrameConfig(self.head_edit.text(), self.saddr_edit.text(), self.daddr_edit.text(), self.id_edit.text())
 
-    def get_checksum_mode_from_ui(self) -> ChecksumMode:  # As defined
+    def get_checksum_mode_from_ui(self) -> ChecksumMode:
         mode = self.checksum_mode_combo.currentData()
-        return mode if isinstance(mode, ChecksumMode) else Constants.DEFAULT_CHECKSUM_MODE
+        return mode if isinstance(mode,
+                                  ChecksumMode) else Constants.DEFAULT_CHECKSUM_MODE  # Ensure Constants is imported
 
-    def update_port_combo_display(self, available_ports: List[Dict], current_port_name: Optional[str]):  # As defined
+    def update_port_combo_display(self, available_ports: List[Dict], current_port_name: Optional[str]):
+        self.port_combo.blockSignals(True)  # Block signals during update
         self.port_combo.clear()
         if not available_ports:
-            self.port_combo.addItem("无可用端口"); self.port_combo.setEnabled(False)
+            self.port_combo.addItem("无可用端口")
+            self.port_combo.setEnabled(False)
         else:
-            for port_info in available_ports: self.port_combo.addItem(
-                f"{port_info['name']} ({port_info['description']})", port_info['name'])
+            for port_info in available_ports:
+                self.port_combo.addItem(f"{port_info['name']} ({port_info['description']})", port_info['name'])
             self.port_combo.setEnabled(True)
             if current_port_name:
                 idx = self.port_combo.findData(current_port_name)
                 if idx != -1:
                     self.port_combo.setCurrentIndex(idx)
-                elif self.port_combo.count() > 0:
+                elif self.port_combo.count() > 0:  # If current_port_name not found, select first available
                     self.port_combo.setCurrentIndex(0)
+            elif self.port_combo.count() > 0:  # If no current_port_name, select first
+                self.port_combo.setCurrentIndex(0)
+        self.port_combo.blockSignals(False)  # Unblock signals
+        self._emit_config_changed()  # Emit config changed after port list update if selection changed
 
-    def set_connection_status_display(self, connected: bool):  # As defined
+    def set_connection_status_display(self, connected: bool):
         self.port_combo.setEnabled(not connected)
         self.baud_combo.setEnabled(not connected)
         self.data_bits_combo.setEnabled(not connected)
@@ -472,12 +562,12 @@ class SerialConfigDefinitionPanelWidget(QWidget):
         self.refresh_ports_button.setEnabled(not connected)
         self.connect_button.setChecked(connected)
         self.connect_button.setText("关闭串口" if connected else "打开串口")
-        if not self.port_combo.count() or self.port_combo.currentText() == "无可用端口": self.connect_button.setEnabled(
-            False)
+        if not self.port_combo.count() or self.port_combo.currentText() == "无可用端口":
+            self.connect_button.setEnabled(False)
 
     def update_checksum_display(self, sum_check: str, add_check: str):
-        self.sum_check_display.setText(sum_check); self.add_check_display.setText(add_check)
-
+        self.sum_check_display.setText(sum_check)
+        self.add_check_display.setText(add_check)
 
 class CustomLogPanelWidget(QWidget):
     def __init__(self, main_window_ref: 'SerialDebugger', parent: Optional[QWidget] = None): # 添加 main_window_ref
@@ -590,10 +680,6 @@ class BasicCommPanelWidget(QWidget):
         config.get("recv_timestamp_display", False))
 
 
-# Presume all necessary imports and other PanelWidget classes
-# (ParsePanelWidget, SendPanelWidget, SerialConfigDefinitionPanelWidget,
-#  CustomLogPanelWidget, BasicCommPanelWidget, PlotWidgetContainer)
-# are correctly defined above this SerialDebugger class, as in your provided file.
 
 class SerialDebugger(QMainWindow):
     def __init__(self, parent: Optional[QWidget] = None):
@@ -1087,7 +1173,7 @@ class SerialDebugger(QMainWindow):
         dispatched_to_a_panel = False
         for panel_widget in self.parse_panel_widgets.values():
             if func_id_hex.upper() == panel_widget.get_target_func_id().upper():
-                panel_widget.dispatch_data(data_payload_ba);
+                panel_widget.dispatch_data(data_payload_ba)
                 dispatched_to_a_panel = True
         if not dispatched_to_a_panel and self.error_logger: self.error_logger.log_debug(
             f"Frame FID {func_id_hex} no target panel.")

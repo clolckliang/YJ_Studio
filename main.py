@@ -759,22 +759,22 @@ class SerialDebugger(QMainWindow):
 
     def create_menus(self) -> None:
         file_menu = self.menuBar().addMenu("文件(&F)")
-        load_config_action = QAction("加载配置...", self);
-        load_config_action.triggered.connect(self.load_configuration_action);
+        load_config_action = QAction("加载配置...", self)
+        load_config_action.triggered.connect(self.load_configuration_action)
         file_menu.addAction(load_config_action)
-        save_config_action = QAction("保存配置...", self);
-        save_config_action.triggered.connect(self.save_configuration_action);
+        save_config_action = QAction("保存配置...", self)
+        save_config_action.triggered.connect(self.save_configuration_action)
         file_menu.addAction(save_config_action)
         file_menu.addSeparator()
-        export_parsed_data_action = QAction("导出已解析数据 (CSV)...", self);
-        export_parsed_data_action.triggered.connect(self.export_parsed_data_action);
+        export_parsed_data_action = QAction("导出已解析数据 (CSV)...", self)
+        export_parsed_data_action.triggered.connect(self.export_parsed_data_action)
         file_menu.addAction(export_parsed_data_action)
-        save_raw_data_action = QAction("保存原始录制数据 (JSON)...", self);
-        save_raw_data_action.triggered.connect(self.save_raw_recorded_data_action);
+        save_raw_data_action = QAction("保存原始录制数据 (JSON)...", self)
+        save_raw_data_action.triggered.connect(self.save_raw_recorded_data_action)
         file_menu.addAction(save_raw_data_action)
         file_menu.addSeparator()
-        exit_action = QAction("退出(&X)", self);
-        exit_action.triggered.connect(self.close);
+        exit_action = QAction("退出(&X)", self)
+        exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
         self.view_menu = self.menuBar().addMenu("视图(&V)")
@@ -793,32 +793,32 @@ class SerialDebugger(QMainWindow):
         theme_menu.addAction(load_external_qss_action)
 
         tools_menu = self.menuBar().addMenu("工具(&T)")
-        add_parse_panel_action = QAction("添加自定义解析面板...", self);
-        add_parse_panel_action.triggered.connect(lambda: self.add_new_parse_panel_action());
+        add_parse_panel_action = QAction("添加自定义解析面板...", self)
+        add_parse_panel_action.triggered.connect(lambda: self.add_new_parse_panel_action())
         tools_menu.addAction(add_parse_panel_action)
-        add_send_panel_action = QAction("添加自定义发送面板...", self);
-        add_send_panel_action.triggered.connect(lambda: self.add_new_send_panel_action());
+        add_send_panel_action = QAction("添加自定义发送面板...", self)
+        add_send_panel_action.triggered.connect(lambda: self.add_new_send_panel_action())
         tools_menu.addAction(add_send_panel_action)
         tools_menu.addSeparator()
-        add_plot_action = QAction("添加波形图窗口(&P)", self);
-        add_plot_action.setEnabled(PYQTGRAPH_AVAILABLE);
-        add_plot_action.triggered.connect(lambda: self.add_new_plot_widget_action(from_config=False));
+        add_plot_action = QAction("添加波形图窗口(&P)", self)
+        add_plot_action.setEnabled(PYQTGRAPH_AVAILABLE)
+        add_plot_action.triggered.connect(lambda: self.add_new_plot_widget_action(from_config=False))
         tools_menu.addAction(add_plot_action)
-        clear_all_plots_action = QAction("清空所有波形图", self);
-        clear_all_plots_action.setEnabled(PYQTGRAPH_AVAILABLE);
-        clear_all_plots_action.triggered.connect(self.clear_all_plots_action);
+        clear_all_plots_action = QAction("清空所有波形图", self)
+        clear_all_plots_action.setEnabled(PYQTGRAPH_AVAILABLE)
+        clear_all_plots_action.triggered.connect(self.clear_all_plots_action)
         tools_menu.addAction(clear_all_plots_action)
         tools_menu.addSeparator()
-        self.start_raw_record_action = QAction("开始原始数据录制", self);
-        self.start_raw_record_action.setCheckable(True);
-        self.start_raw_record_action.triggered.connect(self.toggle_raw_data_recording_action);
+        self.start_raw_record_action = QAction("开始原始数据录制", self)
+        self.start_raw_record_action.setCheckable(True)
+        self.start_raw_record_action.triggered.connect(self.toggle_raw_data_recording_action)
         tools_menu.addAction(self.start_raw_record_action)
         tools_menu.addSeparator()
-        show_stats_action = QAction("显示统计信息...", self);
-        show_stats_action.triggered.connect(self.show_statistics_action);
+        show_stats_action = QAction("显示统计信息...", self)
+        show_stats_action.triggered.connect(self.show_statistics_action)
         tools_menu.addAction(show_stats_action)
-        reset_stats_action = QAction("重置统计信息", self);
-        reset_stats_action.triggered.connect(self.protocol_analyzer.reset_statistics);
+        reset_stats_action = QAction("重置统计信息", self)
+        reset_stats_action.triggered.connect(self.protocol_analyzer.reset_statistics)
         tools_menu.addAction(reset_stats_action)
 
     @Slot()
@@ -982,7 +982,7 @@ class SerialDebugger(QMainWindow):
 
         if hasattr(self, 'status_bar_label'):
             if not connected and self.serial_config_panel_widget and \
-                    (not self.serial_config_panel_widget.port_combo.count() or \
+                    (not self.serial_config_panel_widget.port_combo.count() or
                      self.serial_config_panel_widget.port_combo.currentText() == "无可用端口"):
                 self.status_bar_label.setText("无可用串口")
             # else: self.status_bar_label.setText("已连接" if connected else "未连接") # This is handled by on_serial_connection_status_changed
@@ -1164,7 +1164,7 @@ class SerialDebugger(QMainWindow):
             temp_loader = ConfigManager(filename=file_path, error_logger=self.error_logger)
             loaded_cfg = temp_loader.load_config()
             if loaded_cfg != temp_loader.default_config or Path(file_path).exists():
-                self.current_config = loaded_cfg;
+                self.current_config = loaded_cfg
                 self.apply_loaded_config_to_ui()
                 QMessageBox.information(self, "配置加载", f"配置已从 '{file_path}' 加载。")
             else:
@@ -1230,7 +1230,7 @@ class SerialDebugger(QMainWindow):
             plot_name_input = text.strip()
         elif name is None:
             plot_name_input = f"波形图 {plot_id_to_use}"
-        plot_container = PlotWidgetContainer(plot_id_to_use, plot_name_input, self);
+        plot_container = PlotWidgetContainer(plot_id_to_use, plot_name_input, self)
         dw_plot = QDockWidget(plot_name_input, self)
         dw_plot.setObjectName(f"PlotDock_{plot_id_to_use}");
         dw_plot.setWidget(plot_container);

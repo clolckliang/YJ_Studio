@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, Any, List, Dict, Callable, Tuple
 from contextlib import contextmanager
-import datetime
+
 import struct
 import json
 import time
@@ -294,7 +294,7 @@ class DataProcessor(QThread):
     def get_stats(self) -> Dict:
         stats_copy = self._stats.copy()
         if stats_copy['start_time']:
-            stats_copy['uptime_seconds'] = (datetime.datetime.now() - stats_copy['start_time']).total_seconds()
+            stats_copy['uptime_seconds'] = (datetime.now() - stats_copy['start_time']).total_seconds()
         stats_copy['current_queue_size'] = self.get_queue_size()
         return stats_copy
 

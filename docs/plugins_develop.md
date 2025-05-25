@@ -1,5 +1,3 @@
-以下是重新编写的 SerialDebugger 插件开发指南，采用更清晰的结构和更专业的表述方式：
-
 # SerialDebugger 插件开发指南
 
 ## 1. 概述
@@ -79,15 +77,67 @@ def register_plugin_panels(manager):
     manager.register_panel_type(SamplePanel)
 ```
 
-## 5. 开发最佳实践
 
-### 5.1 资源访问
+
+## 5. 插件的加载与使用流程 (新增章节)
+
+一旦您按照上述规范开发并放置了插件，主应用程序 `SerialDebugger` 将按以下流程处理它：
+
+### 5.1 插件发现
+- 当 `SerialDebugger` 启动时，其实例化的 `PluginManager` (在 `main.py` 中为 `self.plugin_manager`) 会调用其 `discover_plugins("panel_plugins")` 方法。
+- 此方法会扫描位于主应用程序根目录下的 `panel_plugins/` 文件夹。
+
+### 5.2 插件加载与注册
+- 对于 `panel_plugins/` 中的每一个子目录（即每个插件包），`PluginManager` 会尝试导入该包。
+- 如果导入成功，`PluginManager` 会查找并调用该插件包内 `__init__.py` 文件中定义的 `register_plugin_panels(manager)` 函数。
+- `PluginManager` 实例自身 (即 `manager`) 会作为参数传递给 `register_plugin_panels` 函数。
+- 在插件的 `register_plugin_panels` 函数内部，您通过调用 `manager.register_panel_type(YourPanelClass)` 来将您的面板类注册到 `PluginManager` 中。
+
+### 5.3 在用户界面中呈现
+- `SerialDebugger` 主窗口通过 `PluginManager` 获取所有已成功注册的面板类型。
+- 例如，在构建“工具” -> “添加面板”菜单时，`SerialDebugger` 会调用 `self.plugin_manager.get_creatable_panel_types()`。此方法返回一个字典，其中包含每个已注册面板的 `PANEL_TYPE_NAME` (作为键) 和 `PANEL_DISPLAY_NAME` (作为值)。
+- `PANEL_DISPLAY_NAME` 将用于在菜单中显示给用户。
+
+### 5.4 面板实例化与显示
+- 当用户从菜单中选择添加某个特定类型的面板时（例如，点击“添加示例面板...”），会触发 `SerialDebugger` 中的一个动作。
+- 此动作会调用 `self.plugin_manager.create_panel_instance(panel_type_name, panel_id, initial_config)`。
+    - `panel_type_name` 是您在插件类中定义的 `PANEL_TYPE_NAME`。
+    - `panel_id` 是主程序分配的唯一ID。
+    - `initial_config` 通常在从配置文件加载面板时提供，新创建时为 `None`。
+- 如果 `create_panel_instance` 成功返回一个面板部件实例：
+    - `SerialDebugger` 会提示用户输入一个停靠窗口 (Dock Widget) 的名称，或者使用面板的 `get_initial_dock_title()` 作为默认建议。
+    - 然后，主程序会创建一个 `QDockWidget`，将您的面板实例设置为其内容部件。
+    - 此 `QDockWidget` 会被添加到主窗口的某个停靠区域，并显示出来。
+    - 您的面板的 `on_panel_added()` 方法（如果实现）会被调用。
+
+### 5.5 用户交互与配置
+- 用户现在可以与您的插件面板进行交互。
+- 当主应用程序保存配置时，会调用您面板的 `get_config()` 方法获取其状态。
+- 当主应用程序加载配置时，会使用保存的配置通过 `create_panel_instance` 重新创建您的面板，并通过其 `__init__` 和 `apply_config` 方法恢复状态。
+
+**简而言之，作为插件开发者，您只需确保：**
+1.  插件包位于 `panel_plugins/` 目录中。
+2.  插件包内有 `__init__.py`，其中包含 `register_plugin_panels` 函数。
+3.  在 `register_plugin_panels` 中正确调用 `manager.register_panel_type(YourPanelClass)`。
+
+主应用程序的 `PluginManager` 和 `SerialDebugger` 类会负责其余的发现、加载、菜单集成和实例化工作。
+
+
+
+
+
+
+
+
+## 6. 开发最佳实践
+
+### 6.1 资源访问
 通过 `main_window_ref` 访问主程序资源：
 - `self.main_window_ref.serial_manager` 串口管理
 - `self.main_window_ref.error_logger` 日志记录
 - `self.main_window_ref.status_bar_label` 状态栏
 
-### 5.2 配置管理
+### 6.2 配置管理
 - 配置键名使用小写下划线命名法
 - 包含版本号字段便于后续升级
 - 示例配置：
@@ -101,7 +151,7 @@ def register_plugin_panels(manager):
 }
 ```
 
-### 5.3 错误处理
+### 6.3 错误处理
 ```python
 try:
     # 风险操作
@@ -110,21 +160,21 @@ except Exception as e:
     self.main_window_ref.status_bar_label.setText("插件操作出错")
 ```
 
-## 6. 调试与测试
+## 7. 调试与测试
 
-### 6.1 测试清单
+### 7.1 测试清单
 1. 面板多次创建/销毁测试
 2. 配置保存/加载循环测试
 3. 主题切换兼容性测试
 4. 高DPI显示测试
 5. 多语言支持测试（如需要）
 
-### 6.2 性能建议
+### 7.2 性能建议
 - 避免在 `apply_config()` 中执行耗时操作
 - 大数据处理使用后台线程
 - 定期调用 `QApplication.processEvents()` 保持响应
 
-## 7. 发布规范
+## 8. 发布规范
 
 1. 包含 `README.md` 说明文档
 2. 提供示例配置文件（如有）

@@ -1102,6 +1102,7 @@ class BasicCommPanelWidget(QWidget):
         """设置发送框中的文本"""
         if self.send_text_edit:
             self.send_text_edit.setText(text)
+
 class ScriptingPanelWidget(QWidget):
     execute_script_requested = Signal(str)
 

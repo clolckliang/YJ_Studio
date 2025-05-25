@@ -1,3 +1,4 @@
+import ast
 from datetime import datetime
 from typing import Optional, Any, List, Dict, Callable, Tuple
 from contextlib import contextmanager
@@ -9,10 +10,129 @@ import math
 import re
 import sys
 import traceback
-import threading
+import threading  # Required for QMutex fallback and for ScriptEngine._output_buffer_lock
 import signal
+import numpy
 
-from PySide6.QtCore import QThread, Signal, QMutex, QByteArray, QTimer, QObject
+# 假设 PySide6 可用，如果环境不同，QMutex 可能需要替换
+try:
+    from PySide6.QtCore import QThread, Signal, QMutex, QByteArray, QTimer, QObject
+except ImportError:
+    print("Warning: PySide6 not found. Using basic threading.Lock for QMutex.")
+
+
+    # Fallback if PySide6 is not available, for basic threading lock
+    class QMutex:
+        def __init__(self):
+            self._lock = threading.Lock()  # Use re-entrant lock
+
+        def lock(self):
+            self._lock.acquire()
+
+        def unlock(self):
+            self._lock.release()
+
+        def tryLock(self, timeout: Optional[int] = None) -> bool:
+            if timeout is None:
+                return self._lock.acquire(blocking=False)
+            elif timeout == 0:
+                return self._lock.acquire(blocking=False)
+            else:
+                return self._lock.acquire(blocking=True, timeout=timeout / 1000.0)
+
+
+    class QObject:
+        pass  # Placeholder
+
+
+    class QThread(threading.Thread, QObject):  # Basic QThread placeholder
+        def __init__(self, parent: Optional[QObject] = None):
+            threading.Thread.__init__(self)
+            QObject.__init__(self)  # Not a real QObject, just for structure
+            self._parent = parent
+
+        def msleep(self, ms: int): time.sleep(ms / 1000.0)
+
+        def quit(self): pass  # Placeholder
+
+        def wait(self, timeout: Optional[int] = None):  # timeout in ms
+            super().join(timeout=timeout / 1000.0 if timeout else None)
+
+
+    class Signal:  # Basic Signal placeholder
+        def __init__(self, *args):
+            self.callbacks = []
+
+        def connect(self, callback):
+            self.callbacks.append(callback)
+
+        def disconnect(self, callback):
+            try:
+                self.callbacks.remove(callback)
+            except ValueError:
+                pass
+
+        def emit(self, *args):
+            for cb in self.callbacks:
+                try:
+                    cb(*args)
+                except Exception as e:
+                    print(f"Error in Signal callback: {e}")
+
+
+    class QByteArray:  # Basic QByteArray placeholder
+        def __init__(self, initial_data=None):
+            if isinstance(initial_data, QByteArray):
+                self._data = bytearray(initial_data._data)
+            elif isinstance(initial_data, (bytes, bytearray)):
+                self._data = bytearray(initial_data)
+            elif isinstance(initial_data, str):
+                self._data = bytearray(initial_data, 'utf-8')  # Default encoding
+            elif initial_data is None:
+                self._data = bytearray()
+            else:
+                raise TypeError("Invalid data type for QByteArray")
+
+        def size(self) -> int:
+            return len(self._data)
+
+        def append(self, data: Any):
+            if isinstance(data, (str, int)):  # Handle single char/byte
+                self._data.append(ord(data) if isinstance(data, str) else data)
+            elif isinstance(data, (bytes, bytearray, QByteArray)):
+                self._data.extend(data._data if isinstance(data, QByteArray) else data)
+            else:
+                raise TypeError(f"Cannot append type {type(data)} to QByteArray")
+
+        def at(self, i: int) -> int:
+            return self._data[i]  # Returns int (byte value)
+
+        def data(self) -> bytes:
+            return bytes(self._data)
+
+        def toStdString(self) -> str:
+            return self._data.decode('utf-8', errors='replace')  # Common usage
+
+        def replace(self, pos: int, count: int, data: bytes):
+            self._data = self._data[:pos] + bytearray(data) + self._data[pos + count:]
+
+        def resize(self, size: int):
+            if size > len(self._data):
+                self._data.extend(b'\x00' * (size - len(self._data)))
+            else:
+                self._data = self._data[:size]
+
+        def reserve(self, size: int):
+            pass  # Placeholder, bytearray grows automatically
+
+        def clear(self):
+            self._data.clear()
+
+        def __bytes__(self):
+            return bytes(self._data)
+
+        def __str__(self):
+            return self.toStdString()
 
 
 class ProtocolManager:
@@ -23,12 +143,6 @@ class ProtocolManager:
         self._mutex = QMutex()  # 添加线程安全
 
     def register_protocol(self, name: str, protocol_handler: Any):
-        """
-        注册新的协议处理器
-        Args:
-            name: 协议名称
-            protocol_handler: 协议处理实例或工厂函数
-        """
         self._mutex.lock()
         try:
             if name in self.protocols:
@@ -39,7 +153,6 @@ class ProtocolManager:
             self._mutex.unlock()
 
     def get_protocol(self, name: str) -> Optional[Any]:
-        """获取协议处理器"""
         self._mutex.lock()
         try:
             protocol = self.protocols.get(name)
@@ -50,11 +163,6 @@ class ProtocolManager:
             self._mutex.unlock()
 
     def unregister_protocol(self, name: str) -> bool:
-        """
-        注销协议
-        Returns:
-            bool: 成功返回True，协议不存在返回False
-        """
         self._mutex.lock()
         try:
             if name in self.protocols:
@@ -68,7 +176,6 @@ class ProtocolManager:
             self._mutex.unlock()
 
     def list_protocols(self) -> List[str]:
-        """返回已注册协议名称列表"""
         self._mutex.lock()
         try:
             return list(self.protocols.keys())
@@ -76,7 +183,6 @@ class ProtocolManager:
             self._mutex.unlock()
 
     def clear_protocols(self):
-        """清除所有协议"""
         self._mutex.lock()
         try:
             self.protocols.clear()
@@ -95,100 +201,66 @@ class CircularBuffer:
         self.buffer = QByteArray()
         self.buffer.resize(size)
         self.max_size = size
-        self.head = 0  # 下一个写入位置
-        self.tail = 0  # 下一个读取位置
-        self.count = 0  # 当前缓冲区中的字节数
+        self.head = 0
+        self.tail = 0
+        self.count = 0
         self.mutex = QMutex()
 
     def write(self, data: QByteArray) -> int:
-        """
-        写入数据到缓冲区
-        Returns:
-            int: 实际写入的字节数
-        """
         if not data or data.size() == 0:
             return 0
-
         self.mutex.lock()
         try:
             data_len = data.size()
             bytes_written = 0
-
             for i in range(data_len):
-                # 如果缓冲区满了，覆盖最旧的数据
                 if self.count == self.max_size:
                     self.tail = (self.tail + 1) % self.max_size
                     self.count -= 1
-
-                # 写入单个字节
-                byte_value = data.at(i)
-                if isinstance(byte_value, int):
-                    byte_data = bytes([byte_value])
-                else:
-                    byte_data = bytes([ord(byte_value)] if isinstance(byte_value, str) else [byte_value])
-
-                self.buffer.replace(self.head, 1, byte_data)
+                byte_to_write = bytes([data.at(i)])
+                self.buffer.replace(self.head, 1, byte_to_write)
                 self.head = (self.head + 1) % self.max_size
                 self.count += 1
                 bytes_written += 1
-
             return bytes_written
         finally:
             self.mutex.unlock()
 
     def read(self, length: int) -> QByteArray:
-        """
-        从缓冲区读取数据并消费
-        Args:
-            length: 要读取的字节数
-        Returns:
-            QByteArray: 读取的数据
-        """
         if length <= 0 or self.count == 0:
             return QByteArray()
-
         self.mutex.lock()
         try:
             bytes_to_read = min(length, self.count)
             result = QByteArray()
-            result.reserve(bytes_to_read)
-
             for _ in range(bytes_to_read):
                 byte_value = self.buffer.at(self.tail)
-                result.append(byte_value)
+                result.append(bytes([byte_value]))
                 self.tail = (self.tail + 1) % self.max_size
                 self.count -= 1
-
             return result
         finally:
             self.mutex.unlock()
 
     def peek(self, length: int) -> QByteArray:
-        """预览数据而不消费"""
         if length <= 0 or self.count == 0:
             return QByteArray()
-
         self.mutex.lock()
         try:
             bytes_to_peek = min(length, self.count)
             result = QByteArray()
-            result.reserve(bytes_to_peek)
-
             current_tail = self.tail
             for _ in range(bytes_to_peek):
                 byte_value = self.buffer.at(current_tail)
-                result.append(byte_value)
+                result.append(bytes([byte_value]))
                 current_tail = (current_tail + 1) % self.max_size
-
             return result
         finally:
             self.mutex.unlock()
 
     def discard(self, length: int) -> int:
-        """丢弃指定数量的字节"""
         if length <= 0 or self.count == 0:
             return 0
-
         self.mutex.lock()
         try:
             bytes_to_discard = min(length, self.count)
@@ -199,7 +271,6 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def clear(self):
-        """清空缓冲区"""
         self.mutex.lock()
         try:
             self.head = 0
@@ -209,7 +280,6 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def get_count(self) -> int:
-        """获取当前缓冲区中的字节数"""
         self.mutex.lock()
         try:
             return self.count
@@ -217,7 +287,6 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def get_free_space(self) -> int:
-        """获取可用空间"""
         self.mutex.lock()
         try:
             return self.max_size - self.count
@@ -225,54 +294,45 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def is_empty(self) -> bool:
-        """检查缓冲区是否为空"""
         return self.get_count() == 0
 
     def is_full(self) -> bool:
-        """检查缓冲区是否已满"""
         return self.get_count() == self.max_size
 
     def get_utilization(self) -> float:
-        """获取缓冲区使用率 (0.0 - 1.0)"""
+        if self.max_size == 0: return 0.0
         return self.get_count() / self.max_size
 
 
 class DataProcessor(QThread):
     """数据处理线程类"""
+    processed_data_signal = Signal(str, QByteArray)
+    processing_error_signal = Signal(str)
+    processing_stats_signal = Signal(dict)
 
-    processed_data_signal = Signal(str, QByteArray)  # Emits (original_func_id, processed_payload)
-    processing_error_signal = Signal(str)  # Emits error messages
-    processing_stats_signal = Signal(dict)  # Emits processing statistics
-
-    def __init__(self, parent: Optional[QObject] = None, batch_size: int = 5):  # Smaller batch for responsiveness
+    def __init__(self, parent: Optional[QObject] = None, batch_size: int = 5):
         super().__init__(parent)
-        # from collections import deque # Using deque is more efficient for pop(0)
-        # self.queue: deque[Tuple[str, QByteArray]] = deque() # func_id, payload
-        self.queue: List[Tuple[str, QByteArray]] = []  # (func_id, payload)
+        self.queue: List[Tuple[str, QByteArray]] = []
         self.mutex = QMutex()
         self._running = False
-        self._batch_size = batch_size  # How many items to process before a small sleep or stats update
-        self._stats = {
-            'processed_count': 0,
-            'error_count': 0,
-            'start_time': None,
-            'last_activity': None,
-            'queue_size_history': []  # Optional: for monitoring queue buildup
+        self._batch_size = batch_size
+        self._stats: Dict[str, Any] = {
+            'processed_count': 0, 'error_count': 0,
+            'start_time': None, 'last_activity': None,
+            'queue_size_history': []
         }
         self.MAX_QUEUE_HISTORY = 100
+        self.main_window_ref: Optional[Any] = parent if hasattr(parent, 'error_logger') else None
 
     def add_data(self, func_id: str, data: QByteArray):
-        """添加数据 (功能码和负载) 到处理队列"""
-        if not data or data.size() == 0:
-            return
-
+        if not data or data.size() == 0: return
         self.mutex.lock()
         try:
-            self.queue.append((func_id, data))  # Store as a tuple
-            self._stats['last_activity'] = datetime.datetime.now()
+            self.queue.append((func_id, data))
+            self._stats['last_activity'] = datetime.now()
             if len(self._stats['queue_size_history']) > self.MAX_QUEUE_HISTORY:
                 self._stats['queue_size_history'].pop(0)
-            self.stats['queue_size_history'].append(len(self.queue))
+            self._stats['queue_size_history'].append(len(self.queue))
         finally:
             self.mutex.unlock()
 
@@ -301,120 +361,78 @@ class DataProcessor(QThread):
     def run(self):
         self._running = True
         self._stats['start_time'] = datetime.now()
-        if hasattr(self, 'main_window_ref') and self.main_window_ref.error_logger:  # Check if logger accessible
-            self.main_window_ref.error_logger.log_info("DataProcessor thread started.")
+        logger = getattr(self.main_window_ref, 'error_logger', None)
+        if logger:
+            logger.log_info("DataProcessor thread started.")
         else:
             print("DataProcessor thread started.")
 
         try:
             while self._running:
                 processed_in_this_cycle = 0
+                items_to_process_batch = []
+                self.mutex.lock()
+                try:
+                    count = 0
+                    while self.queue and count < self._batch_size:
+                        items_to_process_batch.append(self.queue.pop(0))
+                        count += 1
+                finally:
+                    self.mutex.unlock()
 
-                for _ in range(self._batch_size):  # Process a batch of items
-                    item_to_process = None
-                    self.mutex.lock()
+                # noinspection PyUnreachableCode
+                for item_to_process in items_to_process_batch:
+                    if not self._running: break
+                    func_id, data_payload = item_to_process
                     try:
-                        if self.queue:
-                            item_to_process = self.queue.pop(0)  # FIFO
-                        else:
-                            # Queue is empty, break from batch processing
-                            self.mutex.unlock()
-                            break
-                    finally:
-                        # Ensure mutex is unlocked if break happens or if queue was empty initially
-                        if self.mutex.tryLock():  # Check if it was locked by this path
-                            self.mutex.unlock()
+                        processed_result_payload = QByteArray(data_payload)
+                        self.processed_data_signal.emit(func_id, processed_result_payload)
+                        self._stats['processed_count'] += 1
+                        processed_in_this_cycle += 1
+                    except Exception as e:
+                        error_msg = f"DataProcessor: Error during processing for FID {func_id}: {e}"
+                        self.processing_error_signal.emit(error_msg)
+                        self._stats['error_count'] += 1
 
-                    if item_to_process:
-                        func_id, data_payload = item_to_process
-                        try:
-                            # --- ACTUAL DATA PROCESSING LOGIC GOES HERE ---
-                            processed_result_payload = QByteArray(data_payload)  # Make a copy or transform
-
-                            self.processed_data_signal.emit(func_id, processed_result_payload)
-                            self._stats['processed_count'] += 1
-                            processed_in_this_cycle += 1
-                        except Exception as e:
-                            error_msg = f"DataProcessor: Error during _process_single_data for FID {func_id}: {e}"
-                            self.processing_error_signal.emit(error_msg)
-                            self._stats['error_count'] += 1
+                if not self._running and items_to_process_batch:
+                    self._stats['last_activity'] = datetime.now()
 
                 if processed_in_this_cycle > 0:
                     self._stats['last_activity'] = datetime.now()
-                    if self._stats['processed_count'] % 10 == 0:  # Emit stats every 10 items
+                    if self._stats['processed_count'] % 10 == 0:
                         self.processing_stats_signal.emit(self.get_stats())
 
-                if processed_in_this_cycle == 0:  # No data was processed from queue
-                    self.msleep(50)  # Sleep longer if queue was empty
+                if not items_to_process_batch:
+                    self.msleep(50)
                 else:
-                    self.msleep(10)  # Shorter sleep if data was processed, to stay responsive
+                    self.msleep(10)
 
-        except Exception as e:  # Catch any unexpected error in the run loop itself
-            fatal_error_msg = f"DataProcessor thread encountered a fatal error: {e}"
+        except Exception as e:
+            fatal_error_msg = f"DataProcessor thread encountered a fatal error: {e}\n{traceback.format_exc()}"
             self.processing_error_signal.emit(fatal_error_msg)
-            if hasattr(self, 'main_window_ref') and self.main_window_ref.error_logger:
-                self.main_window_ref.error_logger.log_error(fatal_error_msg, "DATA_PROCESSOR_FATAL")
+            if logger:
+                logger.log_error(fatal_error_msg, "DATA_PROCESSOR_FATAL")
             else:
                 print(fatal_error_msg)
         finally:
             final_stats = self.get_stats()
-            self.processing_stats_signal.emit(final_stats)  # Emit final stats
+            self.processing_stats_signal.emit(final_stats)
             log_msg = f"DataProcessor thread stopped. Processed: {final_stats.get('processed_count', 0)}, Errors: {final_stats.get('error_count', 0)}."
-            if hasattr(self, 'main_window_ref') and self.main_window_ref.error_logger:
-                self.main_window_ref.error_logger.log_info(log_msg)
+            if logger:
+                logger.log_info(log_msg)
             else:
                 print(log_msg)
 
     def stop(self):
-        if hasattr(self, 'main_window_ref') and self.main_window_ref.error_logger:
-            self.main_window_ref.error_logger.log_info("DataProcessor: Stop requested.")
+        logger = getattr(self.main_window_ref, 'error_logger', None)
+        if logger:
+            logger.log_info("DataProcessor: Stop requested.")
         else:
             print("DataProcessor: Stop requested.")
         self._running = False
-        # Don't call self.wait() from within the thread's own methods if called by main thread.
-        # SerialDebugger will call self.wait() on the thread instance.
 
 
-from datetime import datetime
-from typing import Optional, Any, List, Dict, Callable, Tuple
-from contextlib import contextmanager
-import struct
-import json
-import time
-import math
-import re
-import sys
-import traceback
-import threading
-import signal
-import ast  # For potential future advanced validation
-
-# Assuming PySide6 is available as per the original imports.
-# If not, QMutex might need a standard library alternative for broader use.
-try:
-    from PySide6.QtCore import QMutex
-except ImportError:
-    # Fallback if PySide6 is not available, for basic threading lock
-    class QMutex:
-        def __init__(self):
-            self._lock = threading.Lock()
-
-        def lock(self):
-            self._lock.acquire()
-
-        def unlock(self):
-            self._lock.release()
-
-        def tryLock(self, timeout: Optional[int] = None) -> bool:
-            if timeout is None:
-                return self._lock.acquire(blocking=False)
-            elif timeout == 0:  # Qt's tryLock with 0 timeout
-                return self._lock.acquire(blocking=False)
-            else:  # Qt's tryLock with timeout in ms
-                return self._lock.acquire(blocking=True, timeout=timeout / 1000.0)
-
-
-# --- Script Engine Related Exception Classes ---
+# --- 脚本引擎相关异常类 ---
 class ScriptExecutionTimeout(Exception):
     """脚本执行超时异常"""
     pass
@@ -430,13 +448,14 @@ class ScriptExecutionError(Exception):
     pass
 
 
-# --- Security and Environment Helpers ---
+# --- 安全和环境辅助类 ---
 class RestrictedImport:
     """受限制的导入处理器"""
     ALLOWED_MODULES = {
         'datetime', 'struct', 'json', 'time', 'math', 're',
         'random', 'itertools', 'collections', 'functools',
         'decimal', 'fractions', 'statistics',
+        'threading','numpy',  # <-- 添加想用的模块
     }
 
     def __init__(self, original_import_func: Callable):
@@ -462,21 +481,48 @@ class SafeBuiltins:
     }
 
     @classmethod
-    def get_safe_builtins(cls) -> Dict[str, Callable]:
-        import builtins
-        safe_builtins_dict = {}
+    def get_safe_builtins(cls) -> Dict[str, Any]:
+        import builtins  # noqa
+        safe_builtins_dict: Dict[str, Any] = {}
+
+        for name in dir(builtins):
+            attr = getattr(builtins, name)
+            if isinstance(attr, type) and issubclass(attr, BaseException):
+                safe_builtins_dict[name] = attr
+
+        if hasattr(builtins, '__build_class__'):
+            safe_builtins_dict['__build_class__'] = getattr(builtins, '__build_class__')
+        else:
+            print("Critical Warning: builtins.__build_class__ not found. Class definitions will fail.", file=sys.stderr)
+
         for name in cls.SAFE_BUILTINS_NAMES:
             if hasattr(builtins, name):
-                safe_builtins_dict[name] = getattr(builtins, name)
+                attr = getattr(builtins, name)
+                if callable(attr):
+                    safe_builtins_dict[name] = attr
+                elif name in {'None', 'True', 'False'}:
+                    pass
 
-        if hasattr(builtins, '__import__'):
-            safe_builtins_dict['__import__'] = RestrictedImport(getattr(builtins, '__import__'))
+        if hasattr(builtins, 'classmethod'):
+            safe_builtins_dict['classmethod'] = getattr(builtins, 'classmethod')
+        else:
+            print("Warning: builtins.classmethod not found. @classmethod decorator will not work.", file=sys.stderr)
+
+        if hasattr(builtins, 'staticmethod'):
+            safe_builtins_dict['staticmethod'] = getattr(builtins, 'staticmethod')
+        else:
+            print("Warning: builtins.staticmethod not found. @staticmethod decorator will not work.", file=sys.stderr)
+
+        original_import_func = getattr(builtins, '__import__', None)
+        if original_import_func:
+            safe_builtins_dict['__import__'] = RestrictedImport(original_import_func)
         else:
             try:
-                original_import = __import__.__class__.__bases__[0].__import__  # type: ignore
-                safe_builtins_dict['__import__'] = RestrictedImport(original_import)
-            except Exception:
-                pass
+                original_import_func = __import__.__class__.__bases__[0].__import__  # type: ignore
+                safe_builtins_dict['__import__'] = RestrictedImport(original_import_func)
+            except (AttributeError, IndexError, TypeError):
+                print("Warning: Could not retrieve __import__ function for sandboxing. Imports will fail.",
+                      file=sys.stderr)
 
         return safe_builtins_dict
 
@@ -491,7 +537,7 @@ class ScriptEngine:
         self.debugger = debugger_instance
         self.config = config if config is not None else {}
 
-        self.timeout: int = self.config.get('timeout', 30)  # seconds
+        self.timeout: int = self.config.get('timeout', 30)
         self.max_total_output_length: int = self.config.get('max_output_length', 10000)
         self.max_line_length: int = self.config.get('max_line_length', 1000)
         self.max_history: int = self.config.get('max_history', 100)
@@ -511,6 +557,7 @@ class ScriptEngine:
 
         self.execution_history: List[Dict] = []
         self._execution_lock = QMutex()
+        self._output_buffer_lock = QMutex()  # <-- Lock for script_output_buffer
 
         self.pre_execution_hooks: List[Callable[[str], None]] = []
         self.post_execution_hooks: List[Callable[[Dict], None]] = []
@@ -567,6 +614,7 @@ class ScriptEngine:
         self._log_message('info', "Execution statistics reset.")
 
     def _safe_print(self, *args, **kwargs):
+        self._output_buffer_lock.lock()  # <-- Acquire lock
         try:
             sep = kwargs.get('sep', ' ')
             end = kwargs.get('end', '\n')
@@ -577,35 +625,56 @@ class ScriptEngine:
                 message = message[:self.max_line_length] + "... [行已截断]"
 
             current_buffer_len = sum(len(s) + len(end) for s in self._script_output_buffer)
-            if current_buffer_len + len(message) + len(end) < self.max_total_output_length:
+
+            if current_buffer_len + len(message) + len(end) <= self.max_total_output_length:
                 self._script_output_buffer.append(message)
             elif not self._script_output_buffer or not self._script_output_buffer[-1].endswith("... [总输出已截断]"):
                 if self._script_output_buffer and current_buffer_len < self.max_total_output_length:
-                    self._script_output_buffer.append("... [总输出已截断]")
+                    remaining_space = self.max_total_output_length - current_buffer_len
+                    trunc_msg = "... [总输出已截断]"
+                    if remaining_space > len(trunc_msg) + len(end):
+                        self._script_output_buffer.append(trunc_msg)
                 elif not self._script_output_buffer:
                     self._script_output_buffer.append("... [总输出已截断]")
         except Exception as e:
-            err_msg = f"[Error during script print: {e}]"
-            if sum(len(s) for s in self._script_output_buffer) + len(err_msg) < self.max_total_output_length:
-                self._script_output_buffer.append(err_msg)
+            try:
+                # To prevent _safe_print from causing issues if an error occurs within it,
+                # we keep this internal error handling minimal.
+                # Avoid re-locking or complex operations here.
+                err_msg = f"[Error during script print: {str(e)[:50]}]"
+                # Try to append error to buffer if space allows, but don't let this fail further.
+                if sum(len(s) for s in self._script_output_buffer) + len(err_msg) < self.max_total_output_length:
+                    if not self._script_output_buffer or not self._script_output_buffer[-1].startswith(
+                            "[Error during script print"):
+                        self._script_output_buffer.append(err_msg)
+            except:
+                pass  # Fallback: if internal print error handling fails, do nothing to avoid further issues.
+        finally:
+            self._output_buffer_lock.unlock()  # <-- Release lock
 
-    def _create_safe_environment(self) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        safe_builtins_dict = SafeBuiltins.get_safe_builtins()
-        safe_builtins_dict['print'] = self._safe_print
+    def _create_safe_environment(self) -> Dict[str, Any]:
+        safe_builtins_from_class = SafeBuiltins.get_safe_builtins()
+        safe_builtins_from_class['print'] = self._safe_print
 
-        global_scope = {'__builtins__': safe_builtins_dict}
-        local_scope = {
-            **self.available_modules, **self.host_functions,
-            'sleep': time.sleep, 'now': datetime.now,
+        execution_scope = {
+            '__builtins__': safe_builtins_from_class,
+            '__name__': '<script>',
+            **self.available_modules,
+            **self.host_functions,
+            'sleep': time.sleep,  # Provided via time module, but also as a direct alias
+            'now': datetime.now,  # Provided via datetime module, but also as a direct alias
         }
-        if self.debugger: local_scope['debugger'] = self.debugger
-        return global_scope, local_scope
+        if self.debugger:
+            execution_scope['debugger'] = self.debugger
+
+        return execution_scope
 
     @contextmanager
     def _timeout_context(self, seconds: int):
         if seconds <= 0 or not hasattr(signal, 'SIGALRM'):
             if seconds > 0 and not hasattr(signal, 'SIGALRM'):
-                self._log_message('warning', "Timeout via signal.SIGALRM not supported. Timeout will not be enforced.")
+                self._log_message('warning',
+                                  "Timeout via signal.SIGALRM not supported on this platform. Timeout will not be enforced.")
             yield
             return
 
@@ -624,8 +693,11 @@ class ScriptEngine:
     def _log_message(self, level: str, message: str, category: Optional[str] = "ScriptEngine"):
         log_entry = f"[{level.upper()}] [{category}] {message}"
         print(log_entry, file=sys.stderr)
-        if self.debugger and hasattr(self.debugger, 'log_message'):
-            self.debugger.log_message(level, message, category)
+        if self.debugger and hasattr(self.debugger, 'log_message') and callable(self.debugger.log_message):
+            try:
+                self.debugger.log_message(level.upper(), message, category)
+            except Exception as e:
+                print(f"[ERROR] Failed to call debugger.log_message: {e}", file=sys.stderr)
 
     def _add_to_history(self, script_text_snippet: str, success: bool, result_summary: Optional[str] = None,
                         error_message: Optional[str] = None, output_summary: Optional[str] = None):
@@ -643,18 +715,20 @@ class ScriptEngine:
                                   error: Optional[Exception] = None,
                                   execution_time_sec: float = 0.0,
                                   custom_message: Optional[str] = None) -> Dict:
-        error_str, error_type = None, None
+        error_str, error_type_str = None, None
         if error:
             success = False
             if isinstance(error, ScriptExecutionTimeout):
-                error_str, error_type = f"TimeoutError: {error}", "TimeoutError"
+                error_str, error_type_str = f"TimeoutError: {error}", "TimeoutError"
             elif isinstance(error, ScriptSecurityError):
-                error_str, error_type = f"SecurityError: {error}", "SecurityError"
+                error_str, error_type_str = f"SecurityError: {error}", "SecurityError"
             elif isinstance(error, SyntaxError):
-                error_str, error_type = f"SyntaxError: {error.msg} (line {error.lineno}, offset {error.offset})\n{error.text}", "SyntaxError"
+                tb_lines = traceback.format_exception_only(type(error), error)
+                error_str = "".join(tb_lines).strip()
+                error_type_str = "SyntaxError"
             else:
-                error_str, error_type = f"ExecutionError: {type(error).__name__}: {error}\n{traceback.format_exc(limit=5)}", type(
-                    error).__name__
+                error_type_str = type(error).__name__
+                error_str = f"ExecutionError: {error_type_str}: {error}\n{traceback.format_exc(limit=5)}"
 
         captured_output = "\n".join(self._script_output_buffer)
         self._stats['total_executions'] += 1
@@ -666,8 +740,8 @@ class ScriptEngine:
 
         result_dict = {
             "success": success, "return_value": return_value, "output": captured_output,
-            "error_message": error_str, "error_type": error_type,
-            "execution_time_seconds": round(execution_time_sec, 4),
+            "error_message": error_str, "error_type": error_type_str,
+            "execution_time_seconds": round(execution_time_sec, 6),
             "custom_message": custom_message
         }
         self._add_to_history(script_text, success, str(return_value)[:100] if return_value is not None else None,
@@ -684,25 +758,18 @@ class ScriptEngine:
             ast.parse(script_text)
             return True, None
         except SyntaxError as e:
-            return False, f"SyntaxError: {e.msg} (line {e.lineno}, offset {e.offset})\nNear: {e.text}"
+            return False, f"SyntaxError: {e.msg} (line {e.lineno}, offset {e.offset})\nNear: {e.text.strip() if e.text else '<no text>'}"
         except Exception as e:
-            return False, f"Validation Error: {e}"
+            return False, f"Validation Error: {type(e).__name__}: {e}"
 
-    # --- Internal Execution Logic Methods ---
     def _execute_statements_internal(self, script_text: str) -> Dict:
         start_time = time.perf_counter()
-        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(script_text)
-        if not is_valid_syntax:
-            exec_time = time.perf_counter() - start_time
-            return self._prepare_execution_result(False, script_text, error=SyntaxError(syntax_error_msg),
-                                                  execution_time_sec=exec_time)
-
-        global_scope, local_scope = self._create_safe_environment()
+        execution_scope = self._create_safe_environment()
         execution_error = None
         try:
             with self._timeout_context(self.timeout):
                 compiled_code = compile(script_text, '<script_exec>', 'exec')
-                exec(compiled_code, global_scope, local_scope)
+                exec(compiled_code, execution_scope, execution_scope)
         except Exception as e:
             execution_error = e
         exec_time = time.perf_counter() - start_time
@@ -711,18 +778,12 @@ class ScriptEngine:
 
     def _evaluate_expression_internal(self, expression_text: str) -> Dict:
         start_time = time.perf_counter()
-        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(expression_text)
-        if not is_valid_syntax:  # eval can also raise SyntaxError, this is a pre-check.
-            exec_time = time.perf_counter() - start_time
-            return self._prepare_execution_result(False, expression_text, error=SyntaxError(syntax_error_msg),
-                                                  execution_time_sec=exec_time)
-
-        global_scope, local_scope = self._create_safe_environment()
+        execution_scope = self._create_safe_environment()
         return_val, execution_error = None, None
         try:
             with self._timeout_context(self.timeout):
                 compiled_code = compile(expression_text, '<script_eval>', 'eval')
-                return_val = eval(compiled_code, global_scope, local_scope)
+                return_val = eval(compiled_code, execution_scope, execution_scope)
         except Exception as e:
             execution_error = e
         exec_time = time.perf_counter() - start_time
@@ -733,21 +794,20 @@ class ScriptEngine:
     def _run_function_internal(self, script_text: str, function_name: str, args: Tuple, kwargs: Dict) -> Dict:
         start_time = time.perf_counter()
         full_context_script_text = f"{script_text}\n# Attempting to call: {function_name}"
-        is_valid_syntax, syntax_error_msg = self.validate_script_syntax(script_text)
-        if not is_valid_syntax:
-            exec_time = time.perf_counter() - start_time
-            return self._prepare_execution_result(False, full_context_script_text, error=SyntaxError(syntax_error_msg),
-                                                  execution_time_sec=exec_time)
 
-        global_scope, local_scope = self._create_safe_environment()
+        execution_scope = self._create_safe_environment()
         return_val, execution_error = None, None
         try:
             with self._timeout_context(self.timeout):
-                script_compiled_code = compile(script_text, '<script_defs>', 'exec')
-                exec(script_compiled_code, global_scope, local_scope)
-                if function_name not in local_scope: raise NameError(f"Function '{function_name}' not defined.")
-                target_func = local_scope[function_name]
-                if not callable(target_func): raise TypeError(f"'{function_name}' is not callable.")
+                script_compiled_code = compile(script_text, '<script_defs_for_func_call>', 'exec')
+                exec(script_compiled_code, execution_scope, execution_scope)
+
+                if function_name not in execution_scope:
+                    raise NameError(f"Function '{function_name}' not defined in the script or provided environment.")
+                target_func = execution_scope[function_name]
+                if not callable(target_func):
+                    raise TypeError(f"'{function_name}' is defined but is not a callable function.")
+
                 return_val = target_func(*args, **kwargs)
         except Exception as e:
             execution_error = e
@@ -756,37 +816,18 @@ class ScriptEngine:
                                               return_value=return_val, error=execution_error,
                                               execution_time_sec=exec_time)
 
-    # --- Unified Public Execution Method ---
     def execute(self, script_text: str,
                 mode: str = 'exec',
                 function_name: Optional[str] = None,
                 args: Optional[Tuple] = None,
                 kwargs: Optional[Dict] = None) -> Dict:
-        """
-        Executes a script or evaluates an expression based on the specified mode.
-
-        Args:
-            script_text (str): The Python script or expression to execute.
-            mode (str): Execution mode. One of 'exec', 'eval', 'run_function'.
-                        Defaults to 'exec'.
-            function_name (Optional[str]): Name of the function to call if mode is 'run_function'.
-            args (Optional[Tuple]): Positional arguments for the function if mode is 'run_function'.
-            kwargs (Optional[Dict]): Keyword arguments for the function if mode is 'run_function'.
-
-        Returns:
-            Dict: A dictionary containing execution results including success status,
-                  output, return value (for 'eval' and 'run_function'), error details,
-                  and execution time.
-        """
         self._execution_lock.lock()
         try:
             self._script_output_buffer.clear()
 
-            # Ensure args and kwargs are not None if mode is 'run_function'
             _args = args if args is not None else tuple()
             _kwargs = kwargs if kwargs is not None else {}
 
-            # Pre-execution hooks (pass relevant info based on mode)
             hook_script_info = script_text
             if mode == 'run_function' and function_name:
                 hook_script_info = f"{script_text}\n# Mode: run_function, Target: {function_name}"
@@ -805,7 +846,7 @@ class ScriptEngine:
                 return self._evaluate_expression_internal(script_text)
             elif mode == 'run_function':
                 if not function_name:
-                    start_time = time.perf_counter()  # Minimal time for pre-check
+                    start_time = time.perf_counter()
                     exec_time = time.perf_counter() - start_time
                     return self._prepare_execution_result(False, script_text,
                                                           error=ValueError(
@@ -813,7 +854,7 @@ class ScriptEngine:
                                                           execution_time_sec=exec_time)
                 return self._run_function_internal(script_text, function_name, _args, _kwargs)
             else:
-                start_time = time.perf_counter()  # Minimal time for pre-check
+                start_time = time.perf_counter()
                 exec_time = time.perf_counter() - start_time
                 return self._prepare_execution_result(False, script_text,
                                                       error=ValueError(
@@ -833,14 +874,16 @@ def create_script_engine(debugger_instance: Optional[Any] = None, **kwargs_confi
 
     if final_config.get('add_example_logging_hooks', False):
         def log_pre_exec(script_info: str):
-            short_info = script_info[:150]
-            clean_info = short_info.replace('\n', ' ')  # 先在变量中处理转义
-            engine._log_message('info', f"Executing (info: {clean_info})...")
+            short_info = script_info[:150].replace('\n', '\\n')
+            engine._log_message('info', f"Executing (info: {short_info})...")
 
         def log_post_exec(result: Dict):
             status = "SUCCESS" if result['success'] else "FAILED"
+            error_msg_summary = result['error_message']
+            if error_msg_summary:
+                error_msg_summary = error_msg_summary.split('\n', 1)[0][:100]
             engine._log_message('info',
-                              f"Execution {status}. Time: {result['execution_time_seconds']:.4f}s. Error: {result['error_message'] if result['error_message'] else 'None'}")
+                                f"Execution {status}. Time: {result['execution_time_seconds']:.4f}s. Error: {error_msg_summary if error_msg_summary else 'None'}")
 
         engine.add_pre_execution_hook(log_pre_exec)
         engine.add_post_execution_hook(log_post_exec)
@@ -848,65 +891,101 @@ def create_script_engine(debugger_instance: Optional[Any] = None, **kwargs_confi
     return engine
 
 
-# --- Example Usage (Illustrative) ---
+# --- 示例用法 (说明性) ---
 if __name__ == '__main__':
     print("--- ScriptEngine Refactored Example Usage ---")
 
 
     class MyDebugger:
-        def __init__(self): self.data_store, self.call_count = {"value": 100}, 0
+        def __init__(self):
+            self.data_store: Dict[str, Any] = {"value": 100}
+            self.call_count: int = 0
+            # Add a lock for thread-safety if host functions are to be called from script threads
+            self._lock = QMutex()
 
-        def get_host_value(self, key: str) -> Any: self.call_count += 1; return self.data_store.get(key, None)
+        def get_host_value(self, key: str) -> Any:
+            self._lock.lock()
+            try:
+                self.call_count += 1
+                print(f"[MyDebugger] Attempting to read '{key}' (Thread-safe)")
+                return self.data_store.get(key, None)
+            finally:
+                self._lock.unlock()
 
         def set_host_value(self, key: str, value: Any):
-            self.call_count += 1;
-            self.data_store[key] = value;
-            print(f"[MyDebugger] Set '{key}' to '{value}'")
+            self._lock.lock()
+            try:
+                self.call_count += 1
+                self.data_store[key] = value
+                print(f"[MyDebugger] Set '{key}' to '{value}' (Thread-safe)")
+            finally:
+                self._lock.unlock()
 
         def log_message(self, level: str, message: str, category: Optional[str] = None):
-            print(f"[DebuggerLOG-{level.upper()}-{category or 'APP'}] {message}")
+            cat_str = category if category else "APP"
+            print(f"[DebuggerLOG-{level.upper()}-{cat_str.upper()}] {message}")
 
 
     my_debugger_instance = MyDebugger()
     engine_config = {
         'timeout': 5,
-        'initial_host_functions': {'read_data': my_debugger_instance.get_host_value,
-                                   'write_data': my_debugger_instance.set_host_value},
+        'initial_host_functions': {
+            'read_data': my_debugger_instance.get_host_value,
+            'write_data': my_debugger_instance.set_host_value
+        },
         'add_example_logging_hooks': True
     }
     script_engine = create_script_engine(my_debugger_instance, **engine_config)
 
+    # ... (Tests 1-9 remain the same) ...
     print("\n--- Test 1: Execute Script (mode='exec') ---")
     script1 = """
 print("Hello from script1!")
 a = 10; b = 20; print(f"a + b = {a + b}")
-def my_script_func(x, y): print(f"my_script_func called with {x}, {y}"); return x * y + read_data("value")
+script_global_var = 50 
+def my_script_func(x, y):
+    print(f"my_script_func called with {x}, {y}")
+    host_val = read_data("value") 
+    if host_val is None: host_val = 0
+    print(f"Accessing script_global_var: {script_global_var}")
+    return x * y + host_val + script_global_var
+
+result_from_func = my_script_func(3, 4)
+print(f"Result from my_script_func: {result_from_func}")
 write_data("script_run_time", now().strftime("%Y-%m-%d %H:%M:%S"))
+write_data("func_result", result_from_func)
 """
-    result1 = script_engine.execute(script1, mode='exec')  # Explicitly 'exec', or default
-    # result1 = script_engine.execute(script1) # Also works, 'exec' is default
-    print(f"Result1 Success: {result1['success']}\nResult1 Output:\n{result1['output']}")
+    result1 = script_engine.execute(script1, mode='exec')
+    print(f"Result1 Success: {result1['success']}")
+    print(f"Result1 Output:\n{result1['output']}")
     if result1['error_message']: print(f"Result1 Error: {result1['error_message']}")
     print(f"Debugger call count: {my_debugger_instance.call_count}, data_store: {my_debugger_instance.data_store}")
 
     print("\n--- Test 2: Evaluate Expression (mode='eval') ---")
+    my_debugger_instance.data_store['value'] = 200
     expr1 = "100 * 2 + read_data('value')"
     result2 = script_engine.execute(expr1, mode='eval')
     print(f"Result2 Success: {result2['success']}, Return Value: {result2['return_value']}")
     if result2['error_message']: print(f"Result2 Error: {result2['error_message']}")
 
     print("\n--- Test 3: Run Function in Script (mode='run_function') ---")
+    my_debugger_instance.data_store['value'] = 300
     script_with_func = """
+script_level_var = 10 
+
 def complex_calculation(a, b, factor=1):
     print(f"Performing complex_calculation with a={a}, b={b}, factor={factor}")
-    intermediate = (a + b) * factor; host_val = read_data("value") 
+    print(f"Accessing script_level_var: {script_level_var}") 
+    intermediate = (a + b) * factor
+    host_val = read_data("value")  
     if host_val is None: host_val = 0
-    print(f"Read host_val: {host_val}"); return intermediate + host_val
+    print(f"Read host_val: {host_val}")
+    return intermediate + host_val + script_level_var
 """
     result3 = script_engine.execute(script_with_func, mode='run_function', function_name="complex_calculation",
                                     args=(5, 10), kwargs={'factor': 3})
-    print(
-        f"Result3 Success: {result3['success']}, Return Value: {result3['return_value']}\nResult3 Output:\n{result3['output']}")
+    print(f"Result3 Success: {result3['success']}, Return Value: {result3['return_value']}")
+    print(f"Result3 Output:\n{result3['output']}")
     if result3['error_message']: print(f"Result3 Error: {result3['error_message']}")
 
     print("\n--- Test 4: Function Not Found (mode='run_function') ---")
@@ -914,21 +993,22 @@ def complex_calculation(a, b, factor=1):
     print(f"Result4 Success: {result4['success']}, Error: {result4['error_message']}")
 
     print("\n--- Test 5: Timeout (mode='exec') ---")
-    script_timeout = "print('Starting long loop...'); import time; c = 0\nwhile True: c += 1; time.sleep(0.0001)"
+    script_timeout = "print('Starting long loop...'); import time; c = 0\nwhile True: c += 1; time.sleep(0.0001)"  # time.sleep is from builtins
     if hasattr(signal, 'SIGALRM'):
+        print("Testing timeout (will take a few seconds if it works)...")
         result5 = script_engine.execute(script_timeout, mode='exec')
         print(
             f"Result5 Success: {result5['success']}, Error Type: {result5['error_type']}, Error: {result5['error_message']}")
     else:
-        print("Skipping timeout test as signal.SIGALRM is not available.")
+        print("Skipping timeout test as signal.SIGALRM is not available or not supported on this platform.")
 
     print("\n--- Test 6: Disallowed Import (mode='exec') ---")
-    result6 = script_engine.execute("import os; print(os.getcwd())", mode='exec')
+    result6 = script_engine.execute("import os; print(os.getcwd())", mode='exec')  # os is not in ALLOWED_MODULES
     print(
         f"Result6 Success: {result6['success']}, Error Type: {result6['error_type']}, Error: {result6['error_message']}")
 
     print("\n--- Test 7: Syntax Error (mode='exec') ---")
-    result7 = script_engine.execute("print('Hello'", mode='exec')  # Syntax error
+    result7 = script_engine.execute("print('Hello'", mode='exec')
     print(
         f"Result7 Success: {result7['success']}, Error Type: {result7['error_type']}, Error: {result7['error_message']}")
 
@@ -937,11 +1017,161 @@ def complex_calculation(a, b, factor=1):
     print(
         f"Result8 Success: {result8['success']}, Error Type: {result8['error_type']}, Error: {result8['error_message']}")
 
-    print("\n--- Execution History ---")
+    print("\n--- Test 9: Accessing script-defined variable in another function (mode='exec') ---")
+    script9 = """
+global_val = "I am global in script"
+
+def set_global_val(new_val):
+    global global_val 
+    global_val = new_val
+    print(f"global_val set to: {global_val}")
+
+def print_global_val():
+    print(f"global_val is: {global_val}") 
+
+print_global_val() 
+set_global_val("New Value Set!")
+print_global_val() 
+"""
+    result9 = script_engine.execute(script9, mode='exec')
+    print(f"Result9 Success: {result9['success']}")
+    print(f"Result9 Output:\n{result9['output']}")
+    if result9['error_message']: print(f"Result9 Error: {result9['error_message']}")
+
+    print("\n--- Test 10: Script-internal Exception Handling (mode='exec') ---")
+    script10 = """
+print("Attempting an operation that will cause an error...")
+result_val = None # Renamed to avoid conflict with 'result' from engine
+try:
+    a = 10
+    b = 0
+    print("Trying to divide by zero...")
+    div_result = a / b # This will raise ZeroDivisionError
+    print(f"This won't be printed. Result: {div_result}")
+except ZeroDivisionError as e: # This should be found in builtins now
+    print(f"Caught expected ZeroDivisionError: {e}")
+    result_val = "Handled ZeroDivisionError"
+except Exception as e:
+    print(f"Caught an unexpected exception: {e}")
+    result_val = "Handled Unexpected Exception"
+finally:
+    print("Inside finally block.")
+print(f"Final result_val after try-except: {result_val}")
+if result_val is not None: # Only write if it was set
+    write_data("test10_result", result_val)
+"""
+    result10 = script_engine.execute(script10, mode='exec')
+    print(f"Result10 Success: {result10['success']}")
+    print(f"Result10 Output:\n{result10['output']}")
+    if result10['error_message']: print(f"Result10 Error from engine: {result10['error_message']}")
+    print(f"Debugger data_store after Test 10: {my_debugger_instance.data_store}")
+
+    print("\n--- Test 11: Class and Object Definition/Usage (mode='exec') ---")
+    script11 = """
+print("Defining a simple class 'MyItem'...")
+
+class MyItem:
+    class_attribute = "This is a class attribute"
+
+    def __init__(self, name, value):
+        print(f"MyItem constructor called for {name}")
+        self.name = name 
+        self.value = value 
+
+    def get_description(self):
+        return f"Item '{self.name}' has value {self.value}."
+
+    def update_value(self, new_value):
+        print(f"Updating value of '{self.name}' from {self.value} to {new_value}")
+        self.value = new_value
+        return self.value
+
+    @classmethod
+    def get_class_attr(cls): # @classmethod should be found now
+        return cls.class_attribute
+
+    @staticmethod
+    def static_helper(): # @staticmethod should be found now
+        return "This is a static helper method."
+
+print(f"Accessing class attribute directly: {MyItem.class_attribute}")
+print(f"Calling class method: {MyItem.get_class_attr()}")
+print(f"Calling static method: {MyItem.static_helper()}")
+
+print("\\nCreating an instance of MyItem...")
+item1 = MyItem("Apple", 10)
+print(item1.get_description())
+
+print("\\nUpdating item1's value...")
+item1.update_value(15)
+print(item1.get_description())
+
+write_data("item1_name", item1.name)
+write_data("item1_value", item1.value)
+"""
+    result11 = script_engine.execute(script11, mode='exec')
+    print(f"Result11 Success: {result11['success']}")
+    print(f"Result11 Output:\n{result11['output']}")
+    if result11['error_message']: print(f"Result11 Error from engine: {result11['error_message']}")
+    print(f"Debugger data_store after Test 11: {my_debugger_instance.data_store}")
+
+    # --- Test 12: Script using threading (mode='exec') ---
+    print("\n--- Test 12: Script using threading (mode='exec') ---")
+    script12 = """
+import threading # Should be allowed now
+import time 
+
+print("Main script: Preparing to start threads.")
+
+# Using a list to collect messages from threads (for demonstration)
+# In a real scenario with complex shared data, use threading.Lock for access
+thread_messages = [""] * 2 # Adjusted for 2 threads
+
+def worker(thread_id, delay):
+    global thread_messages # To modify the list in the outer scope
+    print(f"Thread {thread_id}: starting, will sleep for {delay}s.")
+    time.sleep(delay) 
+    message = f"Thread {thread_id}: finished work after {delay}s."
+    print(message)
+    # For this test, direct assignment is okay as each thread writes to a unique index.
+    # If multiple threads could write to the same index or append, a lock would be essential.
+    if thread_id < len(thread_messages):
+      thread_messages[thread_id] = message
+
+threads = []
+t1 = threading.Thread(target=worker, args=(0, 0.2)) # Thread 0
+threads.append(t1)
+t2 = threading.Thread(target=worker, args=(1, 0.1)) # Thread 1
+threads.append(t2)
+
+print("Main script: Starting thread 0.")
+t1.start()
+print("Main script: Starting thread 1.")
+t2.start()
+
+print("Main script: All threads started. Waiting for them to join.")
+for i, t in enumerate(threads):
+    t.join() 
+    print(f"Main script: Thread {i} has joined.")
+
+print("Main script: All threads completed.")
+print(f"Collected messages: {thread_messages}")
+# Example of calling a (presumably now thread-safe) host function
+write_data("threading_test_completed", True) 
+write_data("thread_messages", " | ".join(thread_messages))
+"""
+    result12 = script_engine.execute(script12, mode='exec')
+    print(f"Result12 Success: {result12['success']}")
+    print(f"Result12 Output:\n{result12['output']}")
+    if result12['error_message']: print(f"Result12 Error from engine: {result12['error_message']}")
+    print(f"Debugger data_store after Test 12: {my_debugger_instance.data_store}")
+
+    print("\n--- Execution History (Final) ---")
     for i, entry in enumerate(script_engine.execution_history):
         print(
             f"{i + 1}. [{entry['timestamp']}] Success: {entry['success']}, Script: '{entry['script_snippet']}', Error: {entry['error']}")
-    print("\n--- Execution Stats ---");
+
+    print("\n--- Execution Stats (Final) ---")
     stats = script_engine.get_stats()
     for k, v in stats.items(): print(f"{k}: {v}")
 

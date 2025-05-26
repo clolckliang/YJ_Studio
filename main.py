@@ -1094,7 +1094,7 @@ class SerialDebugger(QMainWindow):
         if self.app_instance is None: self.app_instance = QApplication(sys.argv)
 
         self.error_logger = ErrorLogger()
-        self._setup_application_icon("image.png")
+        self._setup_application_icon("resources/icon/image.png")
         self.setWindowTitle("Serial Debugger Pro (Plugin Enhanced)")
 
         self.config_manager = ConfigManager(error_logger=self.error_logger, filename="serial_debugger_config_v2.json")
@@ -1219,22 +1219,22 @@ class SerialDebugger(QMainWindow):
 
     def create_menus(self) -> None:
         file_menu = self.menuBar().addMenu("文件(&F)")
-        load_config_action = QAction("加载配置...", self);
-        load_config_action.triggered.connect(self.load_configuration_action_dialog);
+        load_config_action = QAction("加载配置...", self)
+        load_config_action.triggered.connect(self.load_configuration_action_dialog)
         file_menu.addAction(load_config_action)
-        save_config_action = QAction("保存配置...", self);
-        save_config_action.triggered.connect(self.save_configuration_action_dialog);
+        save_config_action = QAction("保存配置...", self)
+        save_config_action.triggered.connect(self.save_configuration_action_dialog)
         file_menu.addAction(save_config_action)
         file_menu.addSeparator()
-        export_parsed_data_action = QAction("导出已解析数据 (CSV)...", self);
-        export_parsed_data_action.triggered.connect(self.export_parsed_data_action);
+        export_parsed_data_action = QAction("导出已解析数据 (CSV)...", self)
+        export_parsed_data_action.triggered.connect(self.export_parsed_data_action)
         file_menu.addAction(export_parsed_data_action)
-        save_raw_data_action = QAction("保存原始录制数据 (JSON)...", self);
-        save_raw_data_action.triggered.connect(self.save_raw_recorded_data_action);
+        save_raw_data_action = QAction("保存原始录制数据 (JSON)...", self)
+        save_raw_data_action.triggered.connect(self.save_raw_recorded_data_action)
         file_menu.addAction(save_raw_data_action)
         file_menu.addSeparator()
-        exit_action = QAction("退出(&X)", self);
-        exit_action.triggered.connect(self.close);
+        exit_action = QAction("退出(&X)", self)
+        exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
         self.view_menu = self.menuBar().addMenu("视图(&V)")
@@ -1254,34 +1254,34 @@ class SerialDebugger(QMainWindow):
         theme_menu.addAction(load_external_qss_action)
 
         tools_menu = self.menuBar().addMenu("工具(&T)")
-        self.add_panel_menu = tools_menu.addMenu("添加面板");
+        self.add_panel_menu = tools_menu.addMenu("添加面板")
         self._update_add_panel_menu()
 
         manage_plugins_action = QAction("插件管理器...", self)
         manage_plugins_action.triggered.connect(self.open_plugin_manager_dialog)
         tools_menu.addAction(manage_plugins_action)
 
-        reload_plugins_action = QAction("扫描/重载插件", self);
-        reload_plugins_action.triggered.connect(self.reload_all_plugins_action);
+        reload_plugins_action = QAction("扫描/重载插件", self)
+        reload_plugins_action.triggered.connect(self.reload_all_plugins_action)
         tools_menu.addAction(reload_plugins_action)
         tools_menu.addSeparator()
 
         if PYQTGRAPH_AVAILABLE:
-            clear_all_plots_action = QAction("清空所有波形图", self);
-            clear_all_plots_action.triggered.connect(self.clear_all_plot_panels_action);
+            clear_all_plots_action = QAction("清空所有波形图", self)
+            clear_all_plots_action.triggered.connect(self.clear_all_plot_panels_action)
             tools_menu.addAction(clear_all_plots_action)
             tools_menu.addSeparator()
 
-        self.start_raw_record_action = QAction("开始原始数据录制", self);
+        self.start_raw_record_action = QAction("开始原始数据录制", self)
         self.start_raw_record_action.setCheckable(True)
-        self.start_raw_record_action.triggered.connect(self.toggle_raw_data_recording_action);
+        self.start_raw_record_action.triggered.connect(self.toggle_raw_data_recording_action)
         tools_menu.addAction(self.start_raw_record_action)
         tools_menu.addSeparator()
-        show_stats_action = QAction("显示统计信息...", self);
-        show_stats_action.triggered.connect(self.show_statistics_action);
+        show_stats_action = QAction("显示统计信息...", self)
+        show_stats_action.triggered.connect(self.show_statistics_action)
         tools_menu.addAction(show_stats_action)
-        reset_stats_action = QAction("重置统计信息", self);
-        reset_stats_action.triggered.connect(self.protocol_analyzer.reset_statistics);
+        reset_stats_action = QAction("重置统计信息", self)
+        reset_stats_action.triggered.connect(self.protocol_analyzer.reset_statistics)
         tools_menu.addAction(reset_stats_action)
 
     def _update_add_panel_menu(self):
@@ -1290,7 +1290,7 @@ class SerialDebugger(QMainWindow):
         available_panel_types = self.plugin_manager.get_creatable_panel_types()
         self.error_logger.log_info(f"[UI_SETUP] 可用动态面板插件: {available_panel_types}")
         if not available_panel_types:
-            no_panels_action = QAction("无可用动态面板插件", self);
+            no_panels_action = QAction("无可用动态面板插件", self)
             no_panels_action.setEnabled(False);
             self.add_panel_menu.addAction(no_panels_action)
         else:
@@ -1304,12 +1304,12 @@ class SerialDebugger(QMainWindow):
         config_data = self.config_manager.load_config()
         if not config_data:
             self.error_logger.log_warning("[CONFIG] 未能加载配置文件，使用默认设置。")
-            self.current_serial_config = SerialPortConfig();
+            self.current_serial_config = SerialPortConfig()
             self.current_frame_config = FrameConfig()
             self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
             if self.serial_config_panel_widget: self.serial_config_panel_widget.update_ui_from_main_configs(
                 self.current_serial_config, self.current_frame_config, self.active_checksum_mode)
-            self._next_dynamic_panel_id = 1;
+            self._next_dynamic_panel_id = 1
             self._next_global_receive_container_id = 1
             self.enabled_plugin_module_names = set()
             return
@@ -1559,11 +1559,11 @@ class SerialDebugger(QMainWindow):
             else:
                 actual_dock_title = panel_widget.get_initial_dock_title()
         dw_panel = QDockWidget(actual_dock_title, self);
-        dw_panel.setObjectName(f"{panel_type_name}_Dock_{panel_id_to_use}");
-        dw_panel.setWidget(panel_widget);
+        dw_panel.setObjectName(f"{panel_type_name}_Dock_{panel_id_to_use}")
+        dw_panel.setWidget(panel_widget)
         dw_panel.installEventFilter(self)
         panel_widget.dock_title_changed.connect(dw_panel.setWindowTitle)
-        all_current_dynamic_docks = list(self.dynamic_panel_docks.values());
+        all_current_dynamic_docks = list(self.dynamic_panel_docks.values())
         target_tab_dock = None
         if all_current_dynamic_docks:
             target_tab_dock = all_current_dynamic_docks[-1]
@@ -1573,7 +1573,7 @@ class SerialDebugger(QMainWindow):
             self.tabifyDockWidget(target_tab_dock, dw_panel)
         else:
             self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dw_panel)
-        self.dynamic_panel_instances[panel_id_to_use] = panel_widget;
+        self.dynamic_panel_instances[panel_id_to_use] = panel_widget
         self.dynamic_panel_docks[panel_id_to_use] = dw_panel
         if panel_id_override is None:
             self._next_dynamic_panel_id += 1

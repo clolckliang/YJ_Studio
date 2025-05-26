@@ -52,95 +52,98 @@ from typing import Dict, Any, Optional, List  # 引入 List
 # 假设 panel_interface.py 在项目根目录，并且项目根目录已在Python路径中
 # 或者根据您的项目结构调整导入
 try:
-    from panel_interface import PanelInterface, SerialDebugger  # SerialDebugger 用于类型提示
+  from core.panel_interface import PanelInterface, SerialDebugger  # SerialDebugger 用于类型提示
 except ImportError:
-    # 开发时的备用导入路径 (不推荐用于生产)
-    import sys
-    from pathlib import Path
-    project_root = Path(__file__).resolve().parent.parent.parent 
-    if str(project_root) not in sys.path:
-        sys.path.insert(0, str(project_root))
-    from panel_interface import PanelInterface, SerialDebugger
+  # 开发时的备用导入路径 (不推荐用于生产)
+  import sys
+  from pathlib import Path
+
+  project_root = Path(__file__).resolve().parent.parent.parent
+  if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+  from core.panel_interface import PanelInterface, SerialDebugger
 
 
 class DataMonitorPanel(PanelInterface):
-    # --- PanelInterface 必须定义的静态类属性 ---
-    PANEL_TYPE_NAME: str = "data_monitor_panel"
-    PANEL_DISPLAY_NAME: str = "数据监视器"
+  # --- PanelInterface 必须定义的静态类属性 ---
+  PANEL_TYPE_NAME: str = "data_monitor_panel"
+  PANEL_DISPLAY_NAME: str = "数据监视器"
 
-    def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger',
-                 initial_config: Optional[Dict[str, Any]] = None,
-                 parent: Optional[QWidget] = None):
-        super().__init__(panel_id, main_window_ref, initial_config, parent)
-        
-        self.monitor_active: bool = False
-        self.data_points: List[Any] = []  # 示例属性
+  def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger',
+               initial_config: Optional[Dict[str, Any]] = None,
+               parent: Optional[QWidget] = None):
+    super().__init__(panel_id, main_window_ref, initial_config, parent)
 
-        self._init_ui() 
+    self.monitor_active: bool = False
+    self.data_points: List[Any] = []  # 示例属性
 
-        if initial_config: 
-            self.apply_config(initial_config)
-        
-        # self._update_dynamic_dock_title()  # 可以在配置应用后调用
+    self._init_ui()
 
-    def _init_ui(self) -> None:
-        """构建和初始化面板的用户界面。"""
-        layout = QVBoxLayout(self)
-        self.info_label = QLabel(f"监视器面板 (ID: {self.panel_id}) - 等待数据...")
-        self.info_label.setWordWrap(True)
-        
-        self.toggle_button = QPushButton("开始监视")
-        self.toggle_button.setCheckable(True)
-        self.toggle_button.clicked.connect(self._on_toggle_monitoring)
-        
-        layout.addWidget(self.info_label)
-        layout.addWidget(self.toggle_button)
-        self.setLayout(layout)
+    if initial_config:
+      self.apply_config(initial_config)
 
-    @Slot(bool)
-    def _on_toggle_monitoring(self, checked: bool):
-        self.monitor_active = checked
-        self.toggle_button.setText("停止监视" if checked else "开始监视")
-        self.info_label.setText(f"监视状态: {'活动' if checked else '停止'}")
-        if self.error_logger:
-            self.error_logger.log_info(f"数据监视器 {self.panel_id} 状态变为: {self.monitor_active}", self.PANEL_TYPE_NAME)
-        # self._update_dynamic_dock_title() 
+    # self._update_dynamic_dock_title()  # 可以在配置应用后调用
 
-    def get_config(self) -> Dict[str, Any]:
-        """返回一个包含此面板当前状态的可JSON序列化字典。"""
-        return {
-            "version": "1.0", 
-            "monitor_active_on_load": self.monitor_active,
-            "saved_data_points_count": len(self.data_points) 
-        }
+  def _init_ui(self) -> None:
+    """构建和初始化面板的用户界面。"""
+    layout = QVBoxLayout(self)
+    self.info_label = QLabel(f"监视器面板 (ID: {self.panel_id}) - 等待数据...")
+    self.info_label.setWordWrap(True)
 
-    def apply_config(self, config: Dict[str, Any]) -> None:
-        """应用从配置文件加载的配置数据来恢复面板状态。"""
-        self.monitor_active = config.get("monitor_active_on_load", False)
-        self.toggle_button.setChecked(self.monitor_active)
-        self._on_toggle_monitoring(self.monitor_active) 
-        if self.error_logger:
-            self.error_logger.log_info(f"数据监视器 {self.panel_id} 配置已应用。", self.PANEL_TYPE_NAME)
+    self.toggle_button = QPushButton("开始监视")
+    self.toggle_button.setCheckable(True)
+    self.toggle_button.clicked.connect(self._on_toggle_monitoring)
 
-    def get_initial_dock_title(self) -> str:
-        """返回此面板停靠窗口的默认标题。"""
-        return f"{self.PANEL_DISPLAY_NAME} ({self.panel_id})"
+    layout.addWidget(self.info_label)
+    layout.addWidget(self.toggle_button)
+    self.setLayout(layout)
 
-    def on_panel_added(self) -> None:
-        super().on_panel_added() 
-        if self.error_logger:
-            self.error_logger.log_info(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 已添加。", "PLUGIN_LIFECYCLE")
+  @Slot(bool)
+  def _on_toggle_monitoring(self, checked: bool):
+    self.monitor_active = checked
+    self.toggle_button.setText("停止监视" if checked else "开始监视")
+    self.info_label.setText(f"监视状态: {'活动' if checked else '停止'}")
+    if self.error_logger:
+      self.error_logger.log_info(f"数据监视器 {self.panel_id} 状态变为: {self.monitor_active}", self.PANEL_TYPE_NAME)
+    # self._update_dynamic_dock_title() 
 
-    def on_panel_removed(self) -> None:
-        super().on_panel_removed() 
-        if self.error_logger:
-            self.error_logger.log_info(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 即将移除。正在清理资源...", "PLUGIN_LIFECYCLE")
-        self.data_points.clear()
+  def get_config(self) -> Dict[str, Any]:
+    """返回一个包含此面板当前状态的可JSON序列化字典。"""
+    return {
+      "version": "1.0",
+      "monitor_active_on_load": self.monitor_active,
+      "saved_data_points_count": len(self.data_points)
+    }
 
-    def update_theme(self) -> None:
-        super().update_theme()
-        if self.error_logger:
-            self.error_logger.log_debug(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 主题更新。", "PLUGIN_LIFECYCLE")
+  def apply_config(self, config: Dict[str, Any]) -> None:
+    """应用从配置文件加载的配置数据来恢复面板状态。"""
+    self.monitor_active = config.get("monitor_active_on_load", False)
+    self.toggle_button.setChecked(self.monitor_active)
+    self._on_toggle_monitoring(self.monitor_active)
+    if self.error_logger:
+      self.error_logger.log_info(f"数据监视器 {self.panel_id} 配置已应用。", self.PANEL_TYPE_NAME)
+
+  def get_initial_dock_title(self) -> str:
+    """返回此面板停靠窗口的默认标题。"""
+    return f"{self.PANEL_DISPLAY_NAME} ({self.panel_id})"
+
+  def on_panel_added(self) -> None:
+    super().on_panel_added()
+    if self.error_logger:
+      self.error_logger.log_info(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 已添加。", "PLUGIN_LIFECYCLE")
+
+  def on_panel_removed(self) -> None:
+    super().on_panel_removed()
+    if self.error_logger:
+      self.error_logger.log_info(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 即将移除。正在清理资源...",
+                                 "PLUGIN_LIFECYCLE")
+    self.data_points.clear()
+
+  def update_theme(self) -> None:
+    super().update_theme()
+    if self.error_logger:
+      self.error_logger.log_debug(f"面板 '{self.PANEL_DISPLAY_NAME}' (ID: {self.panel_id}) 主题更新。",
+                                  "PLUGIN_LIFECYCLE")
 ```
 3.2 生命周期与回调方法
 

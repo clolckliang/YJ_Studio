@@ -1,12 +1,10 @@
 # main.py
 import struct
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, List, Any, Type, Set  # Added Set
+from typing import Optional, Dict, List, Any, Set  # Added Set
 import re
-import importlib
 
 from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal, QSettings
 from PySide6.QtGui import QAction, QTextCursor, QIcon, QIntValidator, QCloseEvent, QFont
@@ -44,8 +42,8 @@ from core.protocol_handler import ProtocolAnalyzer, FrameParser, get_data_type_b
 from core.data_recorder import DataRecorder
 
 # Updated Plugin Architecture Imports
-from panel_interface import PanelInterface
-from plugin_manager import PluginManager  # Assumes plugin_manager_hot_reload_v2 is used
+from core.panel_interface import PanelInterface
+from core.plugin_manager import PluginManager  # Assumes plugin_manager_hot_reload_v2 is used
 
 
 # --- Plugin Management Dialog ---
@@ -836,6 +834,7 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
                 display_text, port_info['name'])
             self.port_combo.setEnabled(True);
             self.connect_button.setEnabled(True)
+            idx = -1
             if current_port_name:
                 idx = self.port_combo.findData(current_port_name)
             if idx != -1:
@@ -1130,6 +1129,7 @@ class SerialDebugger(QMainWindow):
         )
 
         self.plugin_manager = PluginManager(self)
+        self.enabled_plugin_module_names: Set[str] = set()  # <--- 在这里或更早初始化为空集
         self._register_core_panels()
 
         self.enabled_plugin_module_names: Set[str] = set()
@@ -1288,6 +1288,7 @@ class SerialDebugger(QMainWindow):
         if not hasattr(self, 'add_panel_menu'): return
         self.add_panel_menu.clear()
         available_panel_types = self.plugin_manager.get_creatable_panel_types()
+        self.error_logger.log_info(f"[UI_SETUP] 可用动态面板插件: {available_panel_types}")
         if not available_panel_types:
             no_panels_action = QAction("无可用动态面板插件", self);
             no_panels_action.setEnabled(False);
@@ -1473,42 +1474,40 @@ class SerialDebugger(QMainWindow):
 
     @Slot()
     def reload_all_plugins_action(self, preserve_configs: bool = True):
-        self.error_logger.log_info("开始插件热重载流程...", "PLUGIN_RELOAD")
+        self.error_logger.log_info("开始插件热重载流程...")
 
         if preserve_configs:
             self.plugin_manager.store_active_panel_configs(self.dynamic_panel_instances)
 
         active_panel_ids = list(self.dynamic_panel_instances.keys())
         if active_panel_ids:
-            self.error_logger.log_info(f"将要移除 {len(active_panel_ids)} 个活动面板实例...", "PLUGIN_RELOAD")
+            self.error_logger.log_info(f"将要移除 {len(active_panel_ids)} 个活动面板实例...")
             for panel_id in active_panel_ids:
                 self.remove_dynamic_panel(panel_id)
 
         if self.dynamic_panel_instances or self.dynamic_panel_docks:
             self.error_logger.log_warning(
-                f"热重载后仍有残留面板实例或停靠窗口! Instances: {len(self.dynamic_panel_instances)}, Docks: {len(self.dynamic_panel_docks)}",
-                "PLUGIN_RELOAD")
+                f"热重载后仍有残留面板实例或停靠窗口! Instances: {len(self.dynamic_panel_instances)}, Docks: {len(self.dynamic_panel_docks)}")
             self.dynamic_panel_instances.clear();
             self.dynamic_panel_docks.clear()
 
         self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
 
-        self.error_logger.log_info("正在重新扫描和加载插件模块...", "PLUGIN_RELOAD")
+        self.error_logger.log_info("正在重新扫描和加载插件模块...")
         reloaded_panel_type_names = self.plugin_manager.discover_plugins(
             "panel_plugins",
             reload_modules=True,
             load_only_enabled=True
         )
         self.error_logger.log_info(
-            f"插件模块扫描/重载完毕。活动类型: {list(self.plugin_manager.get_creatable_panel_types().keys())}",
-            "PLUGIN_RELOAD")
+            f"插件模块扫描/重载完毕。活动类型: {list(self.plugin_manager.get_creatable_panel_types().keys())}")
 
         self._update_add_panel_menu()
-        self.error_logger.log_info("“添加面板”菜单已更新。", "PLUGIN_RELOAD")
+        self.error_logger.log_info("“添加面板”菜单已更新。")
 
         restored_count = 0
         if preserve_configs:
-            self.error_logger.log_info("正在尝试恢复之前活动的面板...", "PLUGIN_RELOAD")
+            self.error_logger.log_info("正在尝试恢复之前活动的面板...")
             for panel_type_name_to_restore in self.plugin_manager.get_creatable_panel_types().keys():
                 stored_configs = self.plugin_manager.get_stored_configs_for_reload(panel_type_name_to_restore)
                 for panel_data in stored_configs:
@@ -1522,7 +1521,7 @@ class SerialDebugger(QMainWindow):
                     if restored_panel: restored_count += 1
             self.plugin_manager.clear_stored_configs()
 
-        self.error_logger.log_info(f"插件热重载流程完毕。成功恢复 {restored_count} 个面板实例。", "PLUGIN_RELOAD")
+        self.error_logger.log_info(f"插件热重载流程完毕。成功恢复 {restored_count} 个面板实例。")
         sender_obj = self.sender()
         if not isinstance(sender_obj, QDialog) or (
                 isinstance(sender_obj, QDialog) and sender_obj.windowTitle() != "插件管理器"):

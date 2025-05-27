@@ -1,8 +1,10 @@
 # panel_interface.py
+from __future__ import annotations
 from PySide6.QtWidgets import QWidget
 from PySide6.QtCore import Signal, QObject # QObject for typing main_window_ref
-from typing import Dict, Any, Optional
-
+from typing import Dict, Any, Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from main import SerialDebugger
 class PanelInterface(QWidget):
     """
     Abstract base class (or interface) for all dynamic panels

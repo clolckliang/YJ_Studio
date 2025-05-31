@@ -700,7 +700,7 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         self.refresh_ports_button.clicked.connect(self.refresh_ports_requested.emit)
         config_layout.addWidget(self.refresh_ports_button, 5, 0)
         self.connect_button.setCheckable(True)
-        self.connect_button.clicked.connect(self.connect_button_toggled.emit)
+        self.connect_button.toggled.connect(self.connect_button_toggled)
         config_layout.addWidget(self.connect_button, 5, 1)
         config_layout.setColumnStretch(1, 1)
         config_group.setLayout(config_layout)

@@ -36,7 +36,9 @@ class ConfigManager:
                 "recv_timestamp_display": False
                 # 发送文本和hex复选框通常是瞬态的，默认不保存其状态
             },
-
+            "scripting_panel": {
+                "current_script": ""
+            },
             # 窗口几何形状和状态
             "window_geometry": None,
             "window_state": None,

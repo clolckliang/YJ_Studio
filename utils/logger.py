@@ -12,14 +12,18 @@ class ErrorLogger:
                             format='%(asctime)s-%(levelname)s-%(module)s-%(funcName)s-%(message)s', encoding='utf-8')
         self.logger = logging.getLogger("SerialDebuggerApp_v5") # Or a more generic name
 
-    def log_error(self, error_msg: str, error_type: str = "GENERAL") -> None:
-        self.logger.error(f"[{error_type}] {error_msg}")
+    def log_error(self, error_msg: str, error_type: str = "GENERAL", exc_info: bool = False) -> None:
+        self.logger.error(f"[{error_type}] {error_msg}", exc_info=exc_info) # 错误日志记录
 
-    def log_info(self, info_msg: str) -> None:
-        self.logger.info(info_msg)
+    def log_info(self, info_msg: str, info_type: str = "INFO", exc_info: bool = False) -> None:
+        self.logger.info(f"[{info_type}] {info_msg}", exc_info=exc_info) # 信息日志记录
 
-    def log_warning(self, warn_msg: str) -> None:
-        self.logger.warning(warn_msg)
+    def log_debug(self, debug_msg: str, debug_type: str = "DEBUG", exc_info: bool = False) -> None:
+        self.logger.debug(f"[{debug_type}] {debug_msg}", exc_info=exc_info) # 调试日志记录
 
-    def log_debug(self, debug_msg: str) -> None:
-        self.logger.debug(debug_msg)
+
+
+    def log_warning(self, warn_msg: str, warn_type: str = "WARNING", exc_info: bool = False) -> None:
+        self.logger.warning(f"[{warn_type}] {warn_msg}", exc_info=exc_info) # 警告日志记录
+
+

@@ -12,7 +12,7 @@
 
 /* === 主窗口背景设置 === */
 QMainWindow {
-    background-image: url("../icon/yp_juk.jpg"); /* <<<<<<< 在这里修改为你的图片路径！ */
+    background-image: url("yp_juk.jpg"); /* <<<<<<< 在这里修改为你的图片路径！ */
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover; /* 覆盖整个窗口，保持比例 */

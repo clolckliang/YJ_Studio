@@ -1116,7 +1116,7 @@ class SerialDebugger(QMainWindow):
 
         self.error_logger = ErrorLogger()
         self._setup_application_icon("resources/icon/image.png")
-        self.setWindowTitle("Serial Debugger Pro (Plugin Enhanced)")
+        self.setWindowTitle("YJ_Studio (Plugin Enhanced)")
 
         self.config_manager = ConfigManager(error_logger=self.error_logger, filename="serial_debugger_config_v2.json")
         self.theme_manager = ThemeManager(self.app_instance, error_logger=self.error_logger)

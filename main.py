@@ -36,7 +36,7 @@ from core.data_recorder import DataRecorder
 # Assume ParsePanelWidget and SendPanelWidget classes are defined as in your uploaded file.
 # For brevity, their full code is not repeated here, but they are essential.
 
-# --- Panel Widget Classes (Ensure these are defined as previously discussed) ---
+# --- Panel Widget Classes (Ensure these are defined as previously discussed) ----
 class ParsePanelWidget(QWidget):  # Placeholder - Use your full class definition
     def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger', initial_config: Optional[Dict] = None,
                  parent: Optional[QWidget] = None):

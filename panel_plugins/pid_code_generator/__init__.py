@@ -25,7 +25,7 @@ except ImportError as e:
 # 插件版本和基本信息
 PLUGIN_VERSION = "2.0.0"
 PLUGIN_NAME = "advanced_pid_code_generator"
-PLUGIN_DISPLAY_NAME = "高级PID代码生成器"
+PLUGIN_DISPLAY_NAME = "PID代码生成器"
 PLUGIN_AUTHOR = "YJ Studio Team"
 
 # 设置日志记录器

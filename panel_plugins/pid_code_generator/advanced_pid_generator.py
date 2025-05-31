@@ -154,8 +154,8 @@ class CSyntaxHighlighter(QSyntaxHighlighter):
 
 
 class AdvancedPIDGeneratorWidget(PanelInterface):
-    PANEL_TYPE_NAME: str = "advanced_pid_code_generator_v5"
-    PANEL_DISPLAY_NAME: str = "PID代码生成器 v5 (多实例)"
+    PANEL_TYPE_NAME: str = "advanced_pid_code_generator_"
+    PANEL_DISPLAY_NAME: str = "PID代码生成器 "
 
     def __init__(self,
                  panel_id: int,

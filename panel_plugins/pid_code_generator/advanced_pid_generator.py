@@ -351,116 +351,116 @@ class AdvancedPIDGeneratorWidget(PanelInterface):
         main_tab_layout = QVBoxLayout(widget)
         core_params_group = QGroupBox("核心PID参数")
         core_layout = QGridLayout(core_params_group)
-        core_layout.addWidget(QLabel("PID算法:"), 0, 0);
-        self.algorithm_combo = QComboBox();
-        self.algorithm_combo.addItems(["高级PID", "位置式PID (内置)", "增量式PID (内置)"]);
-        self.algorithm_combo.currentTextChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("PID算法:"), 0, 0)
+        self.algorithm_combo = QComboBox()
+        self.algorithm_combo.addItems(["高级PID", "位置式PID (内置)", "增量式PID (内置)"])
+        self.algorithm_combo.currentTextChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.algorithm_combo, 0, 1)
-        core_layout.addWidget(QLabel("PID类型 (P,D作用):"), 1, 0);
-        self.pid_type_combo = QComboBox();
-        self.pid_type_combo.addItems(["标准 (Perr, Derr)", "PI-D (Perr, Dmeas)", "I-PD (Pmeas, Dmeas)"]);
-        self.pid_type_combo.currentTextChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("PID类型 (P,D作用):"), 1, 0)
+        self.pid_type_combo = QComboBox()
+        self.pid_type_combo.addItems(["标准 (Perr, Derr)", "PI-D (Perr, Dmeas)", "I-PD (Pmeas, Dmeas)"])
+        self.pid_type_combo.currentTextChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.pid_type_combo, 1, 1)
-        core_layout.addWidget(QLabel("工作模式 (输出):"), 2, 0);
-        self.work_mode_combo = QComboBox();
-        self.work_mode_combo.addItems(["位置模式", "速度模式 (增量)"]);
-        self.work_mode_combo.currentTextChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("工作模式 (输出):"), 2, 0)
+        self.work_mode_combo = QComboBox()
+        self.work_mode_combo.addItems(["位置模式", "速度模式 (增量)"])
+        self.work_mode_combo.currentTextChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.work_mode_combo, 2, 1)
-        core_layout.addWidget(QLabel("比例 (Kp):"), 0, 2);
-        self.kp_spinbox = QDoubleSpinBox();
-        self.kp_spinbox.setRange(-1000.0, 1000.0);
-        self.kp_spinbox.setDecimals(6);
-        self.kp_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("比例 (Kp):"), 0, 2)
+        self.kp_spinbox = QDoubleSpinBox()
+        self.kp_spinbox.setRange(-1000.0, 1000.0)
+        self.kp_spinbox.setDecimals(6)
+        self.kp_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.kp_spinbox, 0, 3)
-        core_layout.addWidget(QLabel("积分 (Ki, 连续域):"), 1, 2);
-        self.ki_spinbox = QDoubleSpinBox();
-        self.ki_spinbox.setRange(0, 1000.0);
-        self.ki_spinbox.setDecimals(6);
-        self.ki_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("积分 (Ki, 连续域):"), 1, 2)
+        self.ki_spinbox = QDoubleSpinBox()
+        self.ki_spinbox.setRange(0, 1000.0)
+        self.ki_spinbox.setDecimals(6)
+        self.ki_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.ki_spinbox, 1, 3)
-        core_layout.addWidget(QLabel("微分 (Kd, 连续域):"), 2, 2);
-        self.kd_spinbox = QDoubleSpinBox();
-        self.kd_spinbox.setRange(0, 1000.0);
-        self.kd_spinbox.setDecimals(6);
-        self.kd_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("微分 (Kd, 连续域):"), 2, 2)
+        self.kd_spinbox = QDoubleSpinBox()
+        self.kd_spinbox.setRange(0, 1000.0)
+        self.kd_spinbox.setDecimals(6)
+        self.kd_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.kd_spinbox, 2, 3)
-        core_layout.addWidget(QLabel("采样时间 (s):"), 3, 2);
-        self.sample_time_spinbox = QDoubleSpinBox();
-        self.sample_time_spinbox.setRange(0.000001, 10.0);
-        self.sample_time_spinbox.setDecimals(6);
-        self.sample_time_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        core_layout.addWidget(QLabel("采样时间 (s):"), 3, 2)
+        self.sample_time_spinbox = QDoubleSpinBox()
+        self.sample_time_spinbox.setRange(0.000001, 10.0)
+        self.sample_time_spinbox.setDecimals(6)
+        self.sample_time_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         core_layout.addWidget(self.sample_time_spinbox, 3, 3)
         main_tab_layout.addWidget(core_params_group)
         limits_group = QGroupBox("输出与积分限制")
         limits_layout = QGridLayout(limits_group)
-        limits_layout.addWidget(QLabel("最大输出:"), 0, 0);
-        self.max_output_spinbox = QDoubleSpinBox();
-        self.max_output_spinbox.setRange(0, 10000.0);
-        self.max_output_spinbox.setDecimals(2);
-        self.max_output_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        limits_layout.addWidget(QLabel("最大输出:"), 0, 0)
+        self.max_output_spinbox = QDoubleSpinBox()
+        self.max_output_spinbox.setRange(0, 10000.0)
+        self.max_output_spinbox.setDecimals(2)
+        self.max_output_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         limits_layout.addWidget(self.max_output_spinbox, 0, 1)
-        limits_layout.addWidget(QLabel("最小输出:"), 0, 2);
-        self.min_output_spinbox = QDoubleSpinBox();
-        self.min_output_spinbox.setRange(-10000.0, 0);
-        self.min_output_spinbox.setDecimals(2);
-        self.min_output_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        limits_layout.addWidget(QLabel("最小输出:"), 0, 2)
+        self.min_output_spinbox = QDoubleSpinBox()
+        self.min_output_spinbox.setRange(-10000.0, 0)
+        self.min_output_spinbox.setDecimals(2)
+        self.min_output_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         limits_layout.addWidget(self.min_output_spinbox, 0, 3)
-        limits_layout.addWidget(QLabel("积分限幅 (绝对值):"), 1, 0);
-        self.integral_limit_spinbox = QDoubleSpinBox();
-        self.integral_limit_spinbox.setRange(0.0, 10000.0);
-        self.integral_limit_spinbox.setDecimals(2);
-        self.integral_limit_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        limits_layout.addWidget(QLabel("积分限幅 (绝对值):"), 1, 0)
+        self.integral_limit_spinbox = QDoubleSpinBox()
+        self.integral_limit_spinbox.setRange(0.0, 10000.0)
+        self.integral_limit_spinbox.setDecimals(2)
+        self.integral_limit_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         limits_layout.addWidget(self.integral_limit_spinbox, 1, 1)
-        limits_layout.addWidget(QLabel("输出变化率限制 (单位/秒, 0不限制):"), 1, 2);
-        self.output_ramp_spinbox = QDoubleSpinBox();
-        self.output_ramp_spinbox.setRange(0.0, 10000.0);
-        self.output_ramp_spinbox.setDecimals(3);
-        self.output_ramp_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        limits_layout.addWidget(QLabel("输出变化率限制 (单位/秒, 0不限制):"), 1, 2)
+        self.output_ramp_spinbox = QDoubleSpinBox()
+        self.output_ramp_spinbox.setRange(0.0, 10000.0)
+        self.output_ramp_spinbox.setDecimals(3)
+        self.output_ramp_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         limits_layout.addWidget(self.output_ramp_spinbox, 1, 3)
         main_tab_layout.addWidget(limits_group)
         adv_filter_group = QGroupBox("高级控制与滤波器")
         adv_filter_layout = QGridLayout(adv_filter_group)
-        adv_filter_layout.addWidget(QLabel("前馈 (Kff):"), 0, 0);
-        self.kff_spinbox = QDoubleSpinBox();
-        self.kff_spinbox.setRange(-1000.0, 1000.0);
-        self.kff_spinbox.setDecimals(6);
-        self.kff_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("前馈 (Kff):"), 0, 0)
+        self.kff_spinbox = QDoubleSpinBox()
+        self.kff_spinbox.setRange(-1000.0, 1000.0)
+        self.kff_spinbox.setDecimals(6)
+        self.kff_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.kff_spinbox, 0, 1)
-        adv_filter_layout.addWidget(QLabel("前馈权重 (0-1):"), 0, 2);
-        self.ff_weight_spinbox = QDoubleSpinBox();
-        self.ff_weight_spinbox.setRange(0.0, 1.0);
-        self.ff_weight_spinbox.setDecimals(3);
-        self.ff_weight_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("前馈权重 (0-1):"), 0, 2)
+        self.ff_weight_spinbox = QDoubleSpinBox()
+        self.ff_weight_spinbox.setRange(0.0, 1.0)
+        self.ff_weight_spinbox.setDecimals(3)
+        self.ff_weight_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.ff_weight_spinbox, 0, 3)
-        adv_filter_layout.addWidget(QLabel("死区大小:"), 1, 0);
-        self.deadband_spinbox = QDoubleSpinBox();
-        self.deadband_spinbox.setRange(0.0, 1000.0);
-        self.deadband_spinbox.setDecimals(6);
-        self.deadband_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("死区大小:"), 1, 0)
+        self.deadband_spinbox = QDoubleSpinBox()
+        self.deadband_spinbox.setRange(0.0, 1000.0)
+        self.deadband_spinbox.setDecimals(6)
+        self.deadband_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.deadband_spinbox, 1, 1)
-        adv_filter_layout.addWidget(QLabel("积分分离阈值 (误差绝对值):"), 1, 2);
-        self.integral_separation_spinbox = QDoubleSpinBox();
-        self.integral_separation_spinbox.setRange(0.0, 10000.0);
-        self.integral_separation_spinbox.setDecimals(3);
-        self.integral_separation_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("积分分离阈值 (误差绝对值):"), 1, 2)
+        self.integral_separation_spinbox = QDoubleSpinBox()
+        self.integral_separation_spinbox.setRange(0.0, 10000.0)
+        self.integral_separation_spinbox.setDecimals(3)
+        self.integral_separation_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.integral_separation_spinbox, 1, 3)
-        adv_filter_layout.addWidget(QLabel("微分滤波系数 (0-1, 0无):"), 2, 0);
-        self.d_filter_spinbox = QDoubleSpinBox();
-        self.d_filter_spinbox.setRange(0.0, 1.0);
-        self.d_filter_spinbox.setDecimals(3);
-        self.d_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("微分滤波系数 (0-1, 0无):"), 2, 0)
+        self.d_filter_spinbox = QDoubleSpinBox()
+        self.d_filter_spinbox.setRange(0.0, 1.0)
+        self.d_filter_spinbox.setDecimals(3)
+        self.d_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.d_filter_spinbox, 2, 1)
-        adv_filter_layout.addWidget(QLabel("输入滤波系数 (0-1, 0无):"), 2, 2);
-        self.input_filter_spinbox = QDoubleSpinBox();
-        self.input_filter_spinbox.setRange(0.0, 1.0);
-        self.input_filter_spinbox.setDecimals(3);
-        self.input_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("输入滤波系数 (0-1, 0无):"), 2, 2)
+        self.input_filter_spinbox = QDoubleSpinBox()
+        self.input_filter_spinbox.setRange(0.0, 1.0)
+        self.input_filter_spinbox.setDecimals(3)
+        self.input_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.input_filter_spinbox, 2, 3)
-        adv_filter_layout.addWidget(QLabel("设定值滤波系数 (0-1, 0无):"), 3, 0);
-        self.setpoint_filter_spinbox = QDoubleSpinBox();
-        self.setpoint_filter_spinbox.setRange(0.0, 1.0);
-        self.setpoint_filter_spinbox.setDecimals(3);
-        self.setpoint_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adv_filter_layout.addWidget(QLabel("设定值滤波系数 (0-1, 0无):"), 3, 0)
+        self.setpoint_filter_spinbox = QDoubleSpinBox()
+        self.setpoint_filter_spinbox.setRange(0.0, 1.0)
+        self.setpoint_filter_spinbox.setDecimals(3)
+        self.setpoint_filter_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adv_filter_layout.addWidget(self.setpoint_filter_spinbox, 3, 1)
         main_tab_layout.addWidget(adv_filter_group)
         main_tab_layout.addStretch()
@@ -472,62 +472,62 @@ class AdvancedPIDGeneratorWidget(PanelInterface):
         layout = QVBoxLayout(widget)
         adaptive_group = QGroupBox("自适应控制 (概念性, C逻辑需自行实现)")
         adaptive_layout = QGridLayout(adaptive_group)
-        self.adaptive_enable_checkbox = QCheckBox("启用自适应控制");
-        self.adaptive_enable_checkbox.stateChanged.connect(self._on_pid_param_ui_changed);
+        self.adaptive_enable_checkbox = QCheckBox("启用自适应控制")
+        self.adaptive_enable_checkbox.stateChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_enable_checkbox, 0, 0, 1, 4)
-        adaptive_layout.addWidget(QLabel("Kp 最小值:"), 1, 0);
-        self.adaptive_kp_min_spinbox = QDoubleSpinBox();
-        self.adaptive_kp_min_spinbox.setRange(0.001, 100);
-        self.adaptive_kp_min_spinbox.setDecimals(6);
-        self.adaptive_kp_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Kp 最小值:"), 1, 0)
+        self.adaptive_kp_min_spinbox = QDoubleSpinBox()
+        self.adaptive_kp_min_spinbox.setRange(0.001, 100)
+        self.adaptive_kp_min_spinbox.setDecimals(6)
+        self.adaptive_kp_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_kp_min_spinbox, 1, 1)
-        adaptive_layout.addWidget(QLabel("Kp 最大值:"), 1, 2);
-        self.adaptive_kp_max_spinbox = QDoubleSpinBox();
-        self.adaptive_kp_max_spinbox.setRange(0.001, 100);
-        self.adaptive_kp_max_spinbox.setDecimals(6);
-        self.adaptive_kp_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Kp 最大值:"), 1, 2)
+        self.adaptive_kp_max_spinbox = QDoubleSpinBox()
+        self.adaptive_kp_max_spinbox.setRange(0.001, 100)
+        self.adaptive_kp_max_spinbox.setDecimals(6)
+        self.adaptive_kp_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_kp_max_spinbox, 1, 3)
-        adaptive_layout.addWidget(QLabel("Ki 最小值:"), 2, 0);
-        self.adaptive_ki_min_spinbox = QDoubleSpinBox();
-        self.adaptive_ki_min_spinbox.setRange(0.001, 10);
-        self.adaptive_ki_min_spinbox.setDecimals(6);
-        self.adaptive_ki_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Ki 最小值:"), 2, 0)
+        self.adaptive_ki_min_spinbox = QDoubleSpinBox()
+        self.adaptive_ki_min_spinbox.setRange(0.001, 10)
+        self.adaptive_ki_min_spinbox.setDecimals(6)
+        self.adaptive_ki_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_ki_min_spinbox, 2, 1)
-        adaptive_layout.addWidget(QLabel("Ki 最大值:"), 2, 2);
-        self.adaptive_ki_max_spinbox = QDoubleSpinBox();
-        self.adaptive_ki_max_spinbox.setRange(0.001, 10);
-        self.adaptive_ki_max_spinbox.setDecimals(6);
-        self.adaptive_ki_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Ki 最大值:"), 2, 2)
+        self.adaptive_ki_max_spinbox = QDoubleSpinBox()
+        self.adaptive_ki_max_spinbox.setRange(0.001, 10)
+        self.adaptive_ki_max_spinbox.setDecimals(6)
+        self.adaptive_ki_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_ki_max_spinbox, 2, 3)
-        adaptive_layout.addWidget(QLabel("Kd 最小值:"), 3, 0);
-        self.adaptive_kd_min_spinbox = QDoubleSpinBox();
-        self.adaptive_kd_min_spinbox.setRange(0.001, 1);
-        self.adaptive_kd_min_spinbox.setDecimals(6);
-        self.adaptive_kd_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Kd 最小值:"), 3, 0)
+        self.adaptive_kd_min_spinbox = QDoubleSpinBox()
+        self.adaptive_kd_min_spinbox.setRange(0.001, 1)
+        self.adaptive_kd_min_spinbox.setDecimals(6)
+        self.adaptive_kd_min_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_kd_min_spinbox, 3, 1)
-        adaptive_layout.addWidget(QLabel("Kd 最大值:"), 3, 2);
-        self.adaptive_kd_max_spinbox = QDoubleSpinBox();
-        self.adaptive_kd_max_spinbox.setRange(0.001, 1);
-        self.adaptive_kd_max_spinbox.setDecimals(6);
-        self.adaptive_kd_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        adaptive_layout.addWidget(QLabel("Kd 最大值:"), 3, 2)
+        self.adaptive_kd_max_spinbox = QDoubleSpinBox()
+        self.adaptive_kd_max_spinbox.setRange(0.001, 1)
+        self.adaptive_kd_max_spinbox.setDecimals(6)
+        self.adaptive_kd_max_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         adaptive_layout.addWidget(self.adaptive_kd_max_spinbox, 3, 3)
         layout.addWidget(adaptive_group)
         fuzzy_group = QGroupBox("模糊PID控制 (概念性, C逻辑需自行实现)")
         fuzzy_layout = QGridLayout(fuzzy_group)
-        self.fuzzy_enable_checkbox = QCheckBox("启用模糊PID控制");
-        self.fuzzy_enable_checkbox.stateChanged.connect(self._on_pid_param_ui_changed);
+        self.fuzzy_enable_checkbox = QCheckBox("启用模糊PID控制")
+        self.fuzzy_enable_checkbox.stateChanged.connect(self._on_pid_param_ui_changed)
         fuzzy_layout.addWidget(self.fuzzy_enable_checkbox, 0, 0, 1, 2)
-        fuzzy_layout.addWidget(QLabel("模糊误差范围:"), 1, 0);
-        self.fuzzy_error_range_spinbox = QDoubleSpinBox();
-        self.fuzzy_error_range_spinbox.setRange(1, 1000);
-        self.fuzzy_error_range_spinbox.setDecimals(2);
-        self.fuzzy_error_range_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        fuzzy_layout.addWidget(QLabel("模糊误差范围:"), 1, 0)
+        self.fuzzy_error_range_spinbox = QDoubleSpinBox()
+        self.fuzzy_error_range_spinbox.setRange(1, 1000)
+        self.fuzzy_error_range_spinbox.setDecimals(2)
+        self.fuzzy_error_range_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         fuzzy_layout.addWidget(self.fuzzy_error_range_spinbox, 1, 1)
-        fuzzy_layout.addWidget(QLabel("模糊误差变化率范围:"), 2, 0);
-        self.fuzzy_derror_range_spinbox = QDoubleSpinBox();
-        self.fuzzy_derror_range_spinbox.setRange(1, 100);
-        self.fuzzy_derror_range_spinbox.setDecimals(2);
-        self.fuzzy_derror_range_spinbox.valueChanged.connect(self._on_pid_param_ui_changed);
+        fuzzy_layout.addWidget(QLabel("模糊误差变化率范围:"), 2, 0)
+        self.fuzzy_derror_range_spinbox = QDoubleSpinBox()
+        self.fuzzy_derror_range_spinbox.setRange(1, 100)
+        self.fuzzy_derror_range_spinbox.setDecimals(2)
+        self.fuzzy_derror_range_spinbox.valueChanged.connect(self._on_pid_param_ui_changed)
         fuzzy_layout.addWidget(self.fuzzy_derror_range_spinbox, 2, 1)
         layout.addWidget(fuzzy_group)
         layout.addStretch()
@@ -539,34 +539,34 @@ class AdvancedPIDGeneratorWidget(PanelInterface):
         layout = QVBoxLayout(widget)
         group = QGroupBox("全局代码生成选项 (应用于所有实例的库文件)")
         grid_layout = QGridLayout(group)
-        grid_layout.addWidget(QLabel("库结构体名称:"), 0, 0);
-        self.struct_name_edit = QLineEdit();
-        self.struct_name_edit.textChanged.connect(self._on_global_code_config_changed);
+        grid_layout.addWidget(QLabel("库结构体名称:"), 0, 0)
+        self.struct_name_edit = QLineEdit()
+        self.struct_name_edit.textChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.struct_name_edit, 0, 1)
-        grid_layout.addWidget(QLabel("库函数前缀:"), 1, 0);
-        self.function_prefix_edit = QLineEdit();
-        self.function_prefix_edit.textChanged.connect(self._on_global_code_config_changed);
+        grid_layout.addWidget(QLabel("库函数前缀:"), 1, 0)
+        self.function_prefix_edit = QLineEdit()
+        self.function_prefix_edit.textChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.function_prefix_edit, 1, 1)
-        grid_layout.addWidget(QLabel("库头文件名称 (.h):"), 2, 0);
-        self.header_name_edit = QLineEdit();
-        self.header_name_edit.textChanged.connect(self._on_global_code_config_changed);
+        grid_layout.addWidget(QLabel("库头文件名称 (.h):"), 2, 0)
+        self.header_name_edit = QLineEdit()
+        self.header_name_edit.textChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.header_name_edit, 2, 1)
-        grid_layout.addWidget(QLabel("优化级别 (概念性):"), 3, 0);
-        self.optimization_combo = QComboBox();
-        self.optimization_combo.addItems(["基础", "标准", "高级"]);
-        self.optimization_combo.currentTextChanged.connect(self._on_global_code_config_changed);
+        grid_layout.addWidget(QLabel("优化级别 (概念性):"), 3, 0)
+        self.optimization_combo = QComboBox()
+        self.optimization_combo.addItems(["基础", "标准", "高级"])
+        self.optimization_combo.currentTextChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.optimization_combo, 3, 1)
-        self.use_float_checkbox = QCheckBox("使用 float 类型 (否则 double)");
-        self.use_float_checkbox.stateChanged.connect(self._on_global_code_config_changed);
+        self.use_float_checkbox = QCheckBox("使用 float 类型 (否则 double)")
+        self.use_float_checkbox.stateChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.use_float_checkbox, 4, 0)
-        self.include_comments_checkbox = QCheckBox("包含注释 (内置生成器)");
-        self.include_comments_checkbox.stateChanged.connect(self._on_global_code_config_changed);
+        self.include_comments_checkbox = QCheckBox("包含注释 (内置生成器)")
+        self.include_comments_checkbox.stateChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.include_comments_checkbox, 4, 1)
-        self.include_header_checkbox = QCheckBox("生成头文件内容");
-        self.include_header_checkbox.stateChanged.connect(self._on_global_code_config_changed);
+        self.include_header_checkbox = QCheckBox("生成头文件内容")
+        self.include_header_checkbox.stateChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.include_header_checkbox, 5, 0)
-        self.use_template_checkbox = QCheckBox("使用模板生成库代码");
-        self.use_template_checkbox.stateChanged.connect(self._on_global_code_config_changed);
+        self.use_template_checkbox = QCheckBox("使用模板生成库代码")
+        self.use_template_checkbox.stateChanged.connect(self._on_global_code_config_changed)
         grid_layout.addWidget(self.use_template_checkbox, 5, 1)
         layout.addWidget(group)
         layout.addStretch()

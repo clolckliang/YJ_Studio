@@ -8,12 +8,8 @@ from PySide6.QtWidgets import QApplication, QDockWidget, QMessageBox, QInputDial
 from pathlib import Path
 from datetime import datetime
 
-# Adjust the path to ensure core and utils are found if not in the same directory
-# Assuming 'main.py' is at the root, and 'core', 'utils', 'ui' are subdirectories
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'core')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'ui')))
+# 添加项目根目录到Python路径
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import classes directly from main.py
 from main import (

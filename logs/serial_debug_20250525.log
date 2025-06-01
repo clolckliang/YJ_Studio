@@ -1,0 +1,707 @@
+2025-05-25 00:07:14,483-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 00:07:14,508-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:07:14,512-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:07:14,567-INFO-logger-log_info-主题已应用: light
+2025-05-25 00:07:14,567-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 00:07:14,580-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:07:14,580-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 00:07:14,585-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:07:14,585-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 00:07:14,595-INFO-logger-log_info-应用程序启动。
+2025-05-25 00:07:17,773-INFO-logger-log_info-关闭应用程序。
+2025-05-25 00:07:17,775-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 00:07:17,775-INFO-logger-log_info-配置已自动保存。
+2025-05-25 00:07:35,275-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 00:07:35,292-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:07:35,296-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:07:35,340-INFO-logger-log_info-主题已应用: light
+2025-05-25 00:07:35,340-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 00:07:35,346-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:07:35,346-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 00:07:35,350-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:07:35,350-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 00:07:35,360-INFO-logger-log_info-应用程序启动。
+2025-05-25 00:09:12,675-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 00:09:44,462-INFO-logger-log_info-关闭应用程序。
+2025-05-25 00:09:44,465-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 00:09:44,466-INFO-logger-log_info-配置已自动保存。
+2025-05-25 00:35:53,160-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 00:35:53,227-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:35:53,231-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 00:35:53,234-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:35:53,315-INFO-logger-log_info-主题已应用: light
+2025-05-25 00:35:53,315-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 00:35:53,315-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 00:35:53,323-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 00:35:53,331-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 00:35:53,331-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 00:35:53,336-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 00:35:53,337-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 00:35:53,350-INFO-logger-log_info-应用程序启动。
+2025-05-25 00:36:08,511-INFO-logger-log_info-关闭应用程序。
+2025-05-25 00:36:08,523-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 00:36:08,523-INFO-logger-log_info-配置已自动保存。
+2025-05-25 01:22:31,391-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 01:22:31,447-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:22:31,454-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:22:31,457-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:22:31,527-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:22:31,528-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 01:22:31,528-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 01:22:31,535-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:22:31,542-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:22:31,542-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 01:22:31,547-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:22:31,548-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:22:31,560-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:22:54,852-INFO-logger-log_info-关闭应用程序。
+2025-05-25 01:22:54,854-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 01:22:54,854-INFO-logger-log_info-配置已自动保存。
+2025-05-25 01:25:52,536-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 01:25:52,594-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:25:52,599-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:25:52,602-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:25:52,693-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:25:52,693-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 01:25:52,693-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 01:25:52,708-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:25:52,721-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:25:52,721-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 01:25:52,727-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:25:52,727-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:25:52,738-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:26:24,234-INFO-logger-log_info-关闭应用程序。
+2025-05-25 01:32:41,877-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 01:32:41,939-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:32:41,943-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:32:41,946-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:32:42,013-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:32:42,013-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 01:32:42,013-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 01:32:42,018-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:32:42,024-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:32:42,024-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 01:32:42,028-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:32:42,028-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:32:42,038-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:33:00,489-INFO-logger-log_info-关闭应用程序。
+2025-05-25 01:33:00,492-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 01:33:00,492-INFO-logger-log_info-配置已自动保存。
+2025-05-25 01:33:34,239-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 01:33:34,258-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:33:34,261-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:33:34,263-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:33:34,301-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:33:34,301-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C2)'
+2025-05-25 01:33:34,301-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 01:33:34,308-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C2)'
+2025-05-25 01:33:34,314-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:33:34,314-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: CA)'
+2025-05-25 01:33:34,319-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: CA)'
+2025-05-25 01:33:34,319-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:33:34,328-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:33:58,094-INFO-logger-log_info-主题已应用: custom_image_theme
+2025-05-25 01:34:06,035-INFO-logger-log_info-主题已应用: midnight
+2025-05-25 01:34:24,423-INFO-logger-log_info-关闭应用程序。
+2025-05-25 01:34:24,424-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 01:34:24,424-INFO-logger-log_info-配置已自动保存。
+2025-05-25 01:46:28,162-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:46:28,167-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:46:28,249-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/my_custom_style.qss
+2025-05-25 01:46:28,249-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 01:46:28,256-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:46:28,256-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 01:46:28,262-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:46:28,262-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:46:28,274-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:46:55,322-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:46:55,325-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:46:55,342-INFO-logger-log_info-添加新波形图: ID=1, Name='主波形图'
+2025-05-25 01:46:55,356-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:46:55,356-INFO-logger-log_info-Permanently removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 01:46:55,363-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:46:55,363-INFO-logger-log_info-Permanently removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 01:46:55,366-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:46:55,366-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:46:55,376-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:47:13,097-INFO-logger-log_info-应用程序正在关闭。
+2025-05-25 01:47:13,108-INFO-logger-log_info-配置已保存。
+2025-05-25 01:47:13,108-INFO-logger-log_info-配置已在退出时自动保存。
+2025-05-25 01:48:00,183-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 01:48:00,203-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:48:00,205-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:48:00,241-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:48:00,243-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 01:48:00,249-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 01:48:00,249-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 01:48:00,253-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 01:48:00,253-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 01:48:00,262-INFO-logger-log_info-应用程序启动。
+2025-05-25 01:48:10,498-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/improved_qss.qss
+2025-05-25 01:48:35,687-INFO-logger-log_info-主题已应用: light
+2025-05-25 01:48:47,207-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 01:48:54,196-INFO-logger-log_info-Send Panel 1: Added send data container 1
+2025-05-25 01:48:54,605-INFO-logger-log_info-Send Panel 1: Added send data container 2
+2025-05-25 01:48:54,941-INFO-logger-log_info-Send Panel 1: Added send data container 3
+2025-05-25 01:48:55,263-INFO-logger-log_info-Send Panel 1: Added send data container 4
+2025-05-25 01:48:55,507-INFO-logger-log_info-Send Panel 1: Added send data container 5
+2025-05-25 01:48:55,719-INFO-logger-log_info-Send Panel 1: Added send data container 6
+2025-05-25 01:48:55,917-INFO-logger-log_info-Send Panel 1: Added send data container 7
+2025-05-25 01:48:56,098-INFO-logger-log_info-Send Panel 1: Added send data container 8
+2025-05-25 01:48:56,265-INFO-logger-log_info-Send Panel 1: Added send data container 9
+2025-05-25 01:48:56,601-INFO-logger-log_info-Send Panel 1: Added send data container 10
+2025-05-25 01:48:56,811-INFO-logger-log_info-Send Panel 1: Added send data container 11
+2025-05-25 01:48:56,997-INFO-logger-log_info-Send Panel 1: Added send data container 12
+2025-05-25 01:48:57,171-INFO-logger-log_info-Send Panel 1: Added send data container 13
+2025-05-25 01:48:57,351-INFO-logger-log_info-Send Panel 1: Added send data container 14
+2025-05-25 01:48:57,535-INFO-logger-log_info-Send Panel 1: Added send data container 15
+2025-05-25 01:48:57,730-INFO-logger-log_info-Send Panel 1: Added send data container 16
+2025-05-25 01:48:57,939-INFO-logger-log_info-Send Panel 1: Added send data container 17
+2025-05-25 01:48:58,144-INFO-logger-log_info-Send Panel 1: Added send data container 18
+2025-05-25 01:48:58,338-INFO-logger-log_info-Send Panel 1: Added send data container 19
+2025-05-25 01:48:58,521-INFO-logger-log_info-Send Panel 1: Added send data container 20
+2025-05-25 01:48:58,717-INFO-logger-log_info-Send Panel 1: Added send data container 21
+2025-05-25 01:48:58,924-INFO-logger-log_info-Send Panel 1: Added send data container 22
+2025-05-25 01:48:59,228-INFO-logger-log_info-Send Panel 1: Added send data container 23
+2025-05-25 01:48:59,443-INFO-logger-log_info-Send Panel 1: Added send data container 24
+2025-05-25 01:48:59,644-INFO-logger-log_info-Send Panel 1: Added send data container 25
+2025-05-25 01:48:59,839-INFO-logger-log_info-Send Panel 1: Added send data container 26
+2025-05-25 01:49:00,043-INFO-logger-log_info-Send Panel 1: Added send data container 27
+2025-05-25 01:49:00,238-INFO-logger-log_info-Send Panel 1: Added send data container 28
+2025-05-25 01:49:00,441-INFO-logger-log_info-Send Panel 1: Added send data container 29
+2025-05-25 01:49:00,620-INFO-logger-log_info-Send Panel 1: Added send data container 30
+2025-05-25 01:49:00,805-INFO-logger-log_info-Send Panel 1: Added send data container 31
+2025-05-25 01:49:01,022-INFO-logger-log_info-Send Panel 1: Added send data container 32
+2025-05-25 01:49:01,209-INFO-logger-log_info-Send Panel 1: Added send data container 33
+2025-05-25 01:49:01,395-INFO-logger-log_info-Send Panel 1: Added send data container 34
+2025-05-25 01:49:01,571-INFO-logger-log_info-Send Panel 1: Added send data container 35
+2025-05-25 01:49:01,776-INFO-logger-log_info-Send Panel 1: Added send data container 36
+2025-05-25 01:49:02,005-INFO-logger-log_info-Send Panel 1: Added send data container 37
+2025-05-25 01:49:02,181-INFO-logger-log_info-Send Panel 1: Added send data container 38
+2025-05-25 01:49:02,363-INFO-logger-log_info-Send Panel 1: Added send data container 39
+2025-05-25 01:49:02,547-INFO-logger-log_info-Send Panel 1: Added send data container 40
+2025-05-25 01:49:02,751-INFO-logger-log_info-Send Panel 1: Added send data container 41
+2025-05-25 01:49:02,992-INFO-logger-log_info-Send Panel 1: Added send data container 42
+2025-05-25 01:49:03,159-INFO-logger-log_info-Send Panel 1: Added send data container 43
+2025-05-25 01:49:03,397-INFO-logger-log_info-Send Panel 1: Added send data container 44
+2025-05-25 01:49:03,581-INFO-logger-log_info-Send Panel 1: Added send data container 45
+2025-05-25 01:49:03,745-INFO-logger-log_info-Send Panel 1: Added send data container 46
+2025-05-25 01:49:03,943-INFO-logger-log_info-Send Panel 1: Added send data container 47
+2025-05-25 01:49:04,132-INFO-logger-log_info-Send Panel 1: Added send data container 48
+2025-05-25 01:49:04,438-INFO-logger-log_info-Send Panel 1: Added send data container 49
+2025-05-25 01:49:05,877-INFO-logger-log_info-Send Panel 1: Removed send data container 49
+2025-05-25 01:49:06,068-INFO-logger-log_info-Send Panel 1: Removed send data container 48
+2025-05-25 01:49:06,268-INFO-logger-log_info-Send Panel 1: Removed send data container 47
+2025-05-25 01:49:06,488-INFO-logger-log_info-Send Panel 1: Removed send data container 46
+2025-05-25 01:49:06,669-INFO-logger-log_info-Send Panel 1: Removed send data container 45
+2025-05-25 01:49:06,969-INFO-logger-log_info-Send Panel 1: Removed send data container 44
+2025-05-25 01:49:07,309-INFO-logger-log_info-Send Panel 1: Removed send data container 43
+2025-05-25 01:49:07,547-INFO-logger-log_info-Send Panel 1: Removed send data container 42
+2025-05-25 01:49:07,985-INFO-logger-log_info-Send Panel 1: Removed send data container 41
+2025-05-25 01:49:10,482-INFO-logger-log_info-Send Panel 1: Removed send data container 40
+2025-05-25 01:49:10,687-INFO-logger-log_info-Send Panel 1: Removed send data container 39
+2025-05-25 01:49:10,896-INFO-logger-log_info-Send Panel 1: Removed send data container 38
+2025-05-25 01:49:11,107-INFO-logger-log_info-Send Panel 1: Removed send data container 37
+2025-05-25 01:49:11,291-INFO-logger-log_info-Send Panel 1: Removed send data container 36
+2025-05-25 01:49:11,546-INFO-logger-log_info-Send Panel 1: Removed send data container 35
+2025-05-25 01:49:11,765-INFO-logger-log_info-Send Panel 1: Removed send data container 34
+2025-05-25 01:49:11,979-INFO-logger-log_info-Send Panel 1: Removed send data container 33
+2025-05-25 01:49:12,208-INFO-logger-log_info-Send Panel 1: Removed send data container 32
+2025-05-25 01:49:12,437-INFO-logger-log_info-Send Panel 1: Removed send data container 31
+2025-05-25 01:49:12,678-INFO-logger-log_info-Send Panel 1: Removed send data container 30
+2025-05-25 01:49:12,904-INFO-logger-log_info-Send Panel 1: Removed send data container 29
+2025-05-25 01:49:13,119-INFO-logger-log_info-Send Panel 1: Removed send data container 28
+2025-05-25 01:49:13,398-INFO-logger-log_info-Send Panel 1: Removed send data container 27
+2025-05-25 01:49:13,672-INFO-logger-log_info-Send Panel 1: Removed send data container 26
+2025-05-25 01:49:13,921-INFO-logger-log_info-Send Panel 1: Removed send data container 25
+2025-05-25 01:49:14,153-INFO-logger-log_info-Send Panel 1: Removed send data container 24
+2025-05-25 01:49:14,396-INFO-logger-log_info-Send Panel 1: Removed send data container 23
+2025-05-25 01:49:14,630-INFO-logger-log_info-Send Panel 1: Removed send data container 22
+2025-05-25 01:49:14,861-INFO-logger-log_info-Send Panel 1: Removed send data container 21
+2025-05-25 01:49:15,109-INFO-logger-log_info-Send Panel 1: Removed send data container 20
+2025-05-25 01:49:15,321-INFO-logger-log_info-Send Panel 1: Removed send data container 19
+2025-05-25 01:49:15,530-INFO-logger-log_info-Send Panel 1: Removed send data container 18
+2025-05-25 01:49:15,753-INFO-logger-log_info-Send Panel 1: Removed send data container 17
+2025-05-25 01:49:15,992-INFO-logger-log_info-Send Panel 1: Removed send data container 16
+2025-05-25 01:49:16,192-INFO-logger-log_info-Send Panel 1: Removed send data container 15
+2025-05-25 01:49:16,632-INFO-logger-log_info-Send Panel 1: Removed send data container 14
+2025-05-25 01:49:16,856-INFO-logger-log_info-Send Panel 1: Removed send data container 13
+2025-05-25 01:49:17,076-INFO-logger-log_info-Send Panel 1: Removed send data container 12
+2025-05-25 01:49:17,317-INFO-logger-log_info-Send Panel 1: Removed send data container 11
+2025-05-25 01:49:17,554-INFO-logger-log_info-Send Panel 1: Removed send data container 10
+2025-05-25 01:49:17,765-INFO-logger-log_info-Send Panel 1: Removed send data container 9
+2025-05-25 01:49:18,148-INFO-logger-log_info-Send Panel 1: Removed send data container 8
+2025-05-25 01:49:18,386-INFO-logger-log_info-Send Panel 1: Removed send data container 7
+2025-05-25 01:49:18,595-INFO-logger-log_info-Send Panel 1: Removed send data container 6
+2025-05-25 01:49:18,814-INFO-logger-log_info-Send Panel 1: Removed send data container 5
+2025-05-25 01:49:19,048-INFO-logger-log_info-Send Panel 1: Removed send data container 4
+2025-05-25 01:49:19,279-INFO-logger-log_info-Send Panel 1: Removed send data container 3
+2025-05-25 01:49:19,514-INFO-logger-log_info-Send Panel 1: Removed send data container 2
+2025-05-25 01:49:19,744-INFO-logger-log_info-Send Panel 1: Removed send data container 1
+2025-05-25 01:49:21,828-INFO-logger-log_info-关闭应用程序。
+2025-05-25 01:49:21,830-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 01:49:21,830-INFO-logger-log_info-配置已自动保存。
+2025-05-25 02:27:44,893-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 02:27:44,974-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:27:44,980-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:27:44,983-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:27:45,068-INFO-logger-log_info-主题已应用: light
+2025-05-25 02:27:45,068-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 02:27:45,068-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 02:27:45,077-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:27:45,087-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:27:45,087-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 02:27:45,093-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:27:45,093-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 02:27:45,108-INFO-logger-log_info-应用程序启动。
+2025-05-25 02:27:51,670-INFO-logger-log_info-主题已应用: custom_image_theme
+2025-05-25 02:27:59,699-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 02:28:01,543-INFO-logger-log_info-关闭应用程序。
+2025-05-25 02:28:01,546-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 02:28:01,546-INFO-logger-log_info-配置已自动保存。
+2025-05-25 02:40:23,284-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 02:40:23,347-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:40:23,351-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:40:23,353-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:40:23,415-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 02:40:23,416-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 02:40:23,416-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 02:40:23,422-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:40:23,429-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:40:23,429-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 02:40:23,432-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:40:23,432-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 02:40:23,442-INFO-logger-log_info-应用程序启动。
+2025-05-25 02:40:37,950-INFO-logger-log_info-关闭应用程序。
+2025-05-25 02:40:37,953-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 02:40:37,953-INFO-logger-log_info-配置已自动保存。
+2025-05-25 02:56:20,090-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 02:56:20,152-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:56:20,156-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:56:20,159-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:56:20,222-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 02:56:20,222-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 02:56:20,222-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 02:56:20,228-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 02:56:20,234-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 02:56:20,234-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 02:56:20,237-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 02:56:20,237-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 02:56:20,249-INFO-logger-log_info-应用程序启动。
+2025-05-25 02:56:35,602-INFO-logger-log_info-协议分析统计已重置。
+2025-05-25 02:56:38,380-INFO-logger-log_info-协议分析统计已重置。
+2025-05-25 02:56:45,502-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 02:56:45,521-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 02:56:45,521-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 03:27:08,889-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:34:17,181-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:40:50,708-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:47:41,653-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:47:41,689-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 03:47:41,695-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 03:47:41,698-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 03:47:41,826-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 03:47:41,827-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 03:47:41,827-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 03:47:41,832-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 03:47:41,839-INFO-logger-log_info-Added Parse Panel: ID=2, Name='解析面板 2 (ID: C2)'
+2025-05-25 03:47:41,839-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 03:47:41,843-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C1)'
+2025-05-25 03:47:41,843-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 03:47:41,866-INFO-logger-log_info-应用程序启动。
+2025-05-25 03:48:02,452-INFO-logger-log_info-Removed parse panel ID: 2, Name: '解析面板 2 (ID: C2)'
+2025-05-25 03:48:03,388-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C1)'
+2025-05-25 03:48:04,728-INFO-logger-log_info-Removed plot widget ID: 1, Name: '主波形图'
+2025-05-25 03:56:13,639-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 03:56:13,687-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 03:56:13,687-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 03:56:50,054-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:57:47,023-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:58:30,460-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 03:58:30,495-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 03:58:30,498-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 03:58:30,519-INFO-logger-log_info-添加波形图: ID=1, Name='主波形图'
+2025-05-25 03:58:30,536-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 03:58:30,536-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 03:58:30,544-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 03:58:30,544-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 03:58:30,548-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 03:58:30,548-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 03:58:30,558-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:00:53,636-WARNING-logger-log_warning-尝试执行空脚本。
+2025-05-25 04:00:54,491-WARNING-logger-log_warning-尝试执行空脚本。
+2025-05-25 04:00:55,092-WARNING-logger-log_warning-尝试执行空脚本。
+2025-05-25 04:01:20,908-INFO-logger-log_info-Script Output: 2
+2025-05-25 04:01:20,908-INFO-logger-log_info-Script executed successfully in 0.00 seconds
+2025-05-25 04:02:23,100-INFO-logger-log_info-Script Output: 111
+2025-05-25 04:02:23,100-INFO-logger-log_info-Script executed successfully in 0.00 seconds
+2025-05-25 04:03:09,765-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:03:09,830-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:03:09,830-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:14:24,498-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:14:24,559-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:14:24,562-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:14:24,625-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:14:24,625-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:14:24,632-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:14:24,632-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:14:24,635-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:14:24,635-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:14:24,645-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:14:27,747-INFO-logger-log_info-[ScriptEngine] Script executed successfully in 0.00 seconds
+2025-05-25 04:14:46,245-INFO-logger-log_info-[ScriptEngine] Script executed successfully in 0.00 seconds
+2025-05-25 04:14:57,899-INFO-logger-log_info-[ScriptEngine] Script executed successfully in 0.00 seconds
+2025-05-25 04:18:26,360-INFO-logger-log_info-[ScriptEngine] Script executed successfully in 0.00 seconds
+2025-05-25 04:20:16,556-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:20:16,594-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:20:16,595-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:24:24,546-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:24:24,617-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:24:24,621-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:24:24,692-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:24:24,692-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:24:24,700-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:24:24,700-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:24:24,704-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:24:24,705-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:24:24,718-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:24:56,511-INFO-logger-log_info-[ScriptEngine] Script executed successfully in 0.00 seconds
+2025-05-25 04:26:18,421-ERROR-logger-log_error-[GENERAL] [SCRIPT_ERROR] [ScriptEngine] Script execution error: name 'quick_sort' is not defined
+Traceback (most recent call last):
+  File "E:\MY_projects\YJ_toolV4\core\placeholders.py", line 683, in execute
+    if result_container['exception']: raise result_container['exception']
+  File "E:\MY_projects\YJ_toolV4\core\placeholders.py", line 672, in execute_script_thread_target
+    exec(script_text, global_scope, local_scope)
+  File "<string>", line 20, in <module>
+  File "<string>", line 14, in quick_sort
+NameError: name 'quick_sort' is not defined
+
+2025-05-25 04:26:22,890-ERROR-logger-log_error-[GENERAL] [SCRIPT_ERROR] [ScriptEngine] Script execution error: name 'quick_sort' is not defined
+Traceback (most recent call last):
+  File "E:\MY_projects\YJ_toolV4\core\placeholders.py", line 683, in execute
+    if result_container['exception']: raise result_container['exception']
+  File "E:\MY_projects\YJ_toolV4\core\placeholders.py", line 672, in execute_script_thread_target
+    exec(script_text, global_scope, local_scope)
+  File "<string>", line 20, in <module>
+  File "<string>", line 14, in quick_sort
+NameError: name 'quick_sort' is not defined
+
+2025-05-25 04:28:03,000-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:28:03,043-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:28:03,043-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:36:47,925-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:38:52,725-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:41:11,106-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:41:11,200-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:41:11,204-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:41:11,263-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:41:11,263-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:41:11,270-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:41:11,270-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:41:11,273-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:41:11,274-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:41:11,285-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:41:19,040-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:41:19,044-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:41:19,044-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:48:18,045-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:48:18,108-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:48:18,112-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:48:18,177-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:48:18,177-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:48:18,183-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:48:18,183-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:48:18,186-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:48:18,186-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:48:18,196-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:52:08,580-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:52:08,616-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:52:08,616-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:54:54,386-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:54:54,449-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:54:54,454-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:54:54,514-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:54:54,515-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:54:54,522-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:54:54,522-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:54:54,525-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:54:54,525-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:54:54,536-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:59:15,752-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:59:15,757-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:59:15,757-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 04:59:30,272-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 04:59:30,296-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:59:30,299-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:59:30,338-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 04:59:30,339-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 04:59:30,346-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 04:59:30,346-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 04:59:30,350-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 04:59:30,350-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 04:59:30,362-INFO-logger-log_info-应用程序启动。
+2025-05-25 04:59:42,064-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 04:59:42,080-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 04:59:42,080-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 05:00:05,781-INFO-logger-log_info-配置已从 'serial_debugger_config_v5.json' 加载。
+2025-05-25 05:00:05,809-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 05:00:05,815-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 05:00:05,879-INFO-logger-log_info-主题已应用: ocean
+2025-05-25 05:00:05,879-INFO-logger-log_info-Removed parse panel ID: 1, Name: '解析面板 1 (ID: C1)'
+2025-05-25 05:00:05,891-INFO-logger-log_info-Added Parse Panel: ID=1, Name='解析面板 1 (ID: C1)'
+2025-05-25 05:00:05,892-INFO-logger-log_info-Removed send panel ID: 1, Name: '发送面板 1 (ID: C9)'
+2025-05-25 05:00:05,898-INFO-logger-log_info-Added Send Panel: ID=1, Name='发送面板 1 (ID: C9)'
+2025-05-25 05:00:05,898-INFO-logger-log_info-配置已加载并应用到UI。
+2025-05-25 05:00:05,912-INFO-logger-log_info-应用程序启动。
+2025-05-25 05:01:09,101-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 05:01:09,142-INFO-logger-log_info-配置已保存到 'serial_debugger_config_v5.json'。
+2025-05-25 05:01:09,142-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 19:24:30,291-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 19:24:30,292-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 19:24:30,292-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 19:24:30,292-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 19:29:59,081-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 19:29:59,081-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 19:29:59,081-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 19:29:59,082-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 19:29:59,145-INFO-logger-log_info-配置文件 'serial_debugger_config.json' 未找到。使用默认配置。
+2025-05-25 19:29:59,152-INFO-logger-log_info-主题已应用: light
+2025-05-25 19:29:59,153-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 19:29:59,168-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 19:30:43,896-INFO-logger-log_info-主题已应用: dark
+2025-05-25 19:31:48,429-INFO-logger-log_info-主题已应用: pink
+2025-05-25 19:31:53,908-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 19:31:53,949-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 19:31:53,953-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 19:32:41,113-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 19:32:41,114-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 19:32:41,114-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 19:32:41,114-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 19:32:41,128-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 19:32:41,131-INFO-logger-log_info-主题已应用: pink
+2025-05-25 19:32:41,232-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 19:32:41,242-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 19:32:51,902-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 19:32:51,965-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 19:32:51,965-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 19:58:30,938-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 19:58:30,938-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 19:58:30,938-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 19:58:30,939-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 19:58:31,001-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 19:58:31,007-INFO-logger-log_info-主题已应用: pink
+2025-05-25 19:58:31,133-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 19:58:31,145-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 19:58:36,833-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_parse_panel', ID=1, 名称='数据解析面板 1 (ID: C1)'
+2025-05-25 19:58:40,009-INFO-logger-log_info-Parse Panel 1: Added receive container 1
+2025-05-25 19:58:40,537-INFO-logger-log_info-Parse Panel 1: Added receive container 2
+2025-05-25 19:58:40,898-INFO-logger-log_info-Parse Panel 1: Added receive container 3
+2025-05-25 19:58:41,238-INFO-logger-log_info-Parse Panel 1: Added receive container 4
+2025-05-25 19:58:41,489-INFO-logger-log_info-Parse Panel 1: Added receive container 5
+2025-05-25 19:58:41,844-INFO-logger-log_info-Parse Panel 1: Added receive container 6
+2025-05-25 19:58:42,104-INFO-logger-log_info-Parse Panel 1: Added receive container 7
+2025-05-25 19:58:42,470-INFO-logger-log_info-Parse Panel 1: Added receive container 8
+2025-05-25 19:58:43,975-INFO-logger-log_info-Parse Panel 1: Removed receive container 8
+2025-05-25 19:58:44,187-INFO-logger-log_info-Parse Panel 1: Removed receive container 7
+2025-05-25 19:58:44,471-INFO-logger-log_info-Parse Panel 1: Removed receive container 6
+2025-05-25 19:58:44,674-INFO-logger-log_info-Parse Panel 1: Removed receive container 5
+2025-05-25 19:58:44,879-INFO-logger-log_info-Parse Panel 1: Removed receive container 4
+2025-05-25 19:58:45,189-INFO-logger-log_info-Parse Panel 1: Removed receive container 3
+2025-05-25 19:59:10,393-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_send_panel', ID=2, 名称='数据发送面板 2 (ID: S2)'
+2025-05-25 19:59:14,041-INFO-logger-log_info-Send Panel 2: Added send data container 1
+2025-05-25 19:59:14,545-INFO-logger-log_info-Send Panel 2: Added send data container 2
+2025-05-25 19:59:14,791-INFO-logger-log_info-Send Panel 2: Added send data container 3
+2025-05-25 19:59:15,012-INFO-logger-log_info-Send Panel 2: Added send data container 4
+2025-05-25 19:59:15,244-INFO-logger-log_info-Send Panel 2: Added send data container 5
+2025-05-25 19:59:15,491-INFO-logger-log_info-Send Panel 2: Added send data container 6
+2025-05-25 19:59:15,760-INFO-logger-log_info-Send Panel 2: Added send data container 7
+2025-05-25 19:59:16,152-INFO-logger-log_info-Send Panel 2: Added send data container 8
+2025-05-25 19:59:16,684-INFO-logger-log_info-Send Panel 2: Added send data container 9
+2025-05-25 19:59:17,040-INFO-logger-log_info-Send Panel 2: Added send data container 10
+2025-05-25 19:59:19,200-INFO-logger-log_info-Send Panel 2: Removed send data container 10
+2025-05-25 19:59:19,456-INFO-logger-log_info-Send Panel 2: Removed send data container 9
+2025-05-25 19:59:19,712-INFO-logger-log_info-Send Panel 2: Removed send data container 8
+2025-05-25 19:59:19,971-INFO-logger-log_info-Send Panel 2: Removed send data container 7
+2025-05-25 19:59:20,180-INFO-logger-log_info-Send Panel 2: Removed send data container 6
+2025-05-25 19:59:20,382-INFO-logger-log_info-Send Panel 2: Removed send data container 5
+2025-05-25 19:59:20,676-INFO-logger-log_info-Send Panel 2: Removed send data container 4
+2025-05-25 19:59:20,905-INFO-logger-log_info-Send Panel 2: Removed send data container 3
+2025-05-25 19:59:21,124-INFO-logger-log_info-Send Panel 2: Removed send data container 2
+2025-05-25 19:59:21,316-INFO-logger-log_info-Send Panel 2: Removed send data container 1
+2025-05-25 19:59:29,422-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 19:59:29,484-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 19:59:29,488-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 20:04:24,292-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:04:24,292-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:04:24,292-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:04:24,293-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:04:24,314-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 20:04:24,322-INFO-logger-log_info-主题已应用: pink
+2025-05-25 20:04:24,451-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 20:11:17,777-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:11:17,777-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:11:17,777-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:11:17,778-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:12:56,852-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:12:56,852-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:12:56,852-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:12:56,853-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:14:20,005-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:14:20,005-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:14:20,005-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:14:20,006-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:14:20,039-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 20:14:20,053-INFO-logger-log_info-主题已应用: pink
+2025-05-25 20:14:20,194-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 20:14:20,205-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 20:15:04,226-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_parse_panel', ID=3, 名称='数据解析面板 3 (ID: C3)'
+2025-05-25 20:28:39,808-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 20:28:39,844-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 20:28:39,847-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 20:29:04,215-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:29:04,215-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:29:04,215-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:29:04,215-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:29:04,236-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 20:29:04,244-INFO-logger-log_info-主题已应用: pink
+2025-05-25 20:29:04,379-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 20:29:04,390-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 20:29:12,130-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:29:12,130-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:29:12,130-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_plot_widget_panel', ID=4, 名称='波形图 4'
+2025-05-25 20:37:57,836-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 20:37:57,898-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 20:37:57,899-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 20:45:55,330-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:45:55,330-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:45:55,330-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:45:55,331-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:45:55,351-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 20:45:55,358-INFO-logger-log_info-主题已应用: pink
+2025-05-25 20:45:55,419-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:45:55,420-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:45:55,520-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 20:45:55,521-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:45:55,521-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 4
+2025-05-25 20:45:55,531-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 20:45:58,785-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0002s
+2025-05-25 20:46:13,930-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0017s
+2025-05-25 20:46:41,880-INFO-logger-log_info-脚本执行完毕. 成功: False. 时间: 0.0007s
+2025-05-25 20:47:09,955-INFO-logger-log_info-脚本执行完毕. 成功: False. 时间: 0.0005s
+2025-05-25 20:48:56,811-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0006s
+2025-05-25 20:49:12,771-INFO-logger-log_info-Plot panel 4 removed. Updating parse panels.
+2025-05-25 20:49:12,772-INFO-logger-log_info-Plot Panel 4 ('波形图 4') removed.
+2025-05-25 20:49:12,773-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 4, 名称: '波形图 4'
+2025-05-25 20:49:22,231-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 5
+2025-05-25 20:49:22,231-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 5
+2025-05-25 20:49:22,231-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_plot_widget_panel', ID=5, 名称='波形图 5'
+2025-05-25 20:49:36,696-INFO-logger-log_info-Plot panel 5 removed. Updating parse panels.
+2025-05-25 20:49:36,696-INFO-logger-log_info-Plot Panel 5 ('波形图 5') removed.
+2025-05-25 20:49:36,696-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 5, 名称: '波形图 5'
+2025-05-25 20:56:40,313-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 20:56:40,356-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 20:56:40,358-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 20:56:55,047-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 20:56:55,048-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 20:56:55,048-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 20:56:55,048-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 20:56:55,069-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 20:56:55,077-INFO-logger-log_info-主题已应用: pink
+2025-05-25 20:56:55,235-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 20:56:55,247-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 20:57:26,977-INFO-logger-log_info-所有波形图面板已清空。
+2025-05-25 20:57:34,802-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 6
+2025-05-25 20:57:34,802-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 6
+2025-05-25 20:57:34,802-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_plot_widget_panel', ID=6, 名称='波形图 6'
+2025-05-25 20:57:38,427-INFO-logger-log_info-Plot Panel 6 ('波形图 6') cleared.
+2025-05-25 20:57:38,427-INFO-logger-log_info-所有波形图面板已清空。
+2025-05-25 20:57:51,290-INFO-logger-log_info-Plot panel 6 removed. Updating parse panels.
+2025-05-25 20:57:51,290-INFO-logger-log_info-Plot Panel 6 ('波形图 6') removed.
+2025-05-25 20:57:51,290-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 6, 名称: '波形图 6'
+2025-05-25 20:57:54,516-INFO-logger-log_info-所有波形图面板已清空。
+2025-05-25 20:57:56,454-INFO-logger-log_info-所有波形图面板已清空。
+2025-05-25 20:57:58,814-INFO-logger-log_info-开始原始数据录制。
+2025-05-25 20:58:02,095-INFO-logger-log_info-停止原始数据录制。
+2025-05-25 20:58:09,640-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0006s
+2025-05-25 20:58:43,820-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 20:58:43,830-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 20:58:43,831-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 21:04:15,058-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 21:04:15,058-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 21:04:15,058-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 21:04:15,059-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 21:04:15,124-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 21:04:15,143-INFO-logger-log_info-主题已应用: pink
+2025-05-25 21:04:15,363-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 21:04:15,373-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 21:04:27,779-INFO-logger-log_info-Parse Panel 1 removed. Cleaned up associated plot curves.
+2025-05-25 21:04:27,793-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 1, 名称: '数据解析面板 1 (ID: C1)'
+2025-05-25 21:04:29,928-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 2, 名称: '数据发送面板 2 (ID: S2)'
+2025-05-25 21:04:31,647-INFO-logger-log_info-Parse Panel 3 removed. Cleaned up associated plot curves.
+2025-05-25 21:04:31,647-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 3, 名称: '数据解析面板 3 (ID: C3)'
+2025-05-25 21:04:41,548-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/improved_qss.qss
+2025-05-25 21:05:12,797-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:18,046-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:18,545-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:18,780-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:19,014-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:19,225-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:19,440-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0005s
+2025-05-25 21:06:57,628-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 21:06:57,686-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 21:06:57,688-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 21:14:37,945-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 21:14:37,945-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 21:14:37,945-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 21:14:37,946-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 21:14:38,013-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 21:14:38,803-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/improved_qss.qss
+2025-05-25 21:14:38,942-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 21:14:38,957-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 21:14:42,497-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0008s
+2025-05-25 21:15:51,905-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 21:15:51,923-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 21:15:51,924-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 22:27:12,062-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 22:27:12,063-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 22:27:12,063-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 22:27:12,063-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 22:27:12,130-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 22:27:12,828-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/improved_qss.qss
+2025-05-25 22:27:12,951-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 22:27:12,965-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 22:28:12,292-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_parse_panel', ID=7, 名称='数据解析面板 7 (ID: C7)'
+2025-05-25 22:28:36,910-INFO-logger-log_info-Parse Panel 7: Added receive container 9
+2025-05-25 22:28:37,307-INFO-logger-log_info-Parse Panel 7: Added receive container 10
+2025-05-25 22:28:47,723-INFO-logger-log_info-接收容器 9 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:28:47,723-INFO-logger-log_info-接收容器 10 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:28:47,723-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_plot_widget_panel', ID=8, 名称='波形图 8'
+2025-05-25 22:29:00,627-INFO-logger-log_info-接收容器 9 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:29:00,628-INFO-logger-log_info-接收容器 10 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:29:00,628-INFO-logger-log_info-[UI_ACTION] 已添加动态面板: 类型='core_plot_widget_panel', ID=9, 名称='波形图 9'
+2025-05-25 22:29:12,329-INFO-logger-log_info-Plot panel 9 removed. Updating parse panels.
+2025-05-25 22:29:12,330-INFO-logger-log_info-接收容器 9 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:29:12,330-INFO-logger-log_info-接收容器 10 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:29:12,330-INFO-logger-log_info-Plot Panel 9 ('波形图 9') removed.
+2025-05-25 22:29:12,341-INFO-logger-log_info-[UI_ACTION] 已移除动态面板 ID: 9, 名称: '波形图 9'
+2025-05-25 22:29:12,342-INFO-logger-log_info-接收容器 9 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:29:12,342-INFO-logger-log_info-接收容器 10 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:30:03,901-INFO-logger-log_info-脚本执行完毕. 成功: True. 时间: 0.0114s
+2025-05-25 22:30:35,972-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 22:30:36,039-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 22:30:36,042-INFO-logger-log_info-配置已自动保存。应用程序退出。
+2025-05-25 22:37:50,483-INFO-logger-log_info-Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget
+2025-05-25 22:37:50,483-INFO-logger-log_info-Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget
+2025-05-25 22:37:50,483-INFO-logger-log_info-Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel
+2025-05-25 22:37:50,484-INFO-logger-log_info-Plugin directory 'E:\MY_projects\panel_plugins' not found. No external panels will be loaded.
+2025-05-25 22:37:50,507-INFO-logger-log_info-配置已从 'serial_debugger_config.json' 加载。
+2025-05-25 22:37:51,284-INFO-logger-log_info-已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/improved_qss.qss
+2025-05-25 22:37:51,370-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:37:51,370-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:37:51,482-INFO-logger-log_info-[CONFIG] 配置已加载并应用到UI。
+2025-05-25 22:37:51,483-INFO-logger-log_info-接收容器 1 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:37:51,483-INFO-logger-log_info-接收容器 2 的绘图目标已更改为 Plot Panel ID: 8
+2025-05-25 22:37:51,496-INFO-logger-log_info-应用程序启动 (插件架构)。
+2025-05-25 22:38:09,394-INFO-logger-log_info-关闭应用程序，正在停止后台线程...
+2025-05-25 22:38:09,404-INFO-logger-log_info-配置已保存到 'serial_debugger_config.json'。
+2025-05-25 22:38:09,406-INFO-logger-log_info-配置已自动保存。应用程序退出。

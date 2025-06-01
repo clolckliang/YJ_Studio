@@ -1,0 +1,55 @@
+{
+    "serial_port": {
+        "port_name": "COM28",
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "None",
+        "stop_bits": 1
+    },
+    "frame_definition": {
+        "head": "AB",
+        "s_addr": "01",
+        "d_addr": "02",
+        "func_id": "C1"
+    },
+    "checksum_mode": "ORIGINAL_SUM_ADD",
+    "ui_theme_info": {
+        "type": "internal",
+        "name": "light",
+        "path": null
+    },
+    "parse_panels": [
+        {
+            "panel_id": 1,
+            "parse_func_id": "C1",
+            "data_mapping_mode": "顺序填充 (Sequential)",
+            "receive_containers": [],
+            "dock_name": "解析面板 1 (ID: C1)"
+        }
+    ],
+    "send_panels": [
+        {
+            "panel_id": 1,
+            "panel_func_id": "C9",
+            "send_containers": [],
+            "dock_name": "发送面板 1 (ID: C9)"
+        }
+    ],
+    "plot_configs": [
+        {
+            "id": 1,
+            "name": "主波形图",
+            "dock_name": "主波形图"
+        }
+    ],
+    "custom_log_panel": {
+        "hex_display": false,
+        "timestamp_display": false
+    },
+    "basic_comm_panel": {
+        "recv_hex_display": false,
+        "recv_timestamp_display": false
+    },
+    "window_geometry": "AdnQywADAAAAAAIWAAAAXwAABc8AAAOFAAACFgAAAH0AAAXPAAADhQAAAAAAAAAABqsAAAIWAAAAfQAABc8AAAOF",
+    "window_state": "AAAA/wAAAAD9AAAAAwAAAAAAAAO6AAABw/wCAAAAAfwAAAAhAAABwwAAAccBAAAZ+gAAAAQCAAAABfsAAAAgAFMAZQByAGkAYQBsAEMAbwBuAGYAaQBnAEQAbwBjAGsBAAAAAP////8AAAGtAP////sAAAAeAFMAZQBuAGQAUABhAG4AZQBsAEQAbwBjAGsAXwAxAQAAAAD/////AAAAAAAAAAD7AAAAFABQAGwAbwB0AEQAbwBjAGsAXwAxAQAAAAD/////AAAATQD////7AAAAIABQAGEAcgBzAGUAUABhAG4AZQBsAEQAbwBjAGsAXwAxAQAAAAD/////AAAA0AD////7AAAAHgBTAGUAbgBkAFAAYQBuAGUAbABEAG8AYwBrAF8AMQEAAAAA/////wAAANYA////AAAAAQAAATYAAAHD/AIAAAAB+wAAACAAUABhAHIAcwBlAFAAYQBuAGUAbABEAG8AYwBrAF8AMQEAAAAhAAABwwAAAAAAAAAAAAAAAwAAA7oAAAEM/AEAAAAB/AAAAAAAAAO6AAABFwD////6AAAAAQEAAAAC+wAAACoAQwB1AHMAdABvAG0AUAByAG8AdABvAGMAbwBsAEwAbwBnAEQAbwBjAGsBAAAAAP////8AAAEXAP////sAAAAeAEIAYQBzAGkAYwBTAGUAcgBpAGEAbABEAG8AYwBrAQAAAAD/////AAABFwD///8AAAAAAAABxAAAAAQAAAAEAAAACAAAAAj8AAAAAA=="
+}

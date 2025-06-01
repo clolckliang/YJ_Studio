@@ -1,0 +1,40 @@
+{
+    "serial_port": {
+        "port_name": "COM27",
+        "baud_rate": 115200,
+        "data_bits": 8,
+        "parity": "None",
+        "stop_bits": 1
+    },
+    "frame_definition": {
+        "head": "AB",
+        "s_addr": "01",
+        "d_addr": "02",
+        "func_id": "C1"
+    },
+    "checksum_mode": "ORIGINAL_SUM_ADD",
+    "ui_theme_info": {
+        "type": "internal",
+        "name": "custom_image_theme",
+        "path": null
+    },
+    "custom_log_panel": {
+        "hex_display": false,
+        "timestamp_display": false
+    },
+    "basic_comm_panel": {
+        "recv_hex_display": false,
+        "recv_timestamp_display": false,
+        "send_hex_checked": false
+    },
+    "scripting_panel": {
+        "current_script": ""
+    },
+    "dynamic_panels": [],
+    "next_dynamic_panel_id": 12,
+    "next_global_receive_container_id": 1,
+    "enabled_plugins": [
+        "panel_plugins.example_custom_panel",
+        "panel_plugins.pid_code_generator"
+    ]
+}

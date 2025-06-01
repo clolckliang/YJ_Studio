@@ -1,0 +1,1304 @@
+2025-05-31 00:37:58,761-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 00:37:58,761-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 00:37:58,761-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 00:37:58,781-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 00:37:58,821-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 00:37:58,822-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 00:37:59,587-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/resources/my_custom_style.qss
+2025-05-31 00:37:59,587-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 10 (类型: example_custom_panel) 由于其模块未启用或被阻止而未加载。
+2025-05-31 00:37:59,597-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 00:37:59,599-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel'}
+2025-05-31 00:37:59,599-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 00:37:59,636-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 00:37:59,671-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 00:37:59,671-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 00:37:59,673-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 00:37:59,673-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 00:37:59,673-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 00:37:59,673-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板'}
+2025-05-31 00:37:59,701-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 00:38:03,154-INFO-logger-log_info-[INFO] 发现 1 个插件模块
+2025-05-31 00:38:09,641-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 00:38:09,641-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 00:38:09,666-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 00:38:09,668-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 00:38:09,668-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 00:38:09,669-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 00:38:09,670-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:07:07,712-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:07:07,712-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:07:07,713-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:07:07,740-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:07:07,772-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:07:07,789-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:07:08,541-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/resources/my_custom_style.qss
+2025-05-31 01:07:08,549-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:07:08,550-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel'}
+2025-05-31 01:07:08,550-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:07:08,554-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 01:07:08,562-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 01:07:08,562-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:07:08,562-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:07:08,562-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:07:08,562-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:07:08,563-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板'}
+2025-05-31 01:07:08,579-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:07:13,861-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 01:08:48,107-INFO-logger-log_info-[PLUGIN_MGMT] 模块 'panel_plugins.pid_code_generator' 已标记为启用。
+2025-05-31 01:08:48,107-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 01:08:48,107-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:08:48,108-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:08:48,108-INFO-logger-log_info-[PLUGIN_MGMT] 插件管理器请求更新模块 'panel_plugins.pid_code_generator' 状态为 'enabled'。
+2025-05-31 01:08:51,569-INFO-logger-log_info-[INFO] 开始插件热重载流程...
+2025-05-31 01:08:51,569-INFO-logger-log_info-[PLUGIN_MANAGER] Stored configs for 0 active panels before reload.
+2025-05-31 01:08:51,569-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 01:08:51,569-INFO-logger-log_info-[INFO] 正在重新扫描和加载插件模块...
+2025-05-31 01:08:51,569-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:08:51,571-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试重载已启用模块: panel_plugins.example_custom_panel
+2025-05-31 01:08:51,571-INFO-logger-log_info-[INFO] Unregistered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel.
+2025-05-31 01:08:51,572-INFO-logger-log_info-[INFO] 成功重载模块: panel_plugins.example_custom_panel
+2025-05-31 01:08:51,572-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:08:51,572-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:08:51,572-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:08:51,572-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:08:51,572-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:08:51,594-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:08:51,594-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] Registered panel type: 'pid_code_generator' (PID代码生成器) from class PIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:08:51,595-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-05-31 01:08:51,595-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['pid_code_generator']
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] 插件模块扫描/重载完毕。活动类型: ['core_parse_panel', 'core_send_panel', 'core_plot_widget_panel', 'example_custom_panel', 'pid_code_generator']
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'pid_code_generator': 'PID代码生成器'}
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] “添加面板”菜单已更新。
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] 正在尝试恢复之前活动的面板...
+2025-05-31 01:08:51,595-INFO-logger-log_info-[INFO] 插件热重载流程完毕。成功恢复 0 个面板实例。
+2025-05-31 01:08:51,596-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'pid_code_generator': 'PID代码生成器'}
+2025-05-31 01:08:51,598-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 01:08:53,971-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 01:08:58,558-ERROR-logger-log_error-[pid_code_generator] PIDGeneratorWidget UI初始化失败: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:08:58,558-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'pid_code_generator' (ID: 11) from module panel_plugins.pid_code_generator: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 153, in __init__
+    self._init_ui()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 188, in _init_ui
+    preview_tab = self._create_preview_tab()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 358, in _create_preview_tab
+    highlighter = CSyntaxHighlighter(self.code_preview.document())
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 37, in __init__
+    keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+AttributeError: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:08:58,559-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: pid_code_generator
+2025-05-31 01:09:18,133-ERROR-logger-log_error-[pid_code_generator] PIDGeneratorWidget UI初始化失败: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:09:18,133-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'pid_code_generator' (ID: 11) from module panel_plugins.pid_code_generator: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 153, in __init__
+    self._init_ui()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 188, in _init_ui
+    preview_tab = self._create_preview_tab()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 358, in _create_preview_tab
+    highlighter = CSyntaxHighlighter(self.code_preview.document())
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 37, in __init__
+    keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+AttributeError: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:09:18,134-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: pid_code_generator
+2025-05-31 01:09:25,510-INFO-logger-log_info-[INFO] Created instance of panel 'example_custom_panel' (ID: 11) from module panel_plugins.example_custom_panel
+2025-05-31 01:09:26,930-INFO-logger-log_info-[example_custom_panel] 面板 '我的自定义面板' (ID: 11) 已成功添加
+2025-05-31 01:09:26,935-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='example_custom_panel', ID=11, 名称='我的自定义面板 (11)'
+2025-05-31 01:09:33,216-INFO-logger-log_info-[example_custom_panel] 面板 '我的自定义面板' (ID: 11) 正在清理资源
+2025-05-31 01:09:33,216-INFO-logger-log_info-[INFO] [UI_ACTION] 已移除动态面板 ID: 11, 名称: '我的自定义面板 (11)'
+2025-05-31 01:09:44,316-INFO-logger-log_info-[INFO] 开始插件热重载流程...
+2025-05-31 01:09:44,316-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 01:09:44,316-INFO-logger-log_info-[INFO] 正在重新扫描和加载插件模块...
+2025-05-31 01:09:44,316-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:09:44,317-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试重载已启用模块: panel_plugins.example_custom_panel
+2025-05-31 01:09:44,317-INFO-logger-log_info-[INFO] Unregistered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel.
+2025-05-31 01:09:44,317-INFO-logger-log_info-[INFO] 成功重载模块: panel_plugins.example_custom_panel
+2025-05-31 01:09:44,318-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:09:44,318-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:09:44,318-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:09:44,318-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:09:44,318-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试重载已启用模块: panel_plugins.pid_code_generator
+2025-05-31 01:09:44,318-INFO-logger-log_info-[INFO] Unregistered panel type: 'pid_code_generator' (PID代码生成器) from class PIDGeneratorWidget in module panel_plugins.pid_code_generator.
+2025-05-31 01:09:44,319-INFO-logger-log_info-[INFO] 成功重载模块: panel_plugins.pid_code_generator
+2025-05-31 01:09:44,319-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:09:44,319-INFO-logger-log_info-[INFO] Registered panel type: 'pid_code_generator' (PID代码生成器) from class PIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:09:44,319-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-05-31 01:09:44,319-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['pid_code_generator']
+2025-05-31 01:09:44,319-INFO-logger-log_info-[INFO] 插件模块扫描/重载完毕。活动类型: ['core_parse_panel', 'core_send_panel', 'core_plot_widget_panel', 'example_custom_panel', 'pid_code_generator']
+2025-05-31 01:09:44,320-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'pid_code_generator': 'PID代码生成器'}
+2025-05-31 01:09:44,320-INFO-logger-log_info-[INFO] “添加面板”菜单已更新。
+2025-05-31 01:09:44,320-INFO-logger-log_info-[INFO] 插件热重载流程完毕。成功恢复 0 个面板实例。
+2025-05-31 01:09:48,984-ERROR-logger-log_error-[pid_code_generator] PIDGeneratorWidget UI初始化失败: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:09:48,984-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'pid_code_generator' (ID: 12) from module panel_plugins.pid_code_generator: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 153, in __init__
+    self._init_ui()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 188, in _init_ui
+    preview_tab = self._create_preview_tab()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 358, in _create_preview_tab
+    highlighter = CSyntaxHighlighter(self.code_preview.document())
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 37, in __init__
+    keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+AttributeError: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:09:48,985-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: pid_code_generator
+2025-05-31 01:10:06,896-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 01:10:06,896-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 01:10:06,912-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 01:10:06,913-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 01:10:06,913-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 01:10:06,914-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:10:06,916-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:13:26,571-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:13:26,571-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:13:26,571-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:13:26,584-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:13:26,606-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:13:26,608-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:13:27,529-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/resources/my_custom_style.qss
+2025-05-31 01:13:27,686-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:13:27,686-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 01:13:27,687-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:13:27,689-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 01:13:27,695-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 01:13:27,695-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:13:27,695-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:13:27,695-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:13:27,695-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:13:27,695-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:13:27,699-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:13:27,699-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:13:27,699-INFO-logger-log_info-[INFO] Registered panel type: 'pid_code_generator' (PID代码生成器) from class PIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:13:27,699-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-05-31 01:13:27,699-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['pid_code_generator']
+2025-05-31 01:13:27,700-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'pid_code_generator': 'PID代码生成器'}
+2025-05-31 01:13:27,714-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:13:35,036-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 12) from module __main__
+2025-05-31 01:13:36,304-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='core_send_panel', ID=12, 名称='数据发送面板 12 (ID: SC)'
+2025-05-31 01:13:40,303-ERROR-logger-log_error-[pid_code_generator] PIDGeneratorWidget UI初始化失败: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:13:40,303-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'pid_code_generator' (ID: 13) from module panel_plugins.pid_code_generator: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+Traceback (most recent call last):
+  File "E:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 153, in __init__
+    self._init_ui()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 188, in _init_ui
+    preview_tab = self._create_preview_tab()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 358, in _create_preview_tab
+    highlighter = CSyntaxHighlighter(self.code_preview.document())
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 37, in __init__
+    keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+AttributeError: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:13:40,304-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: pid_code_generator
+2025-05-31 01:13:46,918-ERROR-logger-log_error-[pid_code_generator] PIDGeneratorWidget UI初始化失败: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:13:46,918-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'pid_code_generator' (ID: 13) from module panel_plugins.pid_code_generator: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+Traceback (most recent call last):
+  File "E:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 153, in __init__
+    self._init_ui()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 188, in _init_ui
+    preview_tab = self._create_preview_tab()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 358, in _create_preview_tab
+    highlighter = CSyntaxHighlighter(self.code_preview.document())
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\pid_generator_widget.py", line 37, in __init__
+    keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+AttributeError: 'PySide6.QtGui.QTextCharFormat' object has no attribute 'setColor'
+2025-05-31 01:13:46,919-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: pid_code_generator
+2025-05-31 01:13:48,963-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 01:13:48,963-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 01:13:48,977-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 01:13:48,979-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 01:13:48,979-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 01:13:48,980-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:13:48,980-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:14:38,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:14:38,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:14:38,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:14:38,913-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:14:38,935-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:14:38,959-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:14:39,784-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/resources/my_custom_style.qss
+2025-05-31 01:14:39,786-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 12) from module __main__
+2025-05-31 01:14:39,935-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:14:39,935-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 01:14:39,935-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:14:39,937-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 01:14:39,942-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 01:14:39,942-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:14:39,942-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:14:39,942-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:14:39,942-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:14:39,943-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:14:39,983-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:14:39,983-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:14:39,983-INFO-logger-log_info-[INFO] Registered panel type: 'pid_code_generator' (PID代码生成器) from class PIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:14:39,983-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-05-31 01:14:39,983-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['pid_code_generator']
+2025-05-31 01:14:39,984-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'pid_code_generator': 'PID代码生成器'}
+2025-05-31 01:14:39,998-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:14:44,083-INFO-logger-log_info-[INFO] Created instance of panel 'pid_code_generator' (ID: 13) from module panel_plugins.pid_code_generator
+2025-05-31 01:14:45,553-INFO-logger-log_info-[pid_code_generator] 面板 'PID代码生成器' (ID: 13) 已成功添加
+2025-05-31 01:14:45,568-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='pid_code_generator', ID=13, 名称='PID代码生成器 (13)'
+2025-05-31 01:15:03,047-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 01:15:03,048-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 01:15:03,058-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 01:15:03,059-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 01:15:03,060-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 01:15:03,072-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:15:03,072-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:46:01,552-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:46:01,553-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:46:01,553-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:46:01,577-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:46:01,627-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:46:01,648-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:46:02,532-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/YJ_toolV4/resources/my_custom_style.qss
+2025-05-31 01:46:02,536-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 12) from module __main__
+2025-05-31 01:46:02,547-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 13 (类型: pid_code_generator) 由于其模块未启用或被阻止而未加载。
+2025-05-31 01:46:02,702-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:46:02,703-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 01:46:02,703-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:46:02,706-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 01:46:02,711-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 01:46:02,711-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 01:46:02,712-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 01:46:02,712-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 01:46:02,712-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 01:46:02,712-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:46:02,747-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:46:02,747-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:46:02,747-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (高级PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:46:02,747-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器
+2025-05-31 01:46:02,747-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-05-31 01:46:02,747-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 01:46:02,760-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:46:10,573-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 01:46:10,573-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 01:46:10,600-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 01:46:10,602-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 01:46:10,602-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 01:46:10,603-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:46:10,604-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:46:37,822-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:46:37,822-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:46:37,822-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:46:37,842-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:46:37,870-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:46:37,871-INFO-logger-log_info-[INFO] 配置文件 'serial_debugger_config_v2.json' 未找到。使用默认配置。
+2025-05-31 01:46:37,885-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 01:46:38,019-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:46:38,019-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: set()
+2025-05-31 01:46:38,019-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:46:38,022-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:46:38,032-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:46:49,260-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 01:46:55,187-INFO-logger-log_info-[PLUGIN_MGMT] 模块 'panel_plugins.pid_code_generator' 已标记为启用。
+2025-05-31 01:46:55,187-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 01:46:55,187-INFO-logger-log_info-[INFO] 配置文件 'serial_debugger_config_v2.json' 未找到。使用默认配置。
+2025-05-31 01:46:55,188-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:46:55,188-INFO-logger-log_info-[PLUGIN_MGMT] 插件管理器请求更新模块 'panel_plugins.pid_code_generator' 状态为 'enabled'。
+2025-05-31 01:46:56,285-INFO-logger-log_info-[INFO] 开始插件热重载流程...
+2025-05-31 01:46:56,285-INFO-logger-log_info-[PLUGIN_MANAGER] Stored configs for 0 active panels before reload.
+2025-05-31 01:46:56,285-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 01:46:56,285-INFO-logger-log_info-[INFO] 正在重新扫描和加载插件模块...
+2025-05-31 01:46:56,286-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:46:56,286-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:46:56,293-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:46:56,293-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:46:56,293-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (高级PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:46:56,293-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器
+2025-05-31 01:46:56,293-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-05-31 01:46:56,293-INFO-logger-log_info-[INFO] 插件模块扫描/重载完毕。活动类型: ['core_parse_panel', 'core_send_panel', 'core_plot_widget_panel', 'advanced_pid_code_generator']
+2025-05-31 01:46:56,294-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 01:46:56,294-INFO-logger-log_info-[INFO] “添加面板”菜单已更新。
+2025-05-31 01:46:56,294-INFO-logger-log_info-[INFO] 正在尝试恢复之前活动的面板...
+2025-05-31 01:46:56,294-INFO-logger-log_info-[INFO] 插件热重载流程完毕。成功恢复 0 个面板实例。
+2025-05-31 01:46:56,294-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 01:46:56,296-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 01:47:03,980-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator' (ID: 1) from module panel_plugins.pid_code_generator
+2025-05-31 01:47:05,393-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator', ID=1, 名称='高级PID代码生成器 (1)'
+2025-05-31 01:47:39,569-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 1 开始生成代码
+2025-05-31 01:47:39,573-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:48:17,225-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 1 开始生成代码
+2025-05-31 01:48:17,235-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:48:47,386-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 01:48:47,386-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 01:48:47,407-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 01:48:47,409-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 01:48:47,409-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 01:48:47,410-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 01:48:47,410-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 01:50:59,006-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 01:50:59,006-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 01:50:59,007-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 01:50:59,022-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 01:50:59,047-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 01:50:59,048-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 01:50:59,068-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 01:50:59,069-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 1 (类型: advanced_pid_code_generator) 由于其模块未启用或被阻止而未加载。
+2025-05-31 01:50:59,320-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 01:50:59,320-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 01:50:59,321-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 01:50:59,324-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 01:50:59,335-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 01:50:59,335-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 01:50:59,335-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (高级PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 01:50:59,335-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器
+2025-05-31 01:50:59,335-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-05-31 01:50:59,336-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 01:50:59,357-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 01:51:05,803-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator' (ID: 2) from module panel_plugins.pid_code_generator
+2025-05-31 01:51:08,449-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator', ID=2, 名称='高级PID代码生成器 (2)'
+2025-05-31 01:51:14,524-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:51:14,534-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:51:15,164-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:51:15,176-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:51:28,648-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:51:28,652-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:51:59,049-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码已导出到: E:/MY_projects/yj_studio/advanced_pid_controller.c
+2025-05-31 01:53:30,444-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:53:30,461-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:53:59,133-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:53:59,143-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:54:06,891-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 01:54:06,904-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 01:55:43,325-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码已导出到: E:/MY_projects/yj_studio/advanced_pid_controller.c
+2025-05-31 02:15:28,855-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 02:15:28,856-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 02:15:28,856-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 02:15:28,873-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 02:15:28,929-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:15:28,930-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:15:28,949-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 02:15:28,949-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 1 (类型: advanced_pid_code_generator) 由于其模块未启用或被阻止而未加载。
+2025-05-31 02:15:29,105-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 02:15:29,105-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:15:29,106-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:15:29,109-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:15:29,168-ERROR-logger-log_error-[PLUGIN_DISCOVERY] 导入新模块 panel_plugins.pid_code_generator 失败: invalid syntax (advanced_pid_generator.py, line 1050)
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 248, in discover_plugins
+    plugin_module_ref = importlib.import_module(full_module_name)
+  File "D:\Dev_env\anaconda3\envs\Ano_port\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\__init__.py", line 20, in <module>
+    from .advanced_pid_generator import AdvancedPIDGeneratorWidget
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 1050
+    derivative_input = (measure - pid->prev_measure) if is_d_on_measure else (error - pid->prev_error);
+                                     ^
+SyntaxError: invalid syntax
+2025-05-31 02:15:29,199-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:15:29,213-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 02:15:34,493-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:15:39,650-INFO-logger-log_info-[PLUGIN_MGMT] 模块 'panel_plugins.pid_code_generator' 已标记为启用。
+2025-05-31 02:15:39,650-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:15:39,650-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:15:39,653-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:15:39,653-INFO-logger-log_info-[PLUGIN_MGMT] 插件管理器请求更新模块 'panel_plugins.pid_code_generator' 状态为 'enabled'。
+2025-05-31 02:15:40,982-INFO-logger-log_info-[INFO] 开始插件热重载流程...
+2025-05-31 02:15:40,982-INFO-logger-log_info-[PLUGIN_MANAGER] Stored configs for 0 active panels before reload.
+2025-05-31 02:15:40,982-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:15:40,982-INFO-logger-log_info-[INFO] 正在重新扫描和加载插件模块...
+2025-05-31 02:15:40,982-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:15:40,984-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:15:40,997-ERROR-logger-log_error-[PLUGIN_DISCOVERY] 导入新模块 panel_plugins.pid_code_generator 失败: invalid syntax (advanced_pid_generator.py, line 1050)
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 248, in discover_plugins
+    plugin_module_ref = importlib.import_module(full_module_name)
+  File "D:\Dev_env\anaconda3\envs\Ano_port\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\__init__.py", line 20, in <module>
+    from .advanced_pid_generator import AdvancedPIDGeneratorWidget
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 1050
+    derivative_input = (measure - pid->prev_measure) if is_d_on_measure else (error - pid->prev_error);
+                                     ^
+SyntaxError: invalid syntax
+2025-05-31 02:15:40,997-INFO-logger-log_info-[INFO] 插件模块扫描/重载完毕。活动类型: ['core_parse_panel', 'core_send_panel', 'core_plot_widget_panel']
+2025-05-31 02:15:40,997-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:15:40,997-INFO-logger-log_info-[INFO] “添加面板”菜单已更新。
+2025-05-31 02:15:40,997-INFO-logger-log_info-[INFO] 正在尝试恢复之前活动的面板...
+2025-05-31 02:15:40,997-INFO-logger-log_info-[INFO] 插件热重载流程完毕。成功恢复 0 个面板实例。
+2025-05-31 02:15:40,999-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:15:41,000-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:15:47,122-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 02:15:47,122-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 02:15:47,150-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 02:15:47,152-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 02:15:47,152-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 02:15:47,153-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:15:47,155-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 02:16:37,820-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 02:16:37,821-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 02:16:37,821-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 02:16:37,827-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 02:16:37,843-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:16:37,858-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:16:37,867-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 02:16:37,979-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 02:16:37,980-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:16:37,980-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:16:37,982-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:16:38,024-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 02:16:38,024-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 02:16:38,024-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (高级PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 02:16:38,024-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器
+2025-05-31 02:16:38,025-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-05-31 02:16:38,035-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 02:16:38,046-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 02:16:42,861-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator' (ID: 2) from module panel_plugins.pid_code_generator
+2025-05-31 02:16:47,364-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator', ID=2, 名称='高级PID代码生成器'
+2025-05-31 02:17:03,258-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 02:17:03,262-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:17:24,599-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 2 开始生成代码
+2025-05-31 02:17:24,615-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:18:05,217-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 02:18:05,218-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 02:18:05,234-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 02:18:05,235-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 02:18:05,235-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 02:18:05,237-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:18:05,238-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 02:39:13,443-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 02:39:13,443-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 02:39:13,443-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 02:39:13,469-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 02:39:13,491-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:39:13,512-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:39:13,520-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 02:39:13,520-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 2 (类型: advanced_pid_code_generator) 由于其模块未启用或被阻止而未加载。
+2025-05-31 02:39:13,633-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 02:39:13,633-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:39:13,633-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:39:13,635-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:39:13,641-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 02:39:13,641-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 02:39:13,642-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (高级PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 02:39:13,642-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器
+2025-05-31 02:39:13,642-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-05-31 02:39:13,642-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': '高级PID代码生成器'}
+2025-05-31 02:39:13,653-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 02:39:21,631-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 02:39:27,730-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator' (ID: 3) from module panel_plugins.pid_code_generator
+2025-05-31 02:39:29,147-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator', ID=3, 名称='高级PID代码生成器 (3)'
+2025-05-31 02:39:44,070-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 3 开始生成代码
+2025-05-31 02:39:44,079-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:39:46,445-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 3 开始生成代码
+2025-05-31 02:39:46,454-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:39:57,687-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 3 开始生成代码
+2025-05-31 02:39:57,702-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:40:06,856-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 3 开始生成代码
+2025-05-31 02:40:06,872-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:40:35,034-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成器 3 开始生成代码
+2025-05-31 02:40:35,045-INFO-logger-log_info-[advanced_pid_code_generator] 高级PID代码生成完成
+2025-05-31 02:49:33,500-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 02:49:33,500-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 02:49:33,555-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 02:49:33,556-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 02:49:33,556-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 02:49:33,558-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:49:33,561-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 02:50:20,399-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 02:50:20,399-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 02:50:20,399-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 02:50:20,414-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 02:50:20,429-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:50:20,449-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:50:20,472-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 02:50:20,472-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 3 (类型: advanced_pid_code_generator) 由于其模块未启用或被阻止而未加载。
+2025-05-31 02:50:20,595-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 02:50:20,596-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator'}
+2025-05-31 02:50:20,596-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:50:20,598-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:50:20,644-ERROR-logger-log_error-[PLUGIN_DISCOVERY] 导入新模块 panel_plugins.pid_code_generator 失败: invalid syntax (advanced_pid_generator.py, line 767)
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 248, in discover_plugins
+    plugin_module_ref = importlib.import_module(full_module_name)
+  File "D:\Dev_env\anaconda3\envs\Ano_port\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\__init__.py", line 20, in <module>
+    from .advanced_pid_generator import AdvancedPIDGeneratorWidget
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 767
+    code.append(f"  {data_type} derivative = (pv - pid->prev_measure) / {sample_t}{sfx};") // D on measurement
+                                                                                                ^
+SyntaxError: invalid syntax
+2025-05-31 02:50:20,646-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:50:20,658-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 02:50:24,930-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:50:29,013-INFO-logger-log_info-[PLUGIN_MGMT] 模块 'panel_plugins.example_custom_panel' 已标记为启用。
+2025-05-31 02:50:29,013-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 02:50:29,013-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:50:29,015-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:50:29,015-INFO-logger-log_info-[PLUGIN_MGMT] 插件管理器请求更新模块 'panel_plugins.example_custom_panel' 状态为 'enabled'。
+2025-05-31 02:50:30,823-INFO-logger-log_info-[INFO] 开始插件热重载流程...
+2025-05-31 02:50:30,823-INFO-logger-log_info-[PLUGIN_MANAGER] Stored configs for 0 active panels before reload.
+2025-05-31 02:50:30,823-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 02:50:30,823-INFO-logger-log_info-[INFO] 正在重新扫描和加载插件模块...
+2025-05-31 02:50:30,823-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:50:30,824-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 02:50:30,828-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 02:50:30,828-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 02:50:30,828-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 02:50:30,828-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 02:50:30,828-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 02:50:30,829-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:50:30,841-ERROR-logger-log_error-[PLUGIN_DISCOVERY] 导入新模块 panel_plugins.pid_code_generator 失败: invalid syntax (advanced_pid_generator.py, line 767)
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 248, in discover_plugins
+    plugin_module_ref = importlib.import_module(full_module_name)
+  File "D:\Dev_env\anaconda3\envs\Ano_port\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\__init__.py", line 20, in <module>
+    from .advanced_pid_generator import AdvancedPIDGeneratorWidget
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 767
+    code.append(f"  {data_type} derivative = (pv - pid->prev_measure) / {sample_t}{sfx};") // D on measurement
+                                                                                                ^
+SyntaxError: invalid syntax
+2025-05-31 02:50:30,842-INFO-logger-log_info-[INFO] 插件模块扫描/重载完毕。活动类型: ['core_parse_panel', 'core_send_panel', 'core_plot_widget_panel', 'example_custom_panel']
+2025-05-31 02:50:30,842-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板'}
+2025-05-31 02:50:30,842-INFO-logger-log_info-[INFO] “添加面板”菜单已更新。
+2025-05-31 02:50:30,842-INFO-logger-log_info-[INFO] 正在尝试恢复之前活动的面板...
+2025-05-31 02:50:30,842-INFO-logger-log_info-[INFO] 插件热重载流程完毕。成功恢复 0 个面板实例。
+2025-05-31 02:50:30,843-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板'}
+2025-05-31 02:50:30,845-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:50:36,062-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:50:41,312-INFO-logger-log_info-[INFO] 发现 2 个插件模块
+2025-05-31 02:50:48,431-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 02:50:48,432-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 02:50:48,471-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 02:50:48,473-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 02:50:48,473-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 02:50:48,474-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 02:50:48,474-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 02:54:42,236-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 02:54:42,236-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 02:54:42,236-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 02:54:42,248-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 02:54:42,262-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 02:54:42,279-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 02:54:42,300-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 02:54:42,416-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 02:54:42,417-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 02:54:42,417-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 02:54:42,419-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 02:54:42,424-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 02:54:42,424-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 02:54:42,424-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 02:54:42,424-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 02:54:42,424-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 02:54:42,424-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 02:54:42,472-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 02:54:42,472-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 02:54:42,472-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v3' (高级PID代码生成器 v3) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 02:54:42,473-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v3
+2025-05-31 02:54:42,473-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v3']
+2025-05-31 02:54:42,473-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v3': '高级PID代码生成器 v3'}
+2025-05-31 02:54:42,484-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 02:54:46,444-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v3' (ID: 4) from module panel_plugins.pid_code_generator
+2025-05-31 02:54:48,427-INFO-logger-log_info-[advanced_pid_code_generator_v3] Panel added to main window.
+2025-05-31 02:54:48,429-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v3', ID=4, 名称='高级PID代码生成器 v3 [4]'
+2025-05-31 02:55:06,447-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 02:55:08,838-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 02:56:01,443-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 02:56:23,534-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:02:34,535-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 03:02:34,536-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 03:02:34,593-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 03:02:34,595-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 03:02:34,595-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 03:02:34,597-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 03:02:34,597-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 03:02:38,760-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 03:02:38,760-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 03:02:38,760-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 03:02:38,778-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 03:02:38,793-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 03:02:38,812-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 03:02:38,834-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 03:02:38,834-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 4 (类型: advanced_pid_code_generator_v3) 由于其模块未启用或被阻止而未加载。
+2025-05-31 03:02:38,949-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 03:02:38,950-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 03:02:38,950-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 03:02:38,952-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 03:02:38,956-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 03:02:38,956-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 03:02:38,956-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 03:02:38,956-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 03:02:38,956-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 03:02:38,957-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 03:02:38,960-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 03:02:38,961-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 03:02:38,961-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v3' (高级PID代码生成器 v3) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 03:02:38,961-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v3
+2025-05-31 03:02:38,961-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v3']
+2025-05-31 03:02:38,961-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v3': '高级PID代码生成器 v3'}
+2025-05-31 03:02:38,972-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 03:02:42,997-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v3' (ID: 5) from module panel_plugins.pid_code_generator
+2025-05-31 03:02:44,656-INFO-logger-log_info-[advanced_pid_code_generator_v3] Panel added to main window.
+2025-05-31 03:02:44,658-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v3', ID=5, 名称='高级PID代码生成器 v3 [5]'
+2025-05-31 03:02:57,034-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:02:57,530-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:02:58,002-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:02:58,370-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:02:58,645-INFO-logger-log_info-[advanced_pid_code_generator_v3] C Code preview updated.
+2025-05-31 03:17:57,214-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 03:17:57,214-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 03:17:57,226-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 03:17:57,227-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 03:17:57,228-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 03:17:57,229-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 03:17:57,231-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 03:18:01,788-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 03:18:01,788-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 03:18:01,788-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 03:18:01,797-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 03:18:01,810-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 03:18:01,825-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 03:18:01,848-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 03:18:01,848-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 5 (类型: advanced_pid_code_generator_v3) 由于其模块未启用或被阻止而未加载。
+2025-05-31 03:18:01,974-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 03:18:01,974-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 03:18:01,974-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 03:18:01,977-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 03:18:01,982-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 03:18:01,982-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 03:18:01,982-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 03:18:01,983-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 03:18:01,983-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 03:18:01,983-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 03:18:02,035-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 03:18:02,035-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 03:18:02,035-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 03:18:02,035-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 03:18:02,035-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 03:18:02,035-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 03:18:02,049-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 03:18:06,228-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'advanced_pid_code_generator_v5' (ID: 6) from module panel_plugins.pid_code_generator: 'AdvancedPIDGeneratorWidget' object has no attribute 'code_config'
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 170, in __init__
+    self._trigger_full_code_generation_and_preview_update()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 676, in _trigger_full_code_generation_and_preview_update
+    self._on_global_code_config_changed() # 确保全局代码配置已从UI同步
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 658, in _on_global_code_config_changed
+    if self.struct_name_edit: self.code_config["struct_name"] = self.struct_name_edit.text().strip() or "PID_HandleTypeDef"
+AttributeError: 'AdvancedPIDGeneratorWidget' object has no attribute 'code_config'
+2025-05-31 03:18:06,230-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: advanced_pid_code_generator_v5
+2025-05-31 03:18:12,666-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'advanced_pid_code_generator_v5' (ID: 6) from module panel_plugins.pid_code_generator: 'AdvancedPIDGeneratorWidget' object has no attribute 'code_config'
+Traceback (most recent call last):
+  File "e:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 170, in __init__
+    self._trigger_full_code_generation_and_preview_update()
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 676, in _trigger_full_code_generation_and_preview_update
+    self._on_global_code_config_changed() # 确保全局代码配置已从UI同步
+  File "e:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 658, in _on_global_code_config_changed
+    if self.struct_name_edit: self.code_config["struct_name"] = self.struct_name_edit.text().strip() or "PID_HandleTypeDef"
+AttributeError: 'AdvancedPIDGeneratorWidget' object has no attribute 'code_config'
+2025-05-31 03:18:12,667-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: advanced_pid_code_generator_v5
+2025-05-31 03:18:14,773-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 03:18:14,773-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 03:18:14,820-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 03:18:14,822-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 03:18:14,822-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 03:18:14,823-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 03:18:14,823-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 03:24:36,702-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 03:24:36,702-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 03:24:36,702-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 03:24:36,713-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 03:24:36,727-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 03:24:36,742-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 03:24:36,765-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 03:24:36,882-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 03:24:36,882-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 03:24:36,882-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 03:24:36,884-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 03:24:36,889-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 03:24:36,889-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 03:24:36,889-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 03:24:36,889-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 03:24:36,889-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 03:24:36,889-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 03:24:36,931-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 03:24:36,932-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 03:24:36,932-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 03:24:36,932-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 03:24:36,932-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 03:24:36,932-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 03:24:36,944-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 03:24:41,161-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v5' (ID: 6) from module panel_plugins.pid_code_generator
+2025-05-31 03:24:43,032-INFO-logger-log_info-[advanced_pid_code_generator_v5] Panel added to main window.
+2025-05-31 03:24:43,046-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v5', ID=6, 名称='高级PID代码生成器 v5 (多实例) [6]'
+2025-05-31 03:26:03,550-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:27:05,382-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:27:33,827-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:28:07,623-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:28:58,179-INFO-logger-log_info-[advanced_pid_code_generator_v5] Code exported to: E:\MY_projects\yj_studio\pid.h, E:\MY_projects\yj_studio\pid.c, E:\MY_projects\yj_studio\pid_main.c
+2025-05-31 03:34:45,112-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 03:34:45,113-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 03:34:45,113-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 03:34:45,129-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 03:34:45,159-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 03:34:45,160-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 03:34:45,199-INFO-logger-log_info-[INFO] 主题已应用: custom_image_theme
+2025-05-31 03:34:45,355-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 03:34:45,356-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 03:34:45,357-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 03:34:45,360-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 03:34:45,368-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 03:34:45,368-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 03:34:45,368-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 03:34:45,368-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 03:34:45,368-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 03:34:45,369-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 03:34:45,373-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 03:34:45,373-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 03:34:45,373-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 03:34:45,374-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 03:34:45,374-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 03:34:45,374-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 03:34:45,390-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 03:34:53,578-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v5' (ID: 6) from module panel_plugins.pid_code_generator
+2025-05-31 03:34:55,345-INFO-logger-log_info-[advanced_pid_code_generator_v5] Panel added to main window.
+2025-05-31 03:34:55,353-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v5', ID=6, 名称='高级PID代码生成器 v5 (多实例) [6]'
+2025-05-31 03:36:21,312-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:36:22,158-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:36:37,717-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:36:43,536-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:36:44,162-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:36:44,776-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 03:42:22,199-INFO-logger-log_info-[advanced_pid_code_generator_v5] Code exported to: E:\MY_projects\yj_studio\pid.h, E:\MY_projects\yj_studio\pid.c, E:\MY_projects\yj_studio\pid_main.c
+2025-05-31 08:49:41,071-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 08:52:34,075-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 09:04:58,162-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 09:04:58,162-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 09:04:58,207-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 09:04:58,211-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 09:04:58,212-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 09:04:58,219-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 09:04:58,229-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 09:05:27,402-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 09:05:27,402-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 09:05:27,402-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 09:05:27,412-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 09:05:27,428-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 09:05:27,430-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 09:05:27,439-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 09:05:27,439-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 6 (类型: advanced_pid_code_generator_v5) 由于其模块未启用或被阻止而未加载。
+2025-05-31 09:05:27,563-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 09:05:27,563-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 09:05:27,564-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 09:05:27,586-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 09:05:27,648-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 09:05:27,648-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 09:05:27,648-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 09:05:27,649-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 09:05:27,649-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 09:05:27,649-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 09:05:27,667-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 09:05:27,667-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 09:05:27,667-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 09:05:27,669-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 09:05:27,669-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 09:05:27,669-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 09:05:27,691-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 09:05:48,169-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v5' (ID: 7) from module panel_plugins.pid_code_generator
+2025-05-31 09:05:56,663-INFO-logger-log_info-[advanced_pid_code_generator_v5] Panel added to main window.
+2025-05-31 09:05:56,671-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v5', ID=7, 名称='高级PID代码生成器'
+2025-05-31 09:06:52,556-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:20:23,797-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 09:20:23,802-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 09:20:23,812-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 09:20:23,815-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 09:20:23,819-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 09:20:23,829-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 09:20:23,835-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 09:20:41,350-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 09:20:41,350-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 09:20:41,350-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 09:20:41,365-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 09:20:41,383-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 09:20:41,384-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 09:20:41,393-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 09:20:41,393-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 7 (类型: advanced_pid_code_generator_v5) 由于其模块未启用或被阻止而未加载。
+2025-05-31 09:20:41,516-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 09:20:41,516-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 09:20:41,517-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 09:20:41,520-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 09:20:41,528-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 09:20:41,529-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 09:20:41,529-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 09:20:41,529-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 09:20:41,529-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 09:20:41,529-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 09:20:41,548-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 09:20:41,548-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 09:20:41,549-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 09:20:41,549-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 09:20:41,549-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 09:20:41,549-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 09:20:41,566-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 09:20:46,422-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'advanced_pid_code_generator_v5' (ID: 8) from module panel_plugins.pid_code_generator: name 'QFrame' is not defined
+Traceback (most recent call last):
+  File "E:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 177, in __init__
+    self._init_ui()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 311, in _init_ui
+    instance_card = QFrame()
+NameError: name 'QFrame' is not defined
+2025-05-31 09:20:46,423-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: advanced_pid_code_generator_v5
+2025-05-31 09:20:53,820-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'advanced_pid_code_generator_v5' (ID: 8) from module panel_plugins.pid_code_generator: name 'QFrame' is not defined
+Traceback (most recent call last):
+  File "E:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 177, in __init__
+    self._init_ui()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 311, in _init_ui
+    instance_card = QFrame()
+NameError: name 'QFrame' is not defined
+2025-05-31 09:20:53,821-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: advanced_pid_code_generator_v5
+2025-05-31 09:20:56,521-INFO-logger-log_info-[INFO] Created instance of panel 'example_custom_panel' (ID: 8) from module panel_plugins.example_custom_panel
+2025-05-31 09:20:58,536-INFO-logger-log_info-[INFO] [UI_ACTION] 用户取消添加新面板 'example_custom_panel'.
+2025-05-31 09:21:01,487-ERROR-logger-log_error-[PLUGIN_MANAGER] Error instantiating panel 'advanced_pid_code_generator_v5' (ID: 8) from module panel_plugins.pid_code_generator: name 'QFrame' is not defined
+Traceback (most recent call last):
+  File "E:\MY_projects\yj_studio\core\plugin_manager.py", line 457, in create_panel_instance
+    instance = panel_class(panel_id=panel_id,
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 177, in __init__
+    self._init_ui()
+  File "E:\MY_projects\yj_studio\panel_plugins\pid_code_generator\advanced_pid_generator.py", line 311, in _init_ui
+    instance_card = QFrame()
+NameError: name 'QFrame' is not defined
+2025-05-31 09:21:01,487-ERROR-logger-log_error-[UI_ACTION] 创建面板实例失败: advanced_pid_code_generator_v5
+2025-05-31 09:21:03,012-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 09:21:03,012-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 09:21:03,045-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 09:21:03,047-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 09:21:03,047-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 09:21:03,048-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 09:21:03,049-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 09:27:34,559-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 09:27:34,559-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 09:27:34,559-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 09:27:34,582-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 09:27:34,594-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 09:27:34,595-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 09:27:34,605-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 09:27:34,727-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 09:27:34,727-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 09:27:34,727-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 09:27:34,729-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 09:27:34,737-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 09:27:34,737-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 09:27:34,737-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 09:27:34,737-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 09:27:34,737-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 09:27:34,738-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 09:27:34,755-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 09:27:34,755-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 09:27:34,755-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (高级PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 09:27:34,755-INFO-__init__-register_plugin_panels-面板类型注册成功: 高级PID代码生成器 v5 (多实例)
+2025-05-31 09:27:34,755-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 09:27:34,755-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': '高级PID代码生成器 v5 (多实例)'}
+2025-05-31 09:27:34,767-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 09:27:39,712-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v5' (ID: 8) from module panel_plugins.pid_code_generator
+2025-05-31 09:27:44,929-INFO-logger-log_info-[advanced_pid_code_generator_v5] Panel added to main window.
+2025-05-31 09:27:44,935-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v5', ID=8, 名称='高级PID代码生成器'
+2025-05-31 09:29:11,628-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:29:26,355-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:29:29,496-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:31:17,105-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 09:31:17,107-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 09:31:17,168-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 09:31:17,170-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 09:31:17,171-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 09:31:17,173-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 09:31:17,174-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 09:31:36,549-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 09:31:36,550-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 09:31:36,550-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 09:31:36,558-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 09:31:36,572-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 09:31:36,573-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 09:31:36,582-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 09:31:36,583-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 8 (类型: advanced_pid_code_generator_v5) 由于其模块未启用或被阻止而未加载。
+2025-05-31 09:31:36,698-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 09:31:36,698-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 09:31:36,699-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 09:31:36,701-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 09:31:36,708-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 09:31:36,708-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 09:31:36,708-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 09:31:36,708-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 09:31:36,708-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 09:31:36,708-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 09:31:36,725-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 09:31:36,725-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 09:31:36,725-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 09:31:36,726-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 v5 (多实例)
+2025-05-31 09:31:36,726-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 09:31:36,726-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': 'PID代码生成器 v5 (多实例)'}
+2025-05-31 09:31:36,737-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 09:31:48,075-INFO-logger-log_info-[INFO] Created instance of panel 'advanced_pid_code_generator_v5' (ID: 9) from module panel_plugins.pid_code_generator
+2025-05-31 09:31:54,050-INFO-logger-log_info-[advanced_pid_code_generator_v5] Panel added to main window.
+2025-05-31 09:31:54,054-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='advanced_pid_code_generator_v5', ID=9, 名称='PID代码生成器 v5 (多实例)'
+2025-05-31 09:33:24,886-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:34:04,375-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:34:50,011-INFO-logger-log_info-[advanced_pid_code_generator_v5] All code previews updated.
+2025-05-31 09:35:53,043-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 09:35:53,043-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 09:35:53,068-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 09:35:53,069-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 09:35:53,069-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 09:35:53,070-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 09:35:53,071-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:46:59,416-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:46:59,416-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:46:59,416-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:46:59,439-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:46:59,466-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:46:59,467-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:46:59,476-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 23:46:59,476-INFO-logger-log_info-[INFO] [CONFIG_LOAD] 面板 ID 9 (类型: advanced_pid_code_generator_v5) 由于其模块未启用或被阻止而未加载。
+2025-05-31 23:46:59,566-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:46:59,566-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:46:59,566-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:46:59,584-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:46:59,603-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:46:59,603-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:46:59,603-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:46:59,603-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:46:59,603-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:46:59,604-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:46:59,618-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:46:59,618-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:46:59,618-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_v5' (PID代码生成器 v5 (多实例)) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:46:59,618-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 v5 (多实例)
+2025-05-31 23:46:59,618-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_v5']
+2025-05-31 23:46:59,618-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_v5': 'PID代码生成器 v5 (多实例)'}
+2025-05-31 23:46:59,636-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:47:09,754-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:47:09,754-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:47:09,783-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:47:09,784-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:47:09,784-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:47:09,784-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:47:09,786-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:50:26,052-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:50:26,054-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:50:26,054-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:50:26,078-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:50:26,104-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:50:26,105-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:50:26,115-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-05-31 23:50:26,223-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:50:26,223-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:50:26,224-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:50:26,226-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:50:26,236-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:50:26,236-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:50:26,236-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:50:26,236-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:50:26,236-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:50:26,236-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:50:26,252-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:50:26,252-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:50:26,252-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:50:26,253-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:50:26,253-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:50:26,253-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:50:26,263-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:50:37,692-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:51:45,413-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:51:45,413-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:51:45,471-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:51:45,472-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:51:45,472-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:51:45,473-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:51:45,475-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:51:58,235-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:51:58,235-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:51:58,235-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:51:58,253-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:51:58,271-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:51:58,273-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:51:58,701-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:51:58,792-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:51:58,792-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 23:51:58,792-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:51:58,793-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:51:58,797-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:51:58,797-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:51:58,797-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:51:58,797-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:51:58,797-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:51:58,798-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:51:58,800-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:51:58,800-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:51:58,800-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:51:58,800-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:51:58,800-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:51:58,800-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:51:58,808-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:52:06,569-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:52:06,569-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:52:06,619-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:52:06,621-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:52:06,621-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:52:06,622-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:52:06,623-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:52:38,447-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:52:38,448-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:52:38,448-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:52:38,466-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:52:38,484-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:52:38,485-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:52:39,134-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:52:39,222-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:52:39,223-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:52:39,223-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:52:39,225-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:52:39,229-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:52:39,229-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:52:39,229-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:52:39,229-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:52:39,229-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:52:39,229-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:52:39,232-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:52:39,232-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:52:39,232-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:52:39,232-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:52:39,232-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:52:39,232-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:52:39,240-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:52:41,466-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:52:41,466-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:52:41,501-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:52:41,501-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:52:41,502-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:52:41,503-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:52:41,503-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:52:58,249-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:52:58,249-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:52:58,249-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:52:58,270-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:52:58,287-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:52:58,287-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:52:58,886-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:52:58,971-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:52:58,971-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 23:52:58,972-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:52:58,973-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:52:58,977-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:52:58,977-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:52:58,977-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:52:58,977-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:52:58,977-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:52:58,977-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:52:58,981-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:52:58,981-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:52:58,981-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:52:58,981-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:52:58,981-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:52:58,981-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:52:58,990-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:53:00,985-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:53:00,985-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:53:00,993-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:53:00,994-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:53:00,995-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:53:00,995-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:53:00,996-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:54:40,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:54:40,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:54:40,889-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:54:40,909-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:54:40,926-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:54:40,927-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:54:41,607-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:54:41,696-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:54:41,696-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:54:41,697-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:54:41,698-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:54:41,702-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:54:41,702-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:54:41,702-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:54:41,702-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:54:41,702-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:54:41,702-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:54:41,706-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:54:41,706-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:54:41,706-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:54:41,706-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:54:41,706-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:54:41,706-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:54:41,714-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:54:43,959-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:54:43,959-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:54:43,963-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:54:43,964-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:54:43,964-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:54:43,965-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:54:43,965-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:54:58,658-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:54:58,659-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:54:58,659-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:54:58,670-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:54:58,682-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:54:58,684-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:54:59,142-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:54:59,233-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:54:59,233-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.example_custom_panel'}
+2025-05-31 23:54:59,234-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:54:59,236-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:54:59,239-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:54:59,240-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:54:59,240-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:54:59,240-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:54:59,241-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:54:59,241-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:54:59,244-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:54:59,244-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:54:59,245-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:54:59,245-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:54:59,245-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:54:59,245-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:54:59,252-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:55:01,390-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:55:01,390-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:55:01,439-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:55:01,440-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:55:01,441-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:55:01,442-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:55:01,442-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:56:51,772-WARNING-logger-log_warning-[WARNING] 应用程序图标文件未找到: E:\MY_projects\yj_studio\resources\icon\image.png
+2025-05-31 23:56:51,773-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:56:51,773-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:56:51,773-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:56:51,785-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:56:51,807-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:56:51,807-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:56:52,449-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:56:52,522-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:56:52,523-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:56:52,523-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:56:52,524-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:56:52,529-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:56:52,529-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:56:52,529-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:56:52,529-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:56:52,529-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:56:52,530-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:56:52,533-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:56:52,533-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:56:52,533-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:56:52,533-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:56:52,533-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:56:52,533-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:56:52,542-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:57:07,942-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/my_custom_style.qss
+2025-05-31 23:57:17,180-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:57:18,983-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:57:18,983-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:57:19,025-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:57:19,026-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:57:19,027-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:57:19,027-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:57:19,028-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:57:40,675-WARNING-logger-log_warning-[WARNING] 应用程序图标文件未找到: E:\MY_projects\yj_studio\resources\icon\image.png
+2025-05-31 23:57:40,675-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:57:40,675-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:57:40,675-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:57:40,685-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:57:40,706-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:57:40,707-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:57:41,150-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:57:41,234-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:57:41,234-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:57:41,235-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:57:41,236-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:57:41,241-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:57:41,241-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:57:41,241-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:57:41,241-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:57:41,241-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:57:41,242-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:57:41,244-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:57:41,244-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:57:41,244-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:57:41,245-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:57:41,245-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:57:41,245-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:57:41,252-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:57:59,269-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/my_custom_style.qss
+2025-05-31 23:58:01,567-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:58:01,567-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:58:01,623-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:58:01,624-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:58:01,625-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:58:01,626-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:58:01,627-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-05-31 23:58:47,447-WARNING-logger-log_warning-[WARNING] 应用程序图标文件未找到: E:\MY_projects\yj_studio\resources\icon\image.png
+2025-05-31 23:58:47,447-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-05-31 23:58:47,447-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-05-31 23:58:47,448-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-05-31 23:58:47,455-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-05-31 23:58:47,475-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-05-31 23:58:47,478-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-05-31 23:58:47,486-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/my_custom_style.qss
+2025-05-31 23:58:47,554-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-05-31 23:58:47,554-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.example_custom_panel', 'panel_plugins.pid_code_generator'}
+2025-05-31 23:58:47,554-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\yj_studio\panel_plugins
+2025-05-31 23:58:47,556-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.example_custom_panel
+2025-05-31 23:58:47,561-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.example_custom_panel
+2025-05-31 23:58:47,561-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.example_custom_panel
+2025-05-31 23:58:47,561-INFO-logger-log_info-[INFO] Registered panel type: 'example_custom_panel' (我的自定义面板) from class MyCustomPanelWidget in module panel_plugins.example_custom_panel
+2025-05-31 23:58:47,561-INFO-__init__-register_plugin_panels-面板类型注册成功: 我的自定义面板
+2025-05-31 23:58:47,561-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.example_custom_panel. 类型: ['example_custom_panel']
+2025-05-31 23:58:47,562-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-05-31 23:58:47,564-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-05-31 23:58:47,565-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-05-31 23:58:47,565-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator_' (PID代码生成器 ) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-05-31 23:58:47,565-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器 
+2025-05-31 23:58:47,565-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator_']
+2025-05-31 23:58:47,565-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'example_custom_panel': '我的自定义面板', 'advanced_pid_code_generator_': 'PID代码生成器 '}
+2025-05-31 23:58:47,572-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-05-31 23:59:12,910-INFO-logger-log_info-[INFO] 已从外部文件加载并应用QSS样式: E:/MY_projects/yj_studio/resources/improved_qss.qss
+2025-05-31 23:59:16,241-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-05-31 23:59:16,241-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-05-31 23:59:16,295-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-05-31 23:59:16,297-WARNING-logger-log_warning-[WARNING] 无效的波特率输入: '115200', 使用默认值 115200
+2025-05-31 23:59:16,297-WARNING-logger-log_warning-[WARNING] 无效的停止位输入: '1'，使用默认值 1
+2025-05-31 23:59:16,298-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-05-31 23:59:16,299-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。

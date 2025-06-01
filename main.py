@@ -700,7 +700,9 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         self.refresh_ports_button.clicked.connect(self.refresh_ports_requested.emit)
         config_layout.addWidget(self.refresh_ports_button, 5, 0)
         self.connect_button.setCheckable(True)
-        self.connect_button.toggled.connect(self.connect_button_toggled)
+        # self.connect_button.toggled.connect(self.connect_button_toggled.emit())
+        self.connect_button.clicked.connect(self._handle_internal_connect_button_click)  # <--- 新的连接方式
+
         config_layout.addWidget(self.connect_button, 5, 1)
         config_layout.setColumnStretch(1, 1)
         config_group.setLayout(config_layout)
@@ -864,6 +866,11 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         elif not connected:
             self.connect_button.setEnabled(True)
 
+    @Slot(bool) # <--- 新增的内部槽函数
+    def _handle_internal_connect_button_click(self, checked: bool):
+        """Internal slot to explicitly emit the connect_button_toggled signal."""
+        self.connect_button_toggled.emit(checked) # 明确用 checked 参数发射信号
+
     def update_checksum_display(self, sum_check: str, add_check: str):
         self.sum_check_display.setText(sum_check); self.add_check_display.setText(add_check)
 
@@ -1004,10 +1011,23 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
 
         self.send_basic_data_requested.emit(text_to_send, is_hex)
 
+
     def _validate_hex_input(self, text: str) -> bool:
-        if not text: return False; hex_text = re.sub(r'[\s\-:,]', '', text.upper())
-        if not re.match(r'^[0-9A-F]*$', hex_text): return False
-        return len(hex_text) % 2 == 0 and len(hex_text) > 0
+        if not text:
+            return False  # Handles empty string case explicitly
+
+        # hex_text will now always be assigned if text is not empty
+        hex_text = re.sub(r'[\s\-:,]', '', text.upper())
+
+        if not re.match(r'^[0-9A-F]*$', hex_text):
+            return False  # Handles non-hex characters
+
+        # Handles empty string after stripping (e.g., if input was just spaces)
+        # and ensures even length for valid hex.
+        if not hex_text:  # Check if hex_text became empty after re.sub (e.g. input was only spaces)
+            return False
+
+        return len(hex_text) % 2 == 0  # No need for `and len(hex_text) > 0` due to the `if not hex_text` check above
 
     def append_receive_text(self, text: str):
         if self.receive_text_edit is None:
@@ -1115,7 +1135,7 @@ class SerialDebugger(QMainWindow):
         if self.app_instance is None: self.app_instance = QApplication(sys.argv)
 
         self.error_logger = ErrorLogger()
-        self._setup_application_icon("resources/icon/image.png")
+        self._setup_application_icon("resources/image.png")
         self.setWindowTitle("YJ_Studio (Plugin Enhanced)")
 
         self.config_manager = ConfigManager(error_logger=self.error_logger, filename="serial_debugger_config_v2.json")
@@ -2094,6 +2114,7 @@ class SerialDebugger(QMainWindow):
 
     @Slot(str, bool)
     def send_basic_serial_data_action(self, text_to_send: str, is_hex: bool) -> None:
+        data_to_write = QByteArray()
         if not self.serial_manager.is_connected: QMessageBox.warning(self, "警告", "串口未打开。");
         if self.basic_comm_panel_widget: self.basic_comm_panel_widget.append_receive_text("错误: 串口未打开。\n"); return
         if not text_to_send:

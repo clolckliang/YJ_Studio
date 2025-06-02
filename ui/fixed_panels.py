@@ -309,9 +309,16 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
         self.recv_hex_checkbox = QCheckBox("Hex显示")
         self.recv_timestamp_checkbox = QCheckBox("显示时间戳")
         self.send_hex_checkbox = QCheckBox("Hex发送")
+        self.terminal_mode_checkbox = QCheckBox("终端模式")
         self.send_button = QPushButton("发送")
         self.receive_text_edit: Optional[QTextEdit] = None
-        self.send_text_edit: Optional[QLineEdit] = None
+        self.send_text_edit: Optional[QPlainTextEdit] = None
+        
+        # 终端模式相关变量初始化
+        self.command_history = []  # 存储命令历史
+        self.history_index = -1    # 当前浏览的历史命令索引
+        self.max_history_size = 100  # 最大历史记录数量
+        
         self._init_ui()
         self._connect_signals()
 
@@ -344,15 +351,30 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
     def _create_send_group(self, main_layout: QVBoxLayout):
         send_group = QGroupBox("基本发送 (原始串行数据)")
         send_layout = QVBoxLayout()
-        self.send_text_edit = QLineEdit()
+        
+        # 创建发送文本框，根据终端模式切换类型
+        self.send_text_edit = QPlainTextEdit()
+        self.send_text_edit.setMaximumHeight(100)
         self.send_text_edit.setPlaceholderText("输入要发送的文本或Hex数据 (如: AB CD EF 或 Hello)")
+        self.send_text_edit.setStyleSheet("""
+            QPlainTextEdit {
+                background-color: #1E1E1E;
+                color: #CCCCCC;
+                font-family: Consolas, 'Courier New', monospace;
+            }
+        """)
+        
         send_layout.addWidget(self.send_text_edit)
+        
         send_options_layout = QHBoxLayout()
         send_options_layout.addWidget(self.send_hex_checkbox)
+        send_options_layout.addWidget(self.terminal_mode_checkbox)
         send_options_layout.addStretch()
+        
         clear_send_button = QPushButton("清空")
-        clear_send_button.clicked.connect(self.send_text_edit.clear)
+        clear_send_button.clicked.connect(self.clear_send_area)
         send_options_layout.addWidget(clear_send_button)
+        
         self.send_button.clicked.connect(self._on_send_clicked)
         send_options_layout.addWidget(self.send_button)
         send_layout.addLayout(send_options_layout)
@@ -361,8 +383,9 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
 
     def _connect_signals(self):
         if self.send_text_edit:
-            self.send_text_edit.returnPressed.connect(self._on_send_clicked)
+            self.send_text_edit.keyPressEvent = self._on_send_text_key_press
         self.send_hex_checkbox.toggled.connect(self._on_hex_mode_toggled)
+        self.terminal_mode_checkbox.toggled.connect(self._on_terminal_mode_toggled)
 
     @Slot(bool)
     def _on_hex_mode_toggled(self, checked: bool):
@@ -371,6 +394,72 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
                 self.send_text_edit.setPlaceholderText("输入Hex数据 (如: AB CD EF 或 ABCDEF)")
             else:
                 self.send_text_edit.setPlaceholderText("输入要发送的文本")
+
+    @Slot(bool)
+    def _on_terminal_mode_toggled(self, checked: bool):
+        if self.send_text_edit:
+            if checked:
+                self.send_text_edit.setMaximumHeight(200)
+                self.send_text_edit.setPlaceholderText("终端模式 - 输入命令后按Enter发送 (上下箭头可浏览历史命令)")
+                self.send_text_edit.setStyleSheet("""
+                    QPlainTextEdit {
+                        background-color: #0C0C0C;
+                        color: #CCCCCC;
+                        font-family: Consolas, 'Courier New', monospace;
+                        border: 1px solid #3F3F3F;
+                    }
+                """)
+                # 添加初始提示符
+                self.send_text_edit.setPlainText("> ")
+            else:
+                self.send_text_edit.setMaximumHeight(100)
+                self.send_text_edit.setPlaceholderText("输入要发送的文本或Hex数据 (如: AB CD EF 或 Hello)")
+                self.send_text_edit.setStyleSheet("""
+                    QPlainTextEdit {
+                        background-color: #1E1E1E;
+                        color: #CCCCCC;
+                        font-family: Consolas, 'Courier New', monospace;
+                    }
+                """)
+
+    def _on_send_text_key_press(self, event):
+        if not self.terminal_mode_checkbox.isChecked():
+            # 非终端模式，保持原有行为
+            QPlainTextEdit.keyPressEvent(self.send_text_edit, event)
+            return
+
+        # 终端模式下的特殊按键处理
+        if event.key() == Qt.Key.Key_Up:
+            # 上箭头 - 浏览历史命令
+            if self.command_history and self.history_index < len(self.command_history) - 1:
+                self.history_index += 1
+                self.send_text_edit.setPlainText("> " + self.command_history[self.history_index])
+            event.accept()
+        elif event.key() == Qt.Key.Key_Down:
+            # 下箭头 - 浏览历史命令
+            if self.history_index > 0:
+                self.history_index -= 1
+                self.send_text_edit.setPlainText("> " + self.command_history[self.history_index])
+            elif self.history_index == 0:
+                self.history_index = -1
+                self.send_text_edit.setPlainText("> ")
+            event.accept()
+        elif event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter:
+            # Enter键 - 发送当前文本
+            current_text = self.send_text_edit.toPlainText()
+            if current_text.startswith("> "):
+                current_text = current_text[2:]  # 移除提示符
+            self.send_text_edit.setPlainText(current_text)
+            self._on_send_clicked()
+            # 发送后添加新的提示符
+            self.send_text_edit.setPlainText("> ")
+            event.accept()
+        else:
+            # 其他按键保持默认行为
+            current_text = self.send_text_edit.toPlainText()
+            if not current_text.startswith("> "):
+                self.send_text_edit.setPlainText("> " + current_text)
+            QPlainTextEdit.keyPressEvent(self.send_text_edit, event)
 
     @Slot()
     def _on_send_clicked(self):
@@ -382,14 +471,32 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
             return
         if not self.send_text_edit:
             return
-        text_to_send = self.send_text_edit.text().strip()
+            
+        # 获取要发送的文本
+        text_to_send = self.send_text_edit.toPlainText().strip()
         if not text_to_send:
             QMessageBox.information(self, "提示", "请输入要发送的数据。")
             return
+            
         is_hex = self.send_hex_checkbox.isChecked()
         if is_hex and not self._validate_hex_input(text_to_send):
             QMessageBox.warning(self, "输入错误", "Hex数据格式不正确。\n请输入有效的十六进制数据，如: AB CD EF 或 ABCDEF")
             return
+
+        # 如果是终端模式，处理多行发送和命令历史
+        if self.terminal_mode_checkbox.isChecked():
+            # 添加到命令历史
+            if not self.command_history or self.command_history[0] != text_to_send:
+                self.command_history.insert(0, text_to_send)
+                if len(self.command_history) > 100:  # 限制历史记录数量
+                    self.command_history.pop()
+            self.history_index = -1
+            
+            # 发送后清空输入框
+            self.send_text_edit.clear()
+        else:
+            # 非终端模式保持原有行为
+            self.send_text_edit.clear()
 
         self.send_basic_data_requested.emit(text_to_send, is_hex)
 
@@ -444,7 +551,11 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
         if self.receive_text_edit: self.receive_text_edit.clear()
 
     def clear_send_area(self):
-        if self.send_text_edit: self.send_text_edit.clear()
+        if self.send_text_edit: 
+            if self.terminal_mode_checkbox.isChecked():
+                self.send_text_edit.setPlainText("> ")
+            else:
+                self.send_text_edit.clear()
 
     def get_send_text(self) -> str:
         return self.send_text_edit.text() if self.send_text_edit else ""
@@ -505,4 +616,3 @@ class ScriptingPanelWidget(QWidget):  # Full implementation
 
     def apply_config(self, config: Dict):
         self.script_input_edit.setPlainText(config.get("current_script", ""))
-

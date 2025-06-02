@@ -1,1 +1,27 @@
+# 目录忽略
 /logs/
+
+# 特定文件忽略
+serial_debugger_config_v2.json
+
+# Python编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE特定文件
+.vscode/
+.idea/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# 日志文件
+*.log

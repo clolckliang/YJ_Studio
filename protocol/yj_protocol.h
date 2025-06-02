@@ -148,4 +148,88 @@ int32_t yj_unpack_i32_le(const uint8_t* buffer);
 void yj_pack_float_le(uint8_t* buffer, float value);
 float yj_unpack_float_le(const uint8_t* buffer);
 
+// 发送队列结构
+typedef struct {
+    uint8_t data[YJ_MAX_DATA_PAYLOAD_SIZE];
+    uint16_t len;
+    uint32_t send_time;
+    uint8_t retry_count;
+    uint8_t dest;
+    uint8_t func;
+} yj_pending_frame_t;
+
+
+/* 应用层扩展函数 */
+/**
+ * @brief 带重传机制的发送函数
+ * @param handler 协议处理器实例指针
+ * @param dest 目标地址
+ * @param func 功能ID
+ * @param data 数据指针
+ * @param len 数据长度
+ * @return 0成功, 负数失败
+ */
+int32_t yj_send_with_retry(yj_protocol_handler_t* handler,
+                          uint8_t dest, uint8_t func,
+                          const uint8_t* data, uint16_t len);
+
+/**
+ * @brief 超时检测函数(需在主循环中调用)
+ * @param handler 协议处理器实例指针
+ */
+void yj_check_timeouts(yj_protocol_handler_t* handler);
+
+/**
+ * @brief 带序号的发送函数
+ * @param handler 协议处理器实例指针
+ * @param dest 目标地址
+ * @param func 功能ID
+ * @param data 数据指针
+ * @param len 数据长度
+ */
+void yj_send_with_seq(yj_protocol_handler_t* handler,
+                     uint8_t dest, uint8_t func,
+                     const uint8_t* data, uint16_t len);
+
+/* 高级扩展功能 */
+#define YJ_FUNC_ACK 0xF0  // ACK功能码
+#define YJ_FUNC_NACK 0xF1 // NACK功能码
+
+/**
+ * @brief 启用/禁用帧确认机制
+ * @param handler 协议处理器实例指针
+ * @param enable 1启用, 0禁用
+ */
+void yj_enable_ack(yj_protocol_handler_t* handler, uint8_t enable);
+
+/**
+ * @brief 设置滑动窗口大小
+ * @param handler 协议处理器实例指针
+ * @param window_size 窗口大小(1-255)
+ */
+void yj_set_window_size(yj_protocol_handler_t* handler, uint8_t window_size);
+
+/**
+ * @brief 大数据分包发送
+ * @param handler 协议处理器实例指针
+ * @param dest 目标地址
+ * @param func 功能ID
+ * @param data 数据指针
+ * @param total_len 数据总长度
+ */
+void yj_send_large_data(yj_protocol_handler_t* handler,
+                      uint8_t dest, uint8_t func,
+                      const uint8_t* data, uint32_t total_len);
+
+/**
+ * @brief 获取协议统计信息
+ * @param handler 协议处理器实例指针
+ * @param tx_count 输出:发送帧计数
+ * @param rx_count 输出:接收帧计数
+ * @param error_count 输出:错误计数
+ */
+void yj_get_stats(yj_protocol_handler_t* handler,
+                 uint32_t* tx_count, uint32_t* rx_count,
+                 uint32_t* error_count);
+
 #endif // YJ_PROTOCOL_H

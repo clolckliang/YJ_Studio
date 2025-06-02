@@ -62,7 +62,16 @@ class SerialManager(QObject):
             self.is_connected = True
             msg = f"已连接 {config.port_name} @ {config.baud_rate}"
             self.connection_status_changed.emit(True, msg)
-            if self.error_logger: self.error_logger.log_info(msg)
+            if self.error_logger: 
+                self.error_logger.log_info(msg)
+                # 记录详细的串口配置
+                self.error_logger.log_info(
+                    f"串口详细配置: "
+                    f"数据位={self.serial_port.dataBits()}, "
+                    f"校验位={self.serial_port.parity()}, "
+                    f"停止位={self.serial_port.stopBits()}, "
+                    f"流控制={self.serial_port.flowControl()}"
+                )
             return True
         else:
             self.is_connected = False

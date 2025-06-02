@@ -49,6 +49,14 @@ class SerialManager(QObject):
         stop_bits_map = {"1": QSerialPort.OneStop, "1.5": QSerialPort.OneAndHalfStop,
                          "2": QSerialPort.TwoStop}
         self.serial_port.setStopBits(stop_bits_map.get(str(config.stop_bits), QSerialPort.OneStop))
+        
+        # 明确禁用硬件流控制
+        self.serial_port.setFlowControl(QSerialPort.NoFlowControl)
+        
+        # 添加日志输出流控制设置
+        if self.error_logger:
+            flow_control = "无" if self.serial_port.flowControl() == QSerialPort.NoFlowControl else "启用"
+            self.error_logger.log_info(f"串口流控制设置: {flow_control}")
 
         if self.serial_port.open(QIODevice.OpenModeFlag.ReadWrite):
             self.is_connected = True

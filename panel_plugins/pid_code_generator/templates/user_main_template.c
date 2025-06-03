@@ -1,12 +1,42 @@
 // templates/user_main_template.c
 #include <stdio.h>
 #include <math.h> // For fabs
-#include "{{HEADER_NAME}}" 
+#include "{{HEADER_NAME}}"
 
-// 简单的模拟函数...
+// 定义浮点数后缀宏，根据DATA_TYPE选择
+#ifdef __cplusplus
+#define SFX_F {{SFX}}
+#else
+#define SFX_F {{SFX}}
+#endif
+
+/**
+ * @brief 简单的模拟函数：模拟一个一阶滞后系统对控制输出的响应。
+ * @param[in] current_value 系统当前值。
+ * @param[in] control_output PID控制器输出的控制量。
+ * @param[in] sample_time 仿真步长（秒）。
+ * @return 系统在当前步长后的新值。
+ */
 {{DATA_TYPE}} simulate_system_response({{DATA_TYPE}} current_value, {{DATA_TYPE}} control_output, {{DATA_TYPE}} sample_time) {
-    // ... (与之前相同)
+    // 假设系统时间常数为 0.5 秒 (tau)
+    // alpha = sample_time / (tau + sample_time)
+    const {{DATA_TYPE}} tau = 0.5{{SFX}}; // 系统时间常数，可调整
+    {{DATA_TYPE}} alpha = sample_time / (tau + sample_time);
+
+    // 控制输出对系统值的影响 (简化为线性影响)
+    // 0.1 是一个增益，表示控制输出对系统变化的强度
+    {{DATA_TYPE}} change_due_to_control = control_output * sample_time * 0.1{{SFX}};
+
+    // 计算系统的新值，模拟一阶滞后特性
+    // 新值 = 旧值 * (1 - alpha) + (旧值 + 控制引起的变化) * alpha
+    // 简化为：新值 = 旧值 + alpha * (目标值 - 旧值)
+    // 这里的“目标值”可以看作是控制输出直接作用后的瞬时值
+    {{DATA_TYPE}} target_value_after_control = current_value + change_due_to_control;
+
+    // 应用一阶滞后滤波，模拟系统惯性
+    return current_value * (1.0{{SFX}} - alpha) + target_value_after_control * alpha;
 }
+
 
 int main() {
     printf("Multi-PID Controller Example using {{FUNCTION_PREFIX}} functions.\n");
@@ -14,18 +44,18 @@ int main() {
     printf("Timestamp: {{TIMESTAMP}}\n\n");
 
     // --- PID 实例声明 ---
+    // 在这里声明所有PID控制器实例的变量
 {{PID_INSTANCE_DECLARATIONS}}
 
     printf("--- Initializing PID Controllers ---\n");
     // --- PID 实例初始化 ---
+    // 在这里调用每个PID实例的初始化函数，并设置其参数
 {{PID_INSTANCE_INITIALIZATIONS}}
 
-    printf("\n--- Example PID Run (demonstrating first instance or specific logic) ---\n");
-    // --- 示例计算 (这部分需要仔细设计如何展示多个PID) ---
+    printf("\n--- Example PID Run (demonstrating each instance's behavior) ---\n");
+    // --- 示例计算 ---
+    // 这里为每个PID实例提供一个简短的仿真循环，展示其控制效果
 {{PID_EXAMPLE_COMPUTATIONS}}
-    // 例如，您可以只演示第一个PID，或者如果您有特定的多PID交互逻辑，
-    // 可以在Python中构建更复杂的 {{PID_EXAMPLE_COMPUTATIONS}} 块。
-    // 简单的做法是，Python为每个PID实例生成一小段独立的演示代码。
 
     printf("\nExample run finished.\n");
     return 0;

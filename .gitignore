@@ -25,3 +25,7 @@ Thumbs.db
 
 # 日志文件
 *.log
+core/__pycache__/__init__.cpython-39.pyc
+core/__pycache__/data_recorder.cpython-39.pyc
+core/__pycache__/protocol_handler.cpython-39.pyc
+core/__pycache__/serial_manager.cpython-39.pyc

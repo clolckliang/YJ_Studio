@@ -712,10 +712,15 @@ class A2CStrategy(RLStrategy):
 
 class SnakeGamePanel(PanelInterface):
     PANEL_TYPE_NAME="snake_game";PANEL_DISPLAY_NAME="贪吃蛇游戏"
-    GRID_SIZE=100;INITIAL_SPEED=150;AUTO_SPEED=50
+    # GRID_SIZE=100;
+ 
     def __init__(self,panel_id,main_window_ref,initial_config=None,parent=None):
         super().__init__(panel_id,main_window_ref,initial_config,parent)
         self.rl_config = {}
+        # 将这些值作为实例变量进行初始化
+        self.grid_size= 20
+        self.initial_speed = 150
+        self.auto_speed = 50
         try:
             # Path(__file__) 是当前 snake_panel.py 文件的完整路径
             # .parent 会一层层地返回上级目录
@@ -765,6 +770,54 @@ class SnakeGamePanel(PanelInterface):
         self.start_button=QPushButton("🎮 开始游戏");self.start_button.clicked.connect(self._start_game);self.start_button.setStyleSheet("font-size:16px;font-weight:bold;color:white;background-color:#3498db;border:none;border-radius:8px;padding:8px 20px;")
         score_start_layout.addStretch();score_start_layout.addWidget(self.score_label);score_start_layout.addWidget(self.start_button);score_start_layout.addStretch()
         top_layout.addLayout(score_start_layout)
+        # --- 新增：游戏设置区域（美化版） ---
+        settings_layout = QGridLayout()
+        settings_layout.setContentsMargins(10, 5, 10, 10)
+        settings_layout.setSpacing(15)
+
+        label_style = "font-size:15px;font-weight:bold;color:#ecf0f1;padding:2px 8px;"
+        spin_style = (
+            "QSpinBox {font-size:15px;padding:5px 10px;border-radius:6px;background-color:#22313a;color:#ecf0f1;border:1px solid #2980b9;min-width:60px;}"
+            "QSpinBox::up-button, QSpinBox::down-button {width:18px;height:18px;}"
+            "QSpinBox::up-arrow, QSpinBox::down-arrow {background:transparent;}"
+        )
+
+        # Grid Size 输入框
+        grid_label = QLabel("地图大小:")
+        grid_label.setStyleSheet(label_style)
+        settings_layout.addWidget(grid_label, 0, 0)
+        self.grid_size_spin = QSpinBox()
+        self.grid_size_spin.setRange(10, 100)
+        self.grid_size_spin.setValue(self.grid_size)
+        self.grid_size_spin.setStyleSheet(spin_style)
+        self.grid_size_spin.valueChanged.connect(self._on_grid_size_changed)
+        settings_layout.addWidget(self.grid_size_spin, 0, 1)
+
+        # Manual Speed 输入框
+        manual_label = QLabel("手动速度(ms):")
+        manual_label.setStyleSheet(label_style)
+        settings_layout.addWidget(manual_label, 0, 2)
+        self.manual_speed_spin = QSpinBox()
+        self.manual_speed_spin.setRange(10, 1000)
+        self.manual_speed_spin.setValue(self.initial_speed)
+        self.manual_speed_spin.setStyleSheet(spin_style)
+        self.manual_speed_spin.valueChanged.connect(self._on_manual_speed_changed)
+        settings_layout.addWidget(self.manual_speed_spin, 0, 3)
+        
+        # Auto Speed 输入框
+        auto_label = QLabel("AI速度(ms):")
+        auto_label.setStyleSheet(label_style)
+        settings_layout.addWidget(auto_label, 0, 4)
+        self.auto_speed_spin = QSpinBox()
+        self.auto_speed_spin.setRange(1, 1000)
+        self.auto_speed_spin.setValue(self.auto_speed)
+        self.auto_speed_spin.setStyleSheet(spin_style)
+        self.auto_speed_spin.valueChanged.connect(self._on_auto_speed_changed)
+        settings_layout.addWidget(self.auto_speed_spin, 0, 5)
+
+        top_layout.addLayout(settings_layout)
+        # ------------------------
+
         ai_layout=QHBoxLayout();ai_layout.setSpacing(15)
         self.auto_checkbox=QCheckBox("🤖 AI自动寻路");self.auto_checkbox.stateChanged.connect(self._toggle_auto_mode);self.auto_checkbox.setStyleSheet("font-size:16px;font-weight:bold;color:#ecf0f1;spacing:8px;")
         self.algorithm_combo=QComboBox();self.algorithm_combo.addItems([a.value for a in self.strategies]);self.algorithm_combo.currentTextChanged.connect(self._on_algorithm_changed)
@@ -774,7 +827,33 @@ class SnakeGamePanel(PanelInterface):
         self.params_container=QWidget();self.params_container.setStyleSheet("QLabel{font-size:14px;color:#ecf0f1;}QSpinBox,QDoubleSpinBox{font-size:14px;padding:5px;border-radius:3px;}")
         self.params_layout=QVBoxLayout(self.params_container);self.params_layout.setContentsMargins(0,5,0,5);top_layout.addWidget(self.params_container);self.params_container.setVisible(False)
         main_layout.addWidget(top_widget)
-        self.grid_widget=GridWidget(self.GRID_SIZE,self);main_layout.addWidget(self.grid_widget,1);self.setFocusPolicy(Qt.StrongFocus)
+        self.grid_widget=GridWidget(self.grid_size,self);main_layout.addWidget(self.grid_widget,1);self.setFocusPolicy(Qt.StrongFocus)
+# --- 新增：处理UI事件的函数 ---
+    def _on_grid_size_changed(self, value):
+        """处理地图大小变化的事件"""
+        self.grid_size = value
+        self.grid_widget.grid_size = value
+        # 重新初始化当前策略以适应新地图大小
+        self._on_algorithm_changed(self.algorithm_combo.currentText())
+        # 地图大小改变，必须重启游戏
+        self._new_game()
+        print(f"地图大小已更改为: {value}x{value}，游戏已重置。")
+
+    def _on_manual_speed_changed(self, value):
+        """处理手动速度变化的事件"""
+        self.initial_speed = value
+        # 如果当前在手动模式且游戏正在运行，则更新计时器
+        if not self.auto_mode and self.timer.isActive():
+            self.timer.start(self.initial_speed)
+
+    def _on_auto_speed_changed(self, value):
+        """处理AI速度变化的事件"""
+        self.auto_speed = value
+        # 如果当前在AI模式且游戏正在运行，则更新计时器
+        if self.auto_mode and self.timer.isActive():
+            self.timer.start(self.auto_speed)
+    # ----------------------------
+
 
     def _on_algorithm_changed(self,algo_text):
         enum_member = next((member for member in PathfindingAlgorithm if member.value == algo_text), PathfindingAlgorithm.A_STAR)
@@ -784,7 +863,7 @@ class SnakeGamePanel(PanelInterface):
 
         strategy_class = self.strategies.get(enum_member)
         if strategy_class:
-            self.current_strategy = strategy_class(self.GRID_SIZE, self)
+            self.current_strategy = strategy_class(self.grid_size, self)
         else:
             return
 
@@ -799,22 +878,22 @@ class SnakeGamePanel(PanelInterface):
         self.auto_mode=(state==Qt.Checked.value);has_params=self.params_layout.count()>0
         self.params_container.setVisible(self.auto_mode and has_params)
         if isinstance(self.current_strategy,RLStrategy)and self.current_strategy.is_training:self.current_strategy.toggle_training()
-        if self.timer.isActive():self.timer.start(self.AUTO_SPEED if self.auto_mode else self.INITIAL_SPEED)
+        if self.timer.isActive():self.timer.start(self.auto_speed if self.auto_mode else self.initial_speed)
         if self.auto_mode and self.game_started and not self.game_over and not isinstance(self.current_strategy,RLStrategy):self._calculate_path()
         else:self.current_path=[]
 
     def _new_game(self):
-        center=self.GRID_SIZE//2;self.snake=[(center,center),(center,center-1),(center,center-2)];self.direction='RIGHT';self.next_direction='RIGHT';self._generate_food();self.score=0;self.game_over=False;self.game_started=False
+        center=self.grid_size//2;self.snake=[(center,center),(center,center-1),(center,center-2)];self.direction='RIGHT';self.next_direction='RIGHT';self._generate_food();self.score=0;self.game_over=False;self.game_started=False
         self.current_path=[];self.path_index=0;self.start_button.setText("开始游戏");self._update_ui()
     
     def _new_game_for_rl(self):
-        center=self.GRID_SIZE//2;self.snake=[(center,center),(center,center-1),(center,center-2)];self.direction='RIGHT';self.next_direction='RIGHT';self._generate_food();self.score=0;self.game_over=False
+        center=self.grid_size//2;self.snake=[(center,center),(center,center-1),(center,center-2)];self.direction='RIGHT';self.next_direction='RIGHT';self._generate_food();self.score=0;self.game_over=False
     
     def _start_game(self):
         if isinstance(self.current_strategy,RLStrategy)and self.current_strategy.is_training:return
         if self.game_over:self._new_game()
         self.game_started=True;self.game_over=False;self.start_button.setText("重新开始")
-        self.timer.start(self.AUTO_SPEED if self.auto_mode else self.INITIAL_SPEED)
+        self.timer.start(self.auto_speed if self.auto_mode else self.initial_speed)
         if self.auto_mode:self._calculate_path()
         self.setFocus()
 
@@ -872,7 +951,7 @@ class SnakeGamePanel(PanelInterface):
         path=self.current_strategy.calculate_path(gs,obs)
         if path:self.current_path=path[1:]if len(path)>1 and path[0]==self.snake[0]else path;self.path_index=0
         else:
-            tail_finder=AStarStrategy(self.GRID_SIZE,self);tail_gs=GameState(self.snake,self.snake[-1],self.direction,self.score,False,self.GRID_SIZE)
+            tail_finder=AStarStrategy(self.grid_size,self);tail_gs=GameState(self.snake,self.snake[-1],self.direction,self.score,False,self.grid_size)
             tail_path=tail_finder.calculate_path(tail_gs,set(self.snake[1:-1]))
             if tail_path:self.current_path=tail_path[1:];self.path_index=0
             else:self.current_path=[]
@@ -885,7 +964,7 @@ class SnakeGamePanel(PanelInterface):
         if safe_moves:self.direction=random.choice(safe_moves)
 
     def _generate_food(self):
-        empty=[(r,c)for r in range(self.GRID_SIZE)for c in range(self.GRID_SIZE)if(r,c)not in self.snake]
+        empty=[(r,c)for r in range(self.grid_size)for c in range(self.grid_size)if(r,c)not in self.snake]
         if empty:self.food=random.choice(empty)
         else:self._end_game()
     
@@ -916,7 +995,7 @@ class SnakeGamePanel(PanelInterface):
         gs=cfg.get("game_state",{});self.snake=gs.get("snake",[]);self.food=gs.get("food",(0,0));self.direction=gs.get("direction",'RIGHT');self.score=gs.get("score",0)
         if self.current_strategy and "strategy_params" in cfg:self.current_strategy.apply_parameters(cfg["strategy_params"])
         self._update_ui()
-    def _is_valid(self,pos):return 0<=pos[0]<self.GRID_SIZE and 0<=pos[1]<self.GRID_SIZE
+    def _is_valid(self,pos):return 0<=pos[0]<self.grid_size and 0<=pos[1]<self.grid_size
     def on_panel_removed(self):
         if hasattr(self.current_strategy, 'is_training') and self.current_strategy.is_training:
             self.current_strategy.is_training = False
@@ -926,7 +1005,7 @@ class SnakeGamePanel(PanelInterface):
             self.timer.stop()
         if hasattr(self, 'current_strategy') and hasattr(self.current_strategy, 'viz_window') and self.current_strategy.viz_window:
             self.current_strategy.viz_window.close()
-    def get_current_gamestate(self):return GameState(list(self.snake),self.food,self.direction,self.score,self.game_over,self.GRID_SIZE)
+    def get_current_gamestate(self):return GameState(list(self.snake),self.food,self.direction,self.score,self.game_over,self.grid_size)
 
 # --- 为 GameState 添加辅助方法 ---
 def get_legal_actions(state):

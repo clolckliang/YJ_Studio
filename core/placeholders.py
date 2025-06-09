@@ -217,7 +217,7 @@ class CircularBuffer:
                 if self.count == self.max_size:
                     self.tail = (self.tail + 1) % self.max_size
                     self.count -= 1
-                byte_to_write = bytes([data.at(i)])
+                byte_to_write = data.data()[i:i+1]
                 self.buffer.replace(self.head, 1, byte_to_write)
                 self.head = (self.head + 1) % self.max_size
                 self.count += 1
@@ -251,8 +251,8 @@ class CircularBuffer:
             result = QByteArray()
             current_tail = self.tail
             for _ in range(bytes_to_peek):
-                byte_value = self.buffer.at(current_tail)
-                result.append(bytes([byte_value]))
+                byte_value = self.buffer.data()[current_tail:current_tail+1]
+                result.append(byte_value)
                 current_tail = (current_tail + 1) % self.max_size
             return result
         finally:
@@ -1174,4 +1174,3 @@ write_data("thread_messages", " | ".join(thread_messages))
     print("\n--- Execution Stats (Final) ---")
     stats = script_engine.get_stats()
     for k, v in stats.items(): print(f"{k}: {v}")
-

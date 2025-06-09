@@ -213,12 +213,18 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         return Constants.DEFAULT_CHECKSUM_MODE
 
     def update_port_combo_display(self, available_ports: list[dict], current_port_name: Optional[str]):
+        if self.main_window_ref.error_logger:
+            self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 接收到的串口列表: {[port['name'] for port in available_ports]}")
+            self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 当前选中的串口: {current_port_name}")
+        
         self.port_combo.blockSignals(True)
         self.port_combo.clear()
         if not available_ports:
             self.port_combo.addItem("无可用端口")
             self.port_combo.setEnabled(False)
             self.connect_button.setEnabled(False)
+            if self.main_window_ref.error_logger:
+                self.main_window_ref.error_logger.log_info("update_port_combo_display: 无可用串口")
         else:
             for port_info in available_ports:
                 display_text = f"{port_info['name']} ({port_info.get('description', 'N/A')})"
@@ -228,11 +234,25 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
             idx = -1
             if current_port_name:
                 idx = self.port_combo.findData(current_port_name)
+                if self.main_window_ref.error_logger:
+                    self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 查找当前串口 {current_port_name} 的索引: {idx}")
             if idx != -1:
                 self.port_combo.setCurrentIndex(idx)
+                if self.main_window_ref.error_logger:
+                    self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 设置当前索引为 {idx}")
             elif self.port_combo.count() > 0:
                 self.port_combo.setCurrentIndex(0)
+                if self.main_window_ref.error_logger:
+                    self.main_window_ref.error_logger.log_info("update_port_combo_display: 设置当前索引为 0")
         self.port_combo.blockSignals(False)
+        
+        # 记录最终的下拉框状态
+        if self.main_window_ref.error_logger:
+            items = []
+            for i in range(self.port_combo.count()):
+                items.append(f"{self.port_combo.itemText(i)} (data: {self.port_combo.itemData(i)})")
+            self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 最终下拉框项: {items}")
+            self.main_window_ref.error_logger.log_info(f"update_port_combo_display: 当前选中项: {self.port_combo.currentText()} (data: {self.port_combo.currentData()})")
 
     def set_connection_status_display(self, connected: bool):
         self.port_combo.setEnabled(not connected)
@@ -243,6 +263,12 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         self.refresh_ports_button.setEnabled(not connected)
         self.connect_button.setChecked(connected)
         self.connect_button.setText("关闭串口" if connected else "打开串口")
+        
+        if connected:
+            self.connect_button.setStyleSheet("background-color: green; color: white;")
+        else:
+            self.connect_button.setStyleSheet("")
+
         if not connected and (self.port_combo.count() == 0 or self.port_combo.currentText() == "无可用端口"):
             self.connect_button.setEnabled(False)
         elif not connected:
@@ -364,6 +390,17 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
             }
         """)
         
+        self.setStyleSheet("""
+            QCheckBox::indicator:checked {
+                background-color: #0078D7;
+                border: 1px solid #0078D7;
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #333333;
+                border: 1px solid #555555;
+            }
+        """)
+
         send_layout.addWidget(self.send_text_edit)
         
         send_options_layout = QHBoxLayout()

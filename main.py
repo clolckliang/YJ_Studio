@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Set  # Added Set
-from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal, QSettings
+from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal, QSettings, QTimer
 from PySide6.QtGui import QAction, QIcon, QCloseEvent
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QFileDialog,
@@ -69,7 +69,7 @@ class SerialDebugger(QMainWindow):
         self.theme_manager = ThemeManager(self.app_instance, error_logger=self.error_logger)
         self.data_recorder = DataRecorder(error_logger=self.error_logger)
         self.protocol_analyzer = ProtocolAnalyzer(error_logger=self.error_logger)
-        self.serial_manager = SerialManager(error_logger=self.error_logger, use_pyserial=True) # Added use_pyserial=True
+        self.serial_manager = SerialManager(error_logger=self.error_logger, use_pyserial=True)
         self.frame_parser = FrameParser(error_logger=self.error_logger)
 
         self.current_serial_config = SerialPortConfig()
@@ -137,6 +137,10 @@ class SerialDebugger(QMainWindow):
         self.frame_parser.frame_parse_error.connect(self.on_frame_general_parse_error)
 
         self.error_logger.log_info("应用程序启动 (插件管理增强)。")
+
+        self.flash_timer = QTimer(self)
+        self.flash_timer.setSingleShot(True)
+        self.flash_timer.timeout.connect(self._stop_flash)
 
     def _register_core_panels(self):
         core_modules_to_enable = set()
@@ -675,24 +679,34 @@ class SerialDebugger(QMainWindow):
 
     @Slot(bool)
     def toggle_connection_action_handler(self, connect_request: bool):
+        if self.error_logger:
+            self.error_logger.log_info(f"toggle_connection_action_handler: connect_request={connect_request}")
         if connect_request:
             if not self.serial_manager.is_connected:
                 self.update_current_serial_frame_configs_from_ui()
-                if not self.current_serial_config.port_name or self.current_serial_config.port_name == "无可用端口": QMessageBox.warning(
-                    self, "连接错误", "未选择有效的串口。");
-                if self.serial_config_panel_widget and hasattr(self.serial_config_panel_widget,
-                                                               'connect_button'): self.serial_config_panel_widget.connect_button.setChecked(
-                    False); return
+                if not self.current_serial_config.port_name or self.current_serial_config.port_name == "无可用端口": 
+                    QMessageBox.warning(self, "连接错误", "未选择有效的串口。")
+                    if self.serial_config_panel_widget and hasattr(self.serial_config_panel_widget, 'connect_button'):
+                        self.serial_config_panel_widget.connect_button.setChecked(False)
+                    return
                 self.serial_manager.connect_port(self.current_serial_config)
-                if self.serial_manager.is_connected: self.frame_parser.clear_buffer(); self._parsed_frame_count = 0
+                if self.serial_manager.is_connected: 
+                    self.frame_parser.clear_buffer()
+                    self._parsed_frame_count = 0
         else:
-            if self.serial_manager.is_connected: self.serial_manager.disconnect_port()
+            if self.serial_manager.is_connected: 
+                self.serial_manager.disconnect_port()
 
     @Slot()
     def populate_serial_ports_ui(self) -> None:
         available_ports = self.serial_manager.get_available_ports()
-        if self.serial_config_panel_widget: current_port = self.current_serial_config.port_name if self.current_serial_config else None; self.serial_config_panel_widget.update_port_combo_display(
-            available_ports, current_port)
+        if self.error_logger:
+            self.error_logger.log_info(f"populate_serial_ports_ui: 获取到的串口列表: {[port['name'] for port in available_ports]}")
+        if self.serial_config_panel_widget: 
+            current_port = self.current_serial_config.port_name if self.current_serial_config else None
+            if self.error_logger:
+                self.error_logger.log_info(f"populate_serial_ports_ui: 当前选中的串口: {current_port}")
+            self.serial_config_panel_widget.update_port_combo_display(available_ports, current_port)
         self.update_fixed_panels_connection_status(self.serial_manager.is_connected)
 
     @Slot(bool, str)
@@ -713,12 +727,24 @@ class SerialDebugger(QMainWindow):
 
     @Slot(QByteArray)
     def on_serial_data_received(self, data: QByteArray):
+        self._flash_button("rx")
         if self.error_logger:
             self.error_logger.log_info(f"on_serial_data_received triggered with {data.size()} bytes: {data.toHex(' ').data().decode('ascii').upper()}")
-        if self.basic_comm_panel_widget: self._append_to_basic_receive_text_edit(data, source="RX")
-        if hasattr(self, 'data_recorder'): self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
+        if self.basic_comm_panel_widget: 
+            self._append_to_basic_receive_text_edit(data, source="RX")
+        if hasattr(self, 'data_recorder'): 
+            self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
+        
+        # 确认数据是否被传递给frame_parser
+        if self.error_logger:
+            self.error_logger.log_info(f"传递 {data.size()} 字节数据给 frame_parser")
         self.frame_parser.append_data(data)
+        
         self.update_current_serial_frame_configs_from_ui()
+        
+        # 确认frame_parser是否尝试解析
+        if self.error_logger:
+            self.error_logger.log_info("调用 frame_parser.try_parse_frames")
         self.frame_parser.try_parse_frames( current_frame_config=self.current_frame_config, 
                                             parse_target_func_id_hex= self.current_frame_config.func_id,  # 添加缺失的参数
                                             active_checksum_mode=self.active_checksum_mode
@@ -1048,6 +1074,7 @@ class SerialDebugger(QMainWindow):
 
     @Slot(str, bool)
     def send_basic_serial_data_action(self, text_to_send: str, is_hex: bool) -> None:
+        self._flash_button("tx")
         data_to_write = QByteArray()
         if not self.serial_manager.is_connected: 
             QMessageBox.warning(self, "警告", "串口未打开。");
@@ -1081,6 +1108,23 @@ class SerialDebugger(QMainWindow):
                 self.data_recorder.record_raw_frame(datetime.now(), data_to_write.data(), "TX (Basic)")
             else:
                 self.status_bar_label.setText(f"基本发送错误: 写入{bytes_written}/{data_to_write.size()}字节")
+
+    def _flash_button(self, direction: str):
+        if self.serial_config_panel_widget:
+            button = self.serial_config_panel_widget.connect_button
+            if direction == "rx":
+                button.setStyleSheet("background-color: blue; color: white;")
+            else:
+                button.setStyleSheet("background-color: orange; color: white;")
+            self.flash_timer.start(100)
+
+    def _stop_flash(self):
+        if self.serial_config_panel_widget:
+            button = self.serial_config_panel_widget.connect_button
+            if self.serial_manager.is_connected:
+                button.setStyleSheet("background-color: green; color: white;")
+            else:
+                button.setStyleSheet("")
 
     def closeEvent(self, event: QCloseEvent) -> None:
         self.error_logger.log_info("关闭应用程序，正在停止后台线程...")

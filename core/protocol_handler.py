@@ -171,8 +171,7 @@ class FrameParser(QObject):
             peeked_data = self.buffer.peek(peek_len)
 
             for i in range(peeked_data.size()):
-                # QByteArray.at(i) returns a char, ord() converts it to its integer value.
-                if ord(peeked_data.at(i)) == head_byte_int:
+                if peeked_data.data()[i] == head_byte_int:
                     head_found_at_index = i
                     break
 
@@ -252,8 +251,8 @@ class FrameParser(QObject):
                     error_msg = f"CRC校验错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)"
             else:  # ORIGINAL_SUM_ADD
                 if received_checksum_ba.size() == 2:  # Assuming 2 bytes for SC+AC
-                    received_sc_val = ord(received_checksum_ba.at(0))
-                    received_ac_val = ord(received_checksum_ba.at(1))
+                    received_sc_val = received_checksum_ba.data()[0]
+                    received_ac_val = received_checksum_ba.data()[1]
                     calculated_sc, calculated_ac = calculate_original_checksums_python(frame_part_for_calc)
                     if received_sc_val == calculated_sc and received_ac_val == calculated_ac:
                         is_valid = True

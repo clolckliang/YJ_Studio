@@ -29,21 +29,34 @@ class SerialManager(QObject):
         ports_info = []
         if self.use_pyserial:
             ports = serial.tools.list_ports.comports()
+            if self.error_logger:
+                self.error_logger.log_info(f"pyserial找到的串口: {[port.device for port in ports]}")
             for port in ports:
                 ports_info.append({"name": port.device, "description": port.description})
         else:
             ports = QSerialPortInfo.availablePorts()
+            if self.error_logger:
+                self.error_logger.log_info(f"QtSerialPort找到的串口: {[port.portName() for port in ports]}")
             for port in ports:
                 ports_info.append({"name": port.portName(), "description": port.description()})
+        
+        # 直接添加COM1和COM2用于测试
+        ports_info.append({"name": "COM1", "description": "Virtual Test Port"})
+        ports_info.append({"name": "COM2", "description": "Virtual Test Port"})
+
+        if self.error_logger:
+            self.error_logger.log_info(f"返回的串口列表: {[port['name'] for port in ports_info]}")
         return ports_info
 
     def connect_port(self, config: SerialPortConfig) -> bool:
         if self.error_logger:
-            self.error_logger.log_info(f"尝试连接串口: {config.port_name} @ {config.baud_rate}")
+            self.error_logger.log_info(f"connect_port: 尝试连接串口: {config.port_name} @ {config.baud_rate}")
         if self.is_connected:
             self.disconnect_port()
 
         if not config.port_name:
+            if self.error_logger:
+                self.error_logger.log_error("connect_port: 未选择串口", "CONNECTION")
             self.connection_status_changed.emit(False, "错误: 未选择串口。")
             return False
 
@@ -142,10 +155,11 @@ class SerialManager(QObject):
             if self.serial_port.open(QIODevice.OpenModeFlag.ReadWrite):
                 self.is_connected = True
                 msg = f"已连接 {config.port_name} @ {config.baud_rate}"
+                if self.error_logger:
+                    self.error_logger.log_info(f"connect_port: {msg}")
+                    self.error_logger.log_info(f"connect_port: 发射 connection_status_changed(True, '{msg}')")
                 self.connection_status_changed.emit(True, msg)
                 if self.error_logger:
-                    self.error_logger.log_info(msg)
-                    # 记录详细的串口配置
                     self.error_logger.log_info(
                         f"串口详细配置: "
                         f"数据位={self.serial_port.dataBits()}, "
@@ -158,9 +172,10 @@ class SerialManager(QObject):
                 self.is_connected = False
                 err_str = self.serial_port.errorString()
                 msg = f"打开串口失败: {err_str}"
-                self.connection_status_changed.emit(False, msg)
                 if self.error_logger:
-                    self.error_logger.log_error(msg, "CONNECTION")
+                    self.error_logger.log_error(f"connect_port: {msg}", "CONNECTION")
+                    self.error_logger.log_info(f"connect_port: 发射 connection_status_changed(False, '{msg}')")
+                self.connection_status_changed.emit(False, msg)
                 return False
 
     def disconnect_port(self) -> None:
@@ -242,6 +257,15 @@ class SerialManager(QObject):
                 self.error_logger.log_info(f"接收到 {data.size()} 字节数据 (Qt): {data.toHex(' ').data().decode('ascii').upper()}")
             self.data_received.emit(data)
 
+    @Slot(QSerialPort.SerialPortError)
+    def _handle_serial_error(self, error: QSerialPort.SerialPortError) -> None:
+        """处理Qt串口错误"""
+        if error != QSerialPort.SerialPortError.NoError:
+            error_message = self.serial_port.errorString()
+            if self.error_logger:
+                self.error_logger.log_error(f"Qt串口错误: {error_message}", "SERIAL_ERROR")
+            self.error_occurred_signal.emit(error_message)
+
 
 class SerialReadThread(QThread):
     data_received = Signal(QByteArray)
@@ -252,26 +276,24 @@ class SerialReadThread(QThread):
         self._running = True
 
     def run(self):
-        if self.error_logger:
-            self.error_logger.log_info("SerialReadThread started")
+        parent = self.parent()
+        if parent and hasattr(parent, 'error_logger') and parent.error_logger:
+            parent.error_logger.log_info("SerialReadThread started")
         while self._running:
             try:
                 if self.serial_port.in_waiting > 0:
                     data = self.serial_port.read(self.serial_port.in_waiting)
-                    # 将接收到的数据转换为QByteArray并发送信号
                     qdata = QByteArray(data)
-                    # 记录接收到的数据
-                    parent = self.parent()
                     if parent and hasattr(parent, 'error_logger') and parent.error_logger:
                         parent.error_logger.log_info(f"接收到 {len(data)} 字节数据 (pyserial): {qdata.toHex(' ').data().decode('ascii').upper()}")
+                        parent.error_logger.log_info(f"发射 data_received 信号，包含 {len(data)} 字节数据")
                     self.data_received.emit(qdata)
             except Exception as e:
-                parent = self.parent()
                 if parent and hasattr(parent, 'error_logger') and parent.error_logger:
                     parent.error_logger.log_error(f"串口读取错误: {e}", "READ")
             self.msleep(10)
-        if self.error_logger:
-            self.error_logger.log_info("SerialReadThread stopped")
+        if parent and hasattr(parent, 'error_logger') and parent.error_logger:
+            parent.error_logger.log_info("SerialReadThread stopped")
 
     def stop(self):
         self._running = False

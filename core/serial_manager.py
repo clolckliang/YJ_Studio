@@ -108,7 +108,7 @@ class SerialManager(QObject):
         if self.serial_port.bytesAvailable() > 0:
             data = self.serial_port.readAll()
             if self.error_logger:
-                self.error_logger.log_info(f"接收到 {data.size()} 字节数据")
+                self.error_logger.log_info(f"接收到 {data.size()} 字节数据: {data.toHex(' ').data().decode('ascii').upper()}")
             self.data_received.emit(data)
 
     @Slot(QSerialPort.SerialPortError)

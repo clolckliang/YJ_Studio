@@ -186,10 +186,10 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
             baud_rate = int(self.baud_combo.currentText())
         except ValueError:
             baud_rate = Constants.DEFAULT_BAUD_RATE
-        if hasattr(self.main_window_ref,
-                   'error_logger') and self.main_window_ref.error_logger: self.main_window_ref.error_logger.log_warning(
-            f"无效的波特率输入: '{self.baud_combo.currentText()}', 使用默认值 {baud_rate}"); self.baud_combo.setCurrentText(
-            str(baud_rate))
+            if hasattr(self.main_window_ref,
+                    'error_logger') and self.main_window_ref.error_logger: self.main_window_ref.error_logger.log_warning(
+                f"无效的波特率输入: '{self.baud_combo.currentText()}', 使用默认值 {baud_rate}"); self.baud_combo.setCurrentText(
+                str(baud_rate))
         data_bits = int(self.data_bits_combo.currentText())
         parity = self.parity_combo.currentText()
         stop_bits_str = self.stop_bits_combo.currentText()
@@ -197,9 +197,9 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
             stop_bits = float(stop_bits_str) if stop_bits_str == "1.5" else int(stop_bits_str)
         except ValueError:
             stop_bits = 1
-        if hasattr(self.main_window_ref,
-                   'error_logger') and self.main_window_ref.error_logger: self.main_window_ref.error_logger.log_warning(
-            f"无效的停止位输入: '{stop_bits_str}'，使用默认值 1")
+            if hasattr(self.main_window_ref,
+                    'error_logger') and self.main_window_ref.error_logger: self.main_window_ref.error_logger.log_warning(
+                f"无效的停止位输入: '{stop_bits_str}'，使用默认值 1")
         return SerialPortConfig(port_name, baud_rate, data_bits, parity, stop_bits)
 
     def get_frame_config_from_ui(self) -> FrameConfig:

@@ -45,14 +45,38 @@ class SerialManager(QObject):
             self.connection_status_changed.emit(False, "错误: 未选择串口。")
             return False
 
+        # 参数验证
+        if not isinstance(config.baud_rate, int) or config.baud_rate <= 0:
+            self._log_and_emit_error(f"无效的波特率: {config.baud_rate}", "CONNECTION")
+            return False
+        if config.data_bits not in [5, 6, 7, 8]:
+            self._log_and_emit_error(f"无效的数据位: {config.data_bits}", "CONNECTION")
+            return False
+        if config.parity not in ["None", "Even", "Odd", "Mark", "Space"]:
+            self._log_and_emit_error(f"无效的校验位: {config.parity}", "CONNECTION")
+            return False
+        if config.stop_bits not in [1, 1.5, 2]:
+            self._log_and_emit_error(f"无效的停止位: {config.stop_bits}", "CONNECTION")
+            return False
+
         if self.use_pyserial:
             try:
+                # pyserial的bytesize参数是serial.FIVEBITS, serial.EIGHTBITS等，但pyserial库会自动处理整数
+                # parity参数是'N', 'E', 'O', 'M', 'S'
+                pyserial_parity = config.parity[0].upper() if config.parity != "None" else 'N'
+                # stopbits参数是serial.STOPBITS_ONE, serial.STOPBITS_ONE_POINT_FIVE, serial.STOPBITS_TWO
+                pyserial_stopbits = serial.STOPBITS_ONE
+                if config.stop_bits == 1.5:
+                    pyserial_stopbits = serial.STOPBITS_ONE_POINT_FIVE
+                elif config.stop_bits == 2:
+                    pyserial_stopbits = serial.STOPBITS_TWO
+
                 self.serial_port = serial.Serial(
                     port=config.port_name,
                     baudrate=config.baud_rate,
                     bytesize=config.data_bits,
-                    parity=config.parity[0].upper() if config.parity != "None" else 'N',
-                    stopbits=1.5 if config.stop_bits == 1.5 else int(config.stop_bits),
+                    parity=pyserial_parity,
+                    stopbits=pyserial_stopbits,
                     timeout=0.1,
                     xonxoff=False,
                     rtscts=False,
@@ -75,21 +99,35 @@ class SerialManager(QObject):
                     self.error_logger.log_error(msg, "CONNECTION")
                 return False
         else:
+            from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
+            from PySide6.QtCore import QIODevice # Import QIODevice here for local scope
+
+            self.serial_port = QSerialPort(self) # Re-initialize QSerialPort if not pyserial
+            self.serial_port.setReadBufferSize(4096)
+            self.serial_port.readyRead.connect(self._read_data)
+            self.serial_port.errorOccurred.connect(self._handle_serial_error)
+
             self.serial_port.setPortName(config.port_name)
             self.serial_port.setBaudRate(config.baud_rate)
 
-            data_bits_map = {"8": QSerialPort.Data8, "7": QSerialPort.Data7,
-                             "6": QSerialPort.Data6, "5": QSerialPort.Data5}
-            self.serial_port.setDataBits(data_bits_map.get(str(config.data_bits), QSerialPort.Data8))
+            data_bits_map = {
+                8: QSerialPort.Data8, 7: QSerialPort.Data7,
+                6: QSerialPort.Data6, 5: QSerialPort.Data5
+            }
+            self.serial_port.setDataBits(data_bits_map.get(config.data_bits, QSerialPort.Data8))
 
-            parity_map = {"None": QSerialPort.NoParity, "Even": QSerialPort.EvenParity,
-                          "Odd": QSerialPort.OddParity, "Space": QSerialPort.SpaceParity,
-                          "Mark": QSerialPort.MarkParity}
+            parity_map = {
+                "None": QSerialPort.NoParity, "Even": QSerialPort.EvenParity,
+                "Odd": QSerialPort.OddParity, "Space": QSerialPort.SpaceParity,
+                "Mark": QSerialPort.MarkParity
+            }
             self.serial_port.setParity(parity_map.get(config.parity, QSerialPort.NoParity))
 
-            stop_bits_map = {"1": QSerialPort.OneStop, "1.5": QSerialPort.OneAndHalfStop,
-                             "2": QSerialPort.TwoStop}
-            self.serial_port.setStopBits(stop_bits_map.get(str(config.stop_bits), QSerialPort.OneStop))
+            stop_bits_map = {
+                1: QSerialPort.OneStop, 1.5: QSerialPort.OneAndHalfStop,
+                2: QSerialPort.TwoStop
+            }
+            self.serial_port.setStopBits(stop_bits_map.get(config.stop_bits, QSerialPort.OneStop))
 
             # 明确禁用硬件流控制
             self.serial_port.setFlowControl(QSerialPort.NoFlowControl)
@@ -135,7 +173,7 @@ class SerialManager(QObject):
             if self.error_logger:
                 self.error_logger.log_info("串口已关闭 (pyserial)")
         else:
-            if self.serial_port.isOpen():
+            if self.serial_port and self.serial_port.isOpen(): # Check if serial_port is not None
                 self.serial_port.close()
             self.is_connected = False
             self.connection_status_changed.emit(False, "串口已关闭")
@@ -150,6 +188,9 @@ class SerialManager(QObject):
 
         if self.use_pyserial:
             try:
+                # 记录发送的数据
+                if self.error_logger:
+                    self.error_logger.log_info(f"发送数据 (pyserial): {data.toHex(' ').data().decode('ascii').upper()}")
                 bytes_written = self.serial_port.write(data.data())
                 return bytes_written
             except Exception as e:
@@ -157,6 +198,9 @@ class SerialManager(QObject):
                     self.error_logger.log_error(f"串口写入错误: {e}", "SEND")
                 return -1
         else:
+            # 记录发送的数据
+            if self.error_logger:
+                self.error_logger.log_info(f"发送数据 (Qt): {data.toHex(' ').data().decode('ascii').upper()}")
             bytes_written = self.serial_port.write(data)
             if bytes_written == -1:
                 if self.error_logger:
@@ -165,6 +209,32 @@ class SerialManager(QObject):
                 if self.error_logger:
                     self.error_logger.log_warning(f"串口部分写入: {bytes_written}/{len(data)}字节。", "SEND")
             return bytes_written
+
+    def _log_and_emit_error(self, message: str, error_type: str = "VALIDATION"):
+        """Helper to log and emit connection errors."""
+        self.connection_status_changed.emit(False, f"错误: {message}")
+        if self.error_logger:
+            self.error_logger.log_error(message, error_type)
+
+    def get_current_baud_rate(self) -> Optional[int]:
+        if self.is_connected:
+            if self.use_pyserial and self.serial_port:
+                return self.serial_port.baudrate
+            elif self.serial_port and self.serial_port.isOpen():
+                return self.serial_port.baudRate()
+        return None
+
+    def get_connection_status(self) -> bool:
+        return self.is_connected
+
+    @Slot()
+    def _read_data(self) -> None:
+        """Qt串口数据读取回调函数"""
+        if self.serial_port and self.serial_port.bytesAvailable() > 0:
+            data = self.serial_port.readAll()
+            if self.error_logger:
+                self.error_logger.log_info(f"接收到 {data.size()} 字节数据 (Qt): {data.toHex(' ').data().decode('ascii').upper()}")
+            self.data_received.emit(data)
 
 
 class SerialReadThread(QThread):
@@ -177,9 +247,20 @@ class SerialReadThread(QThread):
 
     def run(self):
         while self._running:
-            if self.serial_port.in_waiting > 0:
-                data = self.serial_port.read(self.serial_port.in_waiting)
-                self.data_received.emit(QByteArray(data))
+            try:
+                if self.serial_port.in_waiting > 0:
+                    data = self.serial_port.read(self.serial_port.in_waiting)
+                    # 将接收到的数据转换为QByteArray并发送信号
+                    qdata = QByteArray(data)
+                    # 记录接收到的数据
+                    parent = self.parent()
+                    if parent and hasattr(parent, 'error_logger') and parent.error_logger:
+                        parent.error_logger.log_info(f"接收到 {len(data)} 字节数据 (pyserial): {qdata.toHex(' ').data().decode('ascii').upper()}")
+                    self.data_received.emit(qdata)
+            except Exception as e:
+                parent = self.parent()
+                if parent and hasattr(parent, 'error_logger') and parent.error_logger:
+                    parent.error_logger.log_error(f"串口读取错误: {e}", "READ")
             self.msleep(10)
 
     def stop(self):

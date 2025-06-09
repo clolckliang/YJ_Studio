@@ -776,7 +776,7 @@ class SerialDebugger(QMainWindow):
             final_log_string += data.toHex(' ').data().decode('ascii', errors='ignore').upper()
         else:
             try:
-                final_log_string += data.data().decode('utf-8')
+                final_log_string += data.data().decode('utf-8', errors='replace')
             except UnicodeDecodeError:
                 try:
                     final_log_string += data.data().decode('gbk', errors='replace')

@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (QApplication, QVBoxLayout, QHBoxLayout, QLabel,
                              QPushButton, QWidget, QGridLayout, QCheckBox, QComboBox, QSizePolicy,
                              QSpinBox, QDoubleSpinBox, QFileDialog)
 from PySide6.QtCore import Qt, QTimer, QRectF
-from PySide6.QtGui import QKeyEvent, QPainter, QColor, QBrush
+from PySide6.QtGui import QKeyEvent, QPainter, QColor, QBrush, QPen
 from typing import Dict, Any, Optional, List, Tuple, Set, Type
 import random
 import heapq
@@ -143,8 +143,14 @@ class GridWidget(QWidget):
         super().__init__(parent);self.grid_size=grid_size
         self.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding);self.setMinimumSize(200,200)
         self.snake,self.food,self.path,self.viz_data=[],None,[],None
-        self.BG_COLOR=QColor("#2c3e50");self.PATH_COLOR=QColor("#000000")
-        self.SNAKE_BODY_COLOR=QColor("#27ae60");self.SNAKE_HEAD_COLOR=QColor("#2ecc71");self.FOOD_COLOR=QColor("#e74c3c")
+        # 更美观的颜色方案
+        self.BG_COLOR=QColor("#1e272e")  # 深蓝灰色背景
+        self.PATH_COLOR=QColor("#0abde3")  # 亮蓝色路径
+        self.SNAKE_BODY_COLOR=QColor("#10ac84")  # 深绿色蛇身
+        self.SNAKE_HEAD_COLOR=QColor("#1dd1a1")  # 亮绿色蛇头
+        self.FOOD_COLOR=QColor("#ee5253")  # 鲜红色食物
+        # 网格线颜色
+        self.GRID_COLOR=QColor("#2c3e50")
     def update_data(self,snake,food,path,viz_data=None):self.snake,self.food,self.path,self.visualization_data=snake,food,path,viz_data;self.update()
     def resizeEvent(self,event):self.update();super().resizeEvent(event)
     def paintEvent(self,event):
@@ -152,7 +158,20 @@ class GridWidget(QWidget):
         cell_size=min(self.width()/self.grid_size,self.height()/self.grid_size)
         grid_w,grid_h=cell_size*self.grid_size,cell_size*self.grid_size
         off_x,off_y=(self.width()-grid_w)/2,(self.height()-grid_h)/2
-        painter.translate(off_x,off_y);painter.fillRect(QRectF(0,0,grid_w,grid_h),self.BG_COLOR)
+        painter.translate(off_x,off_y)
+        
+        # 绘制背景和边框
+        painter.fillRect(QRectF(0,0,grid_w,grid_h),self.BG_COLOR)
+        painter.setPen(QPen(QColor("#34495e"), 2))
+        painter.drawRect(QRectF(0,0,grid_w,grid_h))
+        
+        # 绘制网格线
+        painter.setPen(QPen(self.GRID_COLOR, 0.5))
+        for i in range(1, self.grid_size):
+            # 垂直线
+            painter.drawLine(i * cell_size, 0, i * cell_size, grid_h)
+            # 水平线
+            painter.drawLine(0, i * cell_size, grid_w, i * cell_size)
         if self.visualization_data is not None and isinstance(self.visualization_data,np.ndarray):
             field=self.visualization_data
             try:
@@ -167,15 +186,108 @@ class GridWidget(QWidget):
                                 color=QColor.fromHsvF(hue,0.95,0.95)
                                 painter.fillRect(QRectF(c*cell_size,r*cell_size,cell_size,cell_size),color)
             except Exception:pass
+        # 绘制路径 - 使用半透明效果
         if self.path:
-            painter.setBrush(self.PATH_COLOR);painter.setPen(Qt.NoPen)
-            for r,c in self.path:painter.drawRect(QRectF(c*cell_size,r*cell_size,cell_size,cell_size))
+            path_color = QColor(self.PATH_COLOR)
+            path_color.setAlpha(120)  # 设置透明度
+            painter.setBrush(path_color)
+            painter.setPen(Qt.NoPen)
+            for r, c in self.path:
+                rect = QRectF(c*cell_size+2, r*cell_size+2, cell_size-4, cell_size-4)
+                painter.drawRoundedRect(rect, 4, 4)  # 圆角矩形
+        
+        # 绘制蛇身 - 圆角矩形和渐变效果
         if self.snake:
-            painter.setBrush(self.SNAKE_BODY_COLOR);painter.setPen(Qt.NoPen)
-            for r,c in self.snake[1:]:painter.drawRect(QRectF(c*cell_size,r*cell_size,cell_size,cell_size))
-            painter.setBrush(self.SNAKE_HEAD_COLOR);r,c=self.snake[0];painter.drawRect(QRectF(c*cell_size,r*cell_size,cell_size,cell_size))
+            # 蛇身
+            for i, (r, c) in enumerate(self.snake[1:]):
+                # 渐变颜色效果 - 越靠近尾部越暗
+                fade_factor = max(0.7, 1.0 - (i / (len(self.snake) * 1.5)))
+                body_color = QColor(self.SNAKE_BODY_COLOR)
+                body_color.setRed(int(body_color.red() * fade_factor))
+                body_color.setGreen(int(body_color.green() * fade_factor))
+                body_color.setBlue(int(body_color.blue() * fade_factor))
+                
+                painter.setBrush(body_color)
+                painter.setPen(Qt.NoPen)
+                rect = QRectF(c*cell_size+1, r*cell_size+1, cell_size-2, cell_size-2)
+                painter.drawRoundedRect(rect, 5, 5)
+            
+            # 蛇头 - 更大一点并有边框
+            r, c = self.snake[0]
+            head_rect = QRectF(c*cell_size, r*cell_size, cell_size, cell_size)
+            
+            # 绘制头部光晕效果
+            glow_color = QColor(self.SNAKE_HEAD_COLOR)
+            glow_color.setAlpha(80)
+            painter.setBrush(glow_color)
+            painter.drawEllipse(head_rect.adjusted(-2, -2, 2, 2))
+            
+            # 绘制头部
+            painter.setBrush(self.SNAKE_HEAD_COLOR)
+            painter.setPen(QPen(QColor("#0c9570"), 1.5))  # 深色边框
+            painter.drawRoundedRect(head_rect, 8, 8)
+            
+            # 绘制眼睛
+            eye_size = max(3, cell_size/6)
+            eye_color = QColor("#ffffff")
+            pupil_color = QColor("#000000")
+            
+            # 根据方向确定眼睛位置
+            if hasattr(self.parent(), 'direction'):
+                direction = self.parent().direction
+                eye1_pos = eye2_pos = None
+                
+                if direction == 'RIGHT':
+                    eye1_pos = (c*cell_size + cell_size*0.7, r*cell_size + cell_size*0.3)
+                    eye2_pos = (c*cell_size + cell_size*0.7, r*cell_size + cell_size*0.7)
+                elif direction == 'LEFT':
+                    eye1_pos = (c*cell_size + cell_size*0.3, r*cell_size + cell_size*0.3)
+                    eye2_pos = (c*cell_size + cell_size*0.3, r*cell_size + cell_size*0.7)
+                elif direction == 'UP':
+                    eye1_pos = (c*cell_size + cell_size*0.3, r*cell_size + cell_size*0.3)
+                    eye2_pos = (c*cell_size + cell_size*0.7, r*cell_size + cell_size*0.3)
+                elif direction == 'DOWN':
+                    eye1_pos = (c*cell_size + cell_size*0.3, r*cell_size + cell_size*0.7)
+                    eye2_pos = (c*cell_size + cell_size*0.7, r*cell_size + cell_size*0.7)
+                
+                if eye1_pos and eye2_pos:
+                    # 绘制眼白
+                    painter.setBrush(eye_color)
+                    painter.setPen(Qt.NoPen)
+                    painter.drawEllipse(QRectF(eye1_pos[0]-eye_size/2, eye1_pos[1]-eye_size/2, eye_size, eye_size))
+                    painter.drawEllipse(QRectF(eye2_pos[0]-eye_size/2, eye2_pos[1]-eye_size/2, eye_size, eye_size))
+                    
+                    # 绘制瞳孔
+                    pupil_size = eye_size * 0.6
+                    painter.setBrush(pupil_color)
+                    painter.drawEllipse(QRectF(eye1_pos[0]-pupil_size/2, eye1_pos[1]-pupil_size/2, pupil_size, pupil_size))
+                    painter.drawEllipse(QRectF(eye2_pos[0]-pupil_size/2, eye2_pos[1]-pupil_size/2, pupil_size, pupil_size))
+        
+        # 绘制食物 - 苹果样式
         if self.food:
-            painter.setBrush(self.FOOD_COLOR);painter.setPen(Qt.NoPen);r,c=self.food;painter.drawEllipse(QRectF(c*cell_size,r*cell_size,cell_size,cell_size))
+            r, c = self.food
+            food_rect = QRectF(c*cell_size+2, r*cell_size+2, cell_size-4, cell_size-4)
+            
+            # 苹果主体
+            painter.setBrush(self.FOOD_COLOR)
+            painter.setPen(QPen(QColor("#c0392b"), 1))
+            painter.drawEllipse(food_rect)
+            
+            # 苹果高光
+            highlight = QColor("#ffffff")
+            highlight.setAlpha(120)
+            painter.setBrush(highlight)
+            painter.setPen(Qt.NoPen)
+            highlight_rect = QRectF(c*cell_size + cell_size*0.3, r*cell_size + cell_size*0.3, 
+                                   cell_size*0.25, cell_size*0.25)
+            painter.drawEllipse(highlight_rect)
+            
+            # 苹果柄
+            stem_color = QColor("#7f8c8d")
+            painter.setPen(QPen(stem_color, 2))
+            stem_x = c*cell_size + cell_size/2
+            stem_y = r*cell_size + 2
+            painter.drawLine(stem_x, stem_y, stem_x, stem_y + cell_size/6)
 
 # ==============================================================================
 #  算法策略定义
@@ -762,68 +874,296 @@ class SnakeGamePanel(PanelInterface):
         else:self._on_algorithm_changed(PathfindingAlgorithm.A_STAR.value)
 
     def _init_ui(self):
-        main_layout=QVBoxLayout(self);main_layout.setSpacing(10);main_layout.setContentsMargins(10,10,10,10);self.setStyleSheet("background-color:#2c3e50;border:none;")
-        top_widget=QWidget();top_layout=QVBoxLayout(top_widget);top_layout.setSpacing(10);top_layout.setContentsMargins(15,15,15,15);top_widget.setStyleSheet("background-color:#34495e;border-radius:15px;")
-        title=QLabel("🐍 贪吃蛇 AI 对战");title.setAlignment(Qt.AlignCenter);title.setStyleSheet("font-size:24px;font-weight:bold;color:#ecf0f1;padding:5px;");top_layout.addWidget(title)
-        score_start_layout=QHBoxLayout();score_start_layout.setSpacing(20)
-        self.score_label=QLabel("分数: 0");self.score_label.setStyleSheet("font-size:18px;font-weight:bold;color:#2ecc71;background-color:#2c3e50;padding:8px 15px;border-radius:8px;")
-        self.start_button=QPushButton("🎮 开始游戏");self.start_button.clicked.connect(self._start_game);self.start_button.setStyleSheet("font-size:16px;font-weight:bold;color:white;background-color:#3498db;border:none;border-radius:8px;padding:8px 20px;")
-        score_start_layout.addStretch();score_start_layout.addWidget(self.score_label);score_start_layout.addWidget(self.start_button);score_start_layout.addStretch()
+        # 设置主布局和基本样式
+        main_layout = QVBoxLayout(self)
+        main_layout.setSpacing(15)
+        main_layout.setContentsMargins(15, 15, 15, 15)
+        
+        # 使用渐变背景
+        self.setStyleSheet("""
+            QWidget#snakePanel {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                          stop:0 #1e3c72, stop:1 #2a5298);
+                border: none;
+            }
+            QLabel {
+                color: #ecf0f1;
+            }
+            QComboBox {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                border: 1px solid #3498db;
+                border-radius: 6px;
+                padding: 5px 10px;
+                min-height: 30px;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 30px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                selection-background-color: #3498db;
+            }
+            QCheckBox {
+                spacing: 10px;
+            }
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #34495e;
+                border: 2px solid #7f8c8d;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #2ecc71;
+                border: 2px solid #27ae60;
+            }
+            QSpinBox, QDoubleSpinBox {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                border: 1px solid #3498db;
+                border-radius: 6px;
+                padding: 5px;
+                min-height: 25px;
+            }
+        """)
+        self.setObjectName("snakePanel")
+        
+        # 顶部面板 - 使用卡片式设计
+        top_widget = QWidget()
+        top_layout = QVBoxLayout(top_widget)
+        top_layout.setSpacing(15)
+        top_layout.setContentsMargins(20, 20, 20, 20)
+        top_widget.setStyleSheet("""
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 15px;
+            border: 1px solid #3498db;
+        """)
+        
+        # 标题区域 - 添加动画效果
+        title_widget = QWidget()
+        title_layout = QHBoxLayout(title_widget)
+        title_layout.setContentsMargins(0, 0, 0, 0)
+        
+        title = QLabel("🐍 贪吃蛇 AI 对战")
+        title.setAlignment(Qt.AlignCenter)
+        title.setStyleSheet("""
+            font-size: 28px;
+            font-weight: bold;
+            color: #ecf0f1;
+            padding: 10px;
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                      stop:0 #3498db, stop:0.5 #2ecc71, stop:1 #9b59b6);
+            border-radius: 10px;
+        """)
+        
+        title_layout.addWidget(title)
+        top_layout.addWidget(title_widget)
+        
+        # 分数和开始按钮区域
+        score_start_layout = QHBoxLayout()
+        score_start_layout.setSpacing(25)
+        
+        # 分数标签 - 添加阴影效果
+        self.score_label = QLabel("分数: 0")
+        self.score_label.setStyleSheet("""
+            font-size: 20px;
+            font-weight: bold;
+            color: #2ecc71;
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+        """)
+        
+        # 开始按钮 - 添加悬停效果
+        self.start_button = QPushButton("🎮 开始游戏")
+        self.start_button.clicked.connect(self._start_game)
+        self.start_button.setStyleSheet("""
+            QPushButton {
+                font-size: 18px;
+                font-weight: bold;
+                color: white;
+                background-color: #3498db;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 25px;
+            }
+            QPushButton:hover {
+                background-color: #2980b9;
+            }
+            QPushButton:pressed {
+                background-color: #1c6ea4;
+            }
+        """)
+        
+        score_start_layout.addStretch()
+        score_start_layout.addWidget(self.score_label)
+        score_start_layout.addWidget(self.start_button)
+        score_start_layout.addStretch()
+        
         top_layout.addLayout(score_start_layout)
-        # --- 新增：游戏设置区域（美化版） ---
-        settings_layout = QGridLayout()
-        settings_layout.setContentsMargins(10, 5, 10, 10)
-        settings_layout.setSpacing(15)
-
-        label_style = "font-size:15px;font-weight:bold;color:#ecf0f1;padding:2px 8px;"
-        spin_style = (
-            "QSpinBox {font-size:15px;padding:5px 10px;border-radius:6px;background-color:#22313a;color:#ecf0f1;border:1px solid #2980b9;min-width:60px;}"
-            "QSpinBox::up-button, QSpinBox::down-button {width:18px;height:18px;}"
-            "QSpinBox::up-arrow, QSpinBox::down-arrow {background:transparent;}"
-        )
-
+        # 游戏设置区域 - 使用卡片式设计
+        settings_widget = QWidget()
+        settings_layout = QGridLayout(settings_widget)
+        settings_layout.setContentsMargins(15, 15, 15, 15)
+        settings_layout.setSpacing(20)
+        settings_widget.setStyleSheet("""
+            background-color: rgba(52, 73, 94, 0.7);
+            border-radius: 12px;
+            margin: 5px;
+        """)
+        
+        # 设置标题
+        settings_title = QLabel("⚙️ 游戏设置")
+        settings_title.setStyleSheet("font-size:16px; font-weight:bold; color:#3498db; margin-bottom:5px;")
+        settings_layout.addWidget(settings_title, 0, 0, 1, 6, Qt.AlignCenter)
+        
+        # 统一的标签和输入框样式
+        label_style = """
+            font-size: 15px;
+            font-weight: bold;
+            color: #ecf0f1;
+            padding: 2px 8px;
+        """
+        
+        spin_style = """
+            QSpinBox {
+                font-size: 15px;
+                padding: 8px 12px;
+                border-radius: 8px;
+                background-color: #22313a;
+                color: #ecf0f1;
+                border: 2px solid #3498db;
+                min-width: 80px;
+            }
+            QSpinBox:hover {
+                border: 2px solid #2ecc71;
+            }
+            QSpinBox::up-button, QSpinBox::down-button {
+                width: 20px;
+                height: 20px;
+                border-radius: 4px;
+                background-color: #3498db;
+            }
+            QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+                background-color: #2980b9;
+            }
+            QSpinBox::up-arrow {
+                image: url(resources/up_arrow.png);
+                width: 10px;
+                height: 10px;
+            }
+            QSpinBox::down-arrow {
+                image: url(resources/down_arrow.png);
+                width: 10px;
+                height: 10px;
+            }
+        """
+        
         # Grid Size 输入框
-        grid_label = QLabel("地图大小:")
+        grid_label = QLabel("🗺️ 地图大小:")
         grid_label.setStyleSheet(label_style)
-        settings_layout.addWidget(grid_label, 0, 0)
+        settings_layout.addWidget(grid_label, 1, 0)
+        
         self.grid_size_spin = QSpinBox()
         self.grid_size_spin.setRange(10, 100)
         self.grid_size_spin.setValue(self.grid_size)
         self.grid_size_spin.setStyleSheet(spin_style)
         self.grid_size_spin.valueChanged.connect(self._on_grid_size_changed)
-        settings_layout.addWidget(self.grid_size_spin, 0, 1)
-
+        settings_layout.addWidget(self.grid_size_spin, 1, 1)
+        
         # Manual Speed 输入框
-        manual_label = QLabel("手动速度(ms):")
+        manual_label = QLabel("🎮 手动速度(ms):")
         manual_label.setStyleSheet(label_style)
-        settings_layout.addWidget(manual_label, 0, 2)
+        settings_layout.addWidget(manual_label, 1, 2)
+        
         self.manual_speed_spin = QSpinBox()
         self.manual_speed_spin.setRange(10, 1000)
         self.manual_speed_spin.setValue(self.initial_speed)
         self.manual_speed_spin.setStyleSheet(spin_style)
         self.manual_speed_spin.valueChanged.connect(self._on_manual_speed_changed)
-        settings_layout.addWidget(self.manual_speed_spin, 0, 3)
+        settings_layout.addWidget(self.manual_speed_spin, 1, 3)
         
         # Auto Speed 输入框
-        auto_label = QLabel("AI速度(ms):")
+        auto_label = QLabel("🤖 AI速度(ms):")
         auto_label.setStyleSheet(label_style)
-        settings_layout.addWidget(auto_label, 0, 4)
+        settings_layout.addWidget(auto_label, 1, 4)
+        
         self.auto_speed_spin = QSpinBox()
         self.auto_speed_spin.setRange(1, 1000)
         self.auto_speed_spin.setValue(self.auto_speed)
         self.auto_speed_spin.setStyleSheet(spin_style)
         self.auto_speed_spin.valueChanged.connect(self._on_auto_speed_changed)
-        settings_layout.addWidget(self.auto_speed_spin, 0, 5)
-
-        top_layout.addLayout(settings_layout)
+        settings_layout.addWidget(self.auto_speed_spin, 1, 5)
+        
+        top_layout.addWidget(settings_widget)
         # ------------------------
 
-        ai_layout=QHBoxLayout();ai_layout.setSpacing(15)
-        self.auto_checkbox=QCheckBox("🤖 AI自动寻路");self.auto_checkbox.stateChanged.connect(self._toggle_auto_mode);self.auto_checkbox.setStyleSheet("font-size:16px;font-weight:bold;color:#ecf0f1;spacing:8px;")
-        self.algorithm_combo=QComboBox();self.algorithm_combo.addItems([a.value for a in self.strategies]);self.algorithm_combo.currentTextChanged.connect(self._on_algorithm_changed)
-        self.algorithm_combo.setStyleSheet("font-size:16px;padding:8px;border-radius:5px;")
-        ai_layout.addStretch();ai_layout.addWidget(self.auto_checkbox);ai_layout.addWidget(self.algorithm_combo);ai_layout.addStretch()
-        top_layout.addLayout(ai_layout)
+        # AI控制区域 - 使用卡片式设计
+        ai_widget = QWidget()
+        ai_layout = QHBoxLayout(ai_widget)
+        ai_layout.setContentsMargins(15, 15, 15, 15)
+        ai_layout.setSpacing(20)
+        ai_widget.setStyleSheet("""
+            background-color: rgba(52, 73, 94, 0.7);
+            border-radius: 12px;
+            margin: 5px;
+        """)
+        
+        # AI控制标题
+        ai_title = QLabel("🧠 AI控制")
+        ai_title.setStyleSheet("font-size:16px; font-weight:bold; color:#e74c3c; margin-bottom:5px;")
+        ai_layout.addWidget(ai_title)
+        
+        # AI自动寻路复选框
+        self.auto_checkbox = QCheckBox("🤖 AI自动寻路")
+        self.auto_checkbox.stateChanged.connect(self._toggle_auto_mode)
+        self.auto_checkbox.setStyleSheet("""
+            font-size: 16px;
+            font-weight: bold;
+            color: #ecf0f1;
+            spacing: 10px;
+        """)
+        
+        # 算法选择下拉框
+        self.algorithm_combo = QComboBox()
+        self.algorithm_combo.addItems([a.value for a in self.strategies])
+        self.algorithm_combo.currentTextChanged.connect(self._on_algorithm_changed)
+        # 修复下拉框显示异常，精简样式
+        self.algorithm_combo.setStyleSheet("""
+            QComboBox {
+                font-size: 16px;
+                padding: 6px 12px;
+                border-radius: 8px;
+                border: 2px solid #9b59b6;
+                background-color: #2c3e50;
+                color: #ecf0f1;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 28px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #22313a;
+                color: #ecf0f1;
+                selection-background-color: #3498db;
+                border-radius: 6px;
+                border: 1px solid #2980b9;
+                outline: 0;
+            }
+        """)
+        
+        ai_layout.addStretch()
+        ai_layout.addWidget(self.auto_checkbox)
+        ai_layout.addWidget(self.algorithm_combo)
+        ai_layout.addStretch()
+        
+        top_layout.addWidget(ai_widget)
         self.params_container=QWidget();self.params_container.setStyleSheet("QLabel{font-size:14px;color:#ecf0f1;}QSpinBox,QDoubleSpinBox{font-size:14px;padding:5px;border-radius:3px;}")
         self.params_layout=QVBoxLayout(self.params_container);self.params_layout.setContentsMargins(0,5,0,5);top_layout.addWidget(self.params_container);self.params_container.setVisible(False)
         main_layout.addWidget(top_widget)

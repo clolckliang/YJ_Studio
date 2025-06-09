@@ -713,6 +713,8 @@ class SerialDebugger(QMainWindow):
 
     @Slot(QByteArray)
     def on_serial_data_received(self, data: QByteArray):
+        if self.error_logger:
+            self.error_logger.log_info(f"on_serial_data_received triggered with {data.size()} bytes: {data.toHex(' ').data().decode('ascii').upper()}")
         if self.basic_comm_panel_widget: self._append_to_basic_receive_text_edit(data, source="RX")
         if hasattr(self, 'data_recorder'): self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
         self.frame_parser.append_data(data)
@@ -767,6 +769,8 @@ class SerialDebugger(QMainWindow):
         self.active_checksum_mode = self.serial_config_panel_widget.get_checksum_mode_from_ui()
 
     def _append_to_basic_receive_text_edit(self, data: QByteArray, source: str = "RX"):
+        if self.error_logger:
+            self.error_logger.log_info(f"_append_to_basic_receive_text_edit triggered with {data.size()} bytes: {data.toHex(' ').data().decode('ascii').upper()}")
         if not self.basic_comm_panel_widget or not self.basic_comm_panel_widget.receive_text_edit: return
         final_log_string = ""
         if self.basic_comm_panel_widget.recv_timestamp_checkbox_is_checked(): final_log_string += datetime.now().strftime(

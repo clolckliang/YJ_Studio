@@ -38,6 +38,8 @@ class SerialManager(QObject):
         return ports_info
 
     def connect_port(self, config: SerialPortConfig) -> bool:
+        if self.error_logger:
+            self.error_logger.log_info(f"尝试连接串口: {config.port_name} @ {config.baud_rate}")
         if self.is_connected:
             self.disconnect_port()
 
@@ -162,6 +164,8 @@ class SerialManager(QObject):
                 return False
 
     def disconnect_port(self) -> None:
+        if self.error_logger:
+            self.error_logger.log_info("尝试断开串口连接")
         if self.use_pyserial:
             if self.read_thread and self.read_thread.isRunning():
                 self.read_thread.stop()
@@ -230,6 +234,8 @@ class SerialManager(QObject):
     @Slot()
     def _read_data(self) -> None:
         """Qt串口数据读取回调函数"""
+        if self.error_logger:
+            self.error_logger.log_info("_read_data triggered")
         if self.serial_port and self.serial_port.bytesAvailable() > 0:
             data = self.serial_port.readAll()
             if self.error_logger:
@@ -246,6 +252,8 @@ class SerialReadThread(QThread):
         self._running = True
 
     def run(self):
+        if self.error_logger:
+            self.error_logger.log_info("SerialReadThread started")
         while self._running:
             try:
                 if self.serial_port.in_waiting > 0:
@@ -262,6 +270,8 @@ class SerialReadThread(QThread):
                 if parent and hasattr(parent, 'error_logger') and parent.error_logger:
                     parent.error_logger.log_error(f"串口读取错误: {e}", "READ")
             self.msleep(10)
+        if self.error_logger:
+            self.error_logger.log_info("SerialReadThread stopped")
 
     def stop(self):
         self._running = False

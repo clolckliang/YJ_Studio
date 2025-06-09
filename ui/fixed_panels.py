@@ -519,6 +519,8 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
         return len(hex_text) % 2 == 0  # No need for `and len(hex_text) > 0` due to the `if not hex_text` check above
 
     def append_receive_text(self, text: str):
+        if self.main_window_ref.error_logger:
+            self.main_window_ref.error_logger.log_info(f"append_receive_text triggered with text: {text}")
         if self.receive_text_edit is None:
             return
         cursor = self.receive_text_edit.textCursor()

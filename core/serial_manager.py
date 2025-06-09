@@ -15,7 +15,7 @@ class SerialManager(QObject):
         self.serial_port = QSerialPort(self)
         self.error_logger = error_logger
         self.is_connected = False
-
+        self.serial_port.setReadBufferSize(4096)  # 设置为4kB缓冲区
         self.serial_port.readyRead.connect(self._read_data)
         self.serial_port.errorOccurred.connect(self._handle_serial_error)
 
@@ -106,8 +106,6 @@ class SerialManager(QObject):
     @Slot()
     def _read_data(self) -> None:
         if self.serial_port.bytesAvailable() > 0:
-            # 增加缓冲区大小设置
-            self.serial_port.setReadBufferSize(4096)  # 设置为4KB缓冲区
             data = self.serial_port.readAll()
             if self.error_logger:
                 self.error_logger.log_info(f"接收到 {data.size()} 字节数据")

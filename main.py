@@ -717,7 +717,10 @@ class SerialDebugger(QMainWindow):
         if hasattr(self, 'data_recorder'): self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
         self.frame_parser.append_data(data)
         self.update_current_serial_frame_configs_from_ui()
-        self.frame_parser.try_parse_frames(self.current_frame_config, self.active_checksum_mode)
+        self.frame_parser.try_parse_frames( current_frame_config=self.current_frame_config, 
+                                            parse_target_func_id_hex= self.current_frame_config.func_id,  # 添加缺失的参数
+                                            active_checksum_mode=self.active_checksum_mode
+                                            )
 
     @Slot(str, QByteArray)
     def on_frame_successfully_parsed(self, func_id_hex: str, data_payload_ba: QByteArray):
@@ -822,9 +825,9 @@ class SerialDebugger(QMainWindow):
             return None
         if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
             msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"; self.status_bar_label.setText(msg)
-        if self.error_logger:
-            self.error_logger.log_warning(msg)
-            return None
+            if self.error_logger:
+                self.error_logger.log_warning(msg)
+                return None
         data_content_ba = QByteArray()
         for scw_widget in panel_send_data_containers:
             item_bytes = scw_widget.get_bytes()
@@ -1042,8 +1045,11 @@ class SerialDebugger(QMainWindow):
     @Slot(str, bool)
     def send_basic_serial_data_action(self, text_to_send: str, is_hex: bool) -> None:
         data_to_write = QByteArray()
-        if not self.serial_manager.is_connected: QMessageBox.warning(self, "警告", "串口未打开。");
-        if self.basic_comm_panel_widget: self.basic_comm_panel_widget.append_receive_text("错误: 串口未打开。\n"); return
+        if not self.serial_manager.is_connected: 
+            QMessageBox.warning(self, "警告", "串口未打开。");
+            if self.basic_comm_panel_widget: 
+                self.basic_comm_panel_widget.append_receive_text("错误: 串口未打开。\n")
+            return
         if not text_to_send:
             return; data_to_write = QByteArray()
         if is_hex:
@@ -1055,9 +1061,9 @@ class SerialDebugger(QMainWindow):
             except ValueError:
                 msg = f"Hex发送错误: '{text_to_send}' 包含无效Hex字符."
                 QMessageBox.warning(self, "Hex格式错误", msg)
-            if self.basic_comm_panel_widget:
-                self.basic_comm_panel_widget.append_receive_text(f"错误: {msg}\n")
-                return
+                if self.basic_comm_panel_widget:
+                    self.basic_comm_panel_widget.append_receive_text(f"错误: {msg}\n")
+                    return
         else:
             data_to_write.append(text_to_send.encode('utf-8', errors='replace'))
         if data_to_write:

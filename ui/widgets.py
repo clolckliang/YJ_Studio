@@ -136,6 +136,22 @@ class ReceiveDataContainerWidget(QWidget):
         except ValueError:
             return None
 
+    def get_config(self) -> Dict[str, Any]:
+        target_plot_id = None
+        plot_enabled = False
+        if PYQTGRAPH_AVAILABLE and self.plot_checkbox and self.plot_target_combo:
+            plot_enabled = self.plot_checkbox.isChecked()
+            if plot_enabled and self.plot_target_combo.count() > 0:
+                target_plot_id = self.plot_target_combo.currentData()
+
+        return {
+            "id": self.container_id,
+            "name": self.name_edit.text(),
+            "type": self.type_combo.currentText(),
+            "plot_enabled": plot_enabled,
+            "plot_target_id": target_plot_id
+        }
+
 class SendDataContainerWidget(QWidget):
     def __init__(self, container_id: int, parent: Optional[QWidget] = None):
         super().__init__(parent)
@@ -202,6 +218,14 @@ class SendDataContainerWidget(QWidget):
         except Exception as e:
             QMessageBox.warning(self, "转换错误", f"转换 '{value_str}' 到 {data_type} 失败: {e}")
             return None
+
+    def get_config(self) -> Dict[str, Any]:
+        return {
+            "id": self.container_id,
+            "name": self.name_edit.text(),
+            "type": self.type_combo.currentText(),
+            "value": self.value_edit.text()
+        }
 
 class PlotWidgetContainer(QWidget):
     """一个封装了 PlotWidget 及其控制逻辑的 QWidget。"""
@@ -289,3 +313,9 @@ class PlotWidgetContainer(QWidget):
                 del self.data_lists[recv_container_id]
             # Rebuild legend? Or it updates automatically? pyqtgraph legend usually needs to be cleared and re-added or items removed individually.
             # For simplicity, removing item should update legend if 'name' was set.
+
+    def get_config(self) -> Dict[str, Any]:
+        return {
+            "id": self.plot_id,
+            "name": self.plot_name,
+        }

@@ -69,7 +69,7 @@ class SerialDebugger(QMainWindow):
         self.theme_manager = ThemeManager(self.app_instance, error_logger=self.error_logger)
         self.data_recorder = DataRecorder(error_logger=self.error_logger)
         self.protocol_analyzer = ProtocolAnalyzer(error_logger=self.error_logger)
-        self.serial_manager = SerialManager(error_logger=self.error_logger)
+        self.serial_manager = SerialManager(error_logger=self.error_logger,use_pyserial=True)
         self.frame_parser = FrameParser(error_logger=self.error_logger)
 
         self.current_serial_config = SerialPortConfig()

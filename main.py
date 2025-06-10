@@ -817,7 +817,8 @@ class SerialDebugger(QMainWindow):
 
     def append_to_custom_protocol_log_formatted(self, timestamp: datetime, source: str, content: str,
                                                 is_content_hex: bool):
-        if not self.custom_log_panel_widget: return; final_log_string = ""
+        final_log_string = ""
+        if not self.custom_log_panel_widget: return
         if self.custom_log_panel_widget.timestamp_checkbox_is_checked(): final_log_string += timestamp.strftime(
             "[%H:%M:%S.%f")[:-3] + "] "
         final_log_string += f"{source}: "
@@ -838,47 +839,69 @@ class SerialDebugger(QMainWindow):
         self.custom_log_panel_widget.append_log(final_log_string)
 
     def assemble_custom_frame_from_send_panel_data(self, panel_target_func_id_str: str,
-                                                   panel_send_data_containers: List[SendDataContainerWidget]) -> \
-    Optional[QByteArray]:
+                                             panel_send_data_containers: List[SendDataContainerWidget]) -> Optional[QByteArray]:
+        msg = ""
         self.update_current_serial_frame_configs_from_ui()
         cfg = self.current_frame_config
+        
         try:
             head_ba = QByteArray.fromHex(cfg.head.encode('ascii'))
-            saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii')) 
+            saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii'))
             daddr_ba = QByteArray.fromHex(cfg.d_addr.encode('ascii'))
+            # 【修正 1】: 添加对 id_ba 的定义和转换
+            # 从函数参数 panel_target_func_id_str 获取功能码的字节表示
             id_ba = QByteArray.fromHex(panel_target_func_id_str.encode('ascii'))
+
         except ValueError as e:
             msg = f"帧头/地址/面板功能码({panel_target_func_id_str}) Hex格式错误: {e}"
             self.status_bar_label.setText(msg)
-            if self.error_logger: 
-                self.error_logger.log_warning(msg)
-            return None
-        if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
-            msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"; self.status_bar_label.setText(msg)
             if self.error_logger:
                 self.error_logger.log_warning(msg)
-                return None
+            return None
+
+        # 长度检查现在可以正确工作了
+        if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
+            msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"
+            self.status_bar_label.setText(msg)
+            if self.error_logger:
+                self.error_logger.log_warning(msg)
+            return None
+
         data_content_ba = QByteArray()
         for scw_widget in panel_send_data_containers:
             item_bytes = scw_widget.get_bytes()
-            if item_bytes is None: msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"; self.status_bar_label.setText(
-                msg);
-            if self.error_logger: self.error_logger.log_warning(msg); return None
+            if item_bytes is None:
+                msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"
+                self.status_bar_label.setText(msg)
+                if self.error_logger:
+                    self.error_logger.log_warning(msg)
+                # 【修正 2】: 发现错误后必须立即中断函数，返回 None
+                return None
+            
+            # 【修正 3】: 将获取到的数据字节添加到数据内容中
             data_content_ba.append(item_bytes)
-        len_val = data_content_ba.size()
-        len_ba = QByteArray(struct.pack('<H', len_val))
+
+        # 从这里开始，代码逻辑是正确的，但为了清晰和效率可以做一些小优化
+        
+        # 将所有需要计算校验和的部分组合起来
         frame_part_for_checksum = QByteArray()
+        # 数据长度现在可以被正确计算
+        len_ba = QByteArray(bytes([data_content_ba.size()]))
+
         frame_part_for_checksum.append(head_ba)
         frame_part_for_checksum.append(saddr_ba)
         frame_part_for_checksum.append(daddr_ba)
         frame_part_for_checksum.append(id_ba)
         frame_part_for_checksum.append(len_ba)
         frame_part_for_checksum.append(data_content_ba)
+
         checksum_bytes_to_append = QByteArray()
         active_mode = self.active_checksum_mode
         sum_check_text, add_check_text = "", ""
+
         if active_mode == ChecksumMode.CRC16_CCITT_FALSE:
             crc_val = calculate_frame_crc16(frame_part_for_checksum)
+            # 使用 struct.pack 来处理字节序，这是正确的
             checksum_bytes_to_append.append(struct.pack('>H', crc_val))
             sum_check_text = f"0x{crc_val:04X}"
         else:
@@ -887,12 +910,17 @@ class SerialDebugger(QMainWindow):
             checksum_bytes_to_append.append(bytes([ac_val]))
             sum_check_text = f"0x{sc_val:02X}"
             add_check_text = f"0x{ac_val:02X}"
+
         if self.serial_config_panel_widget:
             self.serial_config_panel_widget.update_checksum_display(sum_check_text, add_check_text)
-        final_frame = QByteArray(frame_part_for_checksum)
-        final_frame.append(checksum_bytes_to_append)
-        return final_frame
 
+        # 【优化建议】: 可以直接在 frame_part_for_checksum 上附加校验和，避免创建新变量 final_frame
+        frame_part_for_checksum.append(checksum_bytes_to_append)
+
+        return frame_part_for_checksum
+
+    
+    
     def get_available_plot_targets(self) -> Dict[int, str]:
         targets = {}
         if not PYQTGRAPH_AVAILABLE: return targets

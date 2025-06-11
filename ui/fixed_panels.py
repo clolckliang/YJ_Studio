@@ -1,8 +1,8 @@
 import re
 from typing import Optional, Dict, TYPE_CHECKING  # Added Set
 
-from PySide6.QtCore import Slot, Qt, Signal
-from PySide6.QtGui import QTextCursor, QIntValidator, QFont
+from PySide6.QtCore import Slot, Qt, Signal, QRegularExpression
+from PySide6.QtGui import QTextCursor, QIntValidator, QFont, QRegularExpressionValidator
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout,
     QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QTextEdit,
@@ -93,6 +93,9 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         frame_def_layout = QGridLayout()
         frame_def_layout.addWidget(QLabel("帧头(H)[Hex,1B]:"), 0, 0)
         self.head_edit.setPlaceholderText("AA")
+        # 添加Hex输入验证器，只允许1字节（2个Hex字符）
+        hex_validator = QRegularExpressionValidator(QRegularExpression("[0-9a-fA-F]{1,2}"), self)
+        self.head_edit.setValidator(hex_validator)
         self.head_edit.editingFinished.connect(self._emit_config_changed)
         frame_def_layout.addWidget(self.head_edit, 0, 1)
         frame_def_layout.addWidget(QLabel("源地址(S)[Hex,1B]:"), 1, 0)
@@ -203,7 +206,18 @@ class SerialConfigDefinitionPanelWidget(QWidget):  # Full implementation
         return SerialPortConfig(port_name, baud_rate, data_bits, parity, stop_bits)
 
     def get_frame_config_from_ui(self) -> FrameConfig:
-        return FrameConfig(head=self.head_edit.text().strip(), s_addr=self.saddr_edit.text().strip(),
+        raw_head = self.head_edit.text().strip().upper()
+        # 确保帧头是长度为2的Hex字符串
+        processed_head = ""
+        if len(raw_head) == 2 and re.match(r'^[0-9A-F]{2}$', raw_head):
+            processed_head = raw_head
+        elif len(raw_head) == 1 and re.match(r'^[0-9A-F]{1}$', raw_head):
+             processed_head = '0' + raw_head # 补齐一个字符的情况
+        else:
+             # 如果不符合预期，使用默认值或空字符串，取决于FrameConfig的默认行为
+             processed_head = Constants.DEFAULT_FRAME_HEAD # 或者 ""
+
+        return FrameConfig(head=processed_head, s_addr=self.saddr_edit.text().strip(),
                            d_addr=self.daddr_edit.text().strip(), func_id=self.id_edit.text().strip())
 
     def get_checksum_mode_from_ui(self) -> ChecksumMode:

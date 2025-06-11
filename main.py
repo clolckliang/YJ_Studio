@@ -347,6 +347,13 @@ class SerialDebugger(QMainWindow):
 
         self.error_logger.log_info("[CONFIG] 配置已加载并应用到UI。")
         self.update_all_parse_panels_plot_targets()
+        
+        # 确保所有数据解析面板功能码为F1，覆盖掉可能的旧配置
+        for panel_id, panel_instance in self.dynamic_panel_instances.items():
+            if isinstance(panel_instance, AdaptedParsePanelWidget):
+                # 即使配置中加载了其他功能码，这里也强制设置为F1
+                panel_instance.set_target_func_id("F1")
+                self.error_logger.log_info(f"Parse Panel {panel_id} 功能码已强制设置为 F1")
 
     def _gather_current_configuration(self) -> Dict[str, Any]:
         self.update_current_serial_frame_configs_from_ui()
@@ -758,16 +765,37 @@ class SerialDebugger(QMainWindow):
                                                      f"FID:{func_id_hex} Payload:{hex_payload_str}", True)
         msg = f"成功解析帧: #{self._parsed_frame_count}, FID: {func_id_hex.upper()}"
         self.status_bar_label.setText(msg)
-        if self.error_logger: self.error_logger.log_info(f"{msg} Payload len: {data_payload_ba.size()}")
-        if hasattr(self, 'protocol_analyzer'): self.protocol_analyzer.analyze_frame(data_payload_ba, 'rx')
+        if self.error_logger:
+            self.error_logger.log_info(f"{msg} Payload len: {data_payload_ba.size()}")
+        if hasattr(self, 'protocol_analyzer'):
+            self.protocol_analyzer.analyze_frame(data_payload_ba, 'rx')
         dispatched_to_a_panel = False
+        if self.error_logger:
+            self.error_logger.log_info(f"尝试将帧分发到匹配功能码的解析面板，功能码: {func_id_hex.upper()}")
         for panel_instance in self.dynamic_panel_instances.values():
+            if self.error_logger:
+                 self.error_logger.log_info(f"检查动态面板 ID {panel_instance.panel_id}, 类型: {type(panel_instance).__name__}")
             if isinstance(panel_instance, AdaptedParsePanelWidget):
-                if func_id_hex.upper() == panel_instance.get_target_func_id().upper(): panel_instance.dispatch_data(
-                    data_payload_ba); dispatched_to_a_panel = True
-        if not dispatched_to_a_panel and self.error_logger: self.error_logger.log_debug(
-            f"[FRAME_PARSER] Frame FID {func_id_hex} no target parse panel.")
-        if hasattr(self, 'data_processor'): self.data_processor.add_data(func_id_hex, QByteArray(data_payload_ba))
+                panel_func_id = panel_instance.get_target_func_id().strip().upper()
+                if not panel_func_id:
+                    if self.error_logger:
+                        self.error_logger.log_warning(f"Parse Panel {panel_instance.panel_id} has no function ID set!")
+                    continue
+                if self.error_logger:
+                    self.error_logger.log_info(f"检查面板 {panel_instance.panel_id} 的功能码: {panel_func_id}")
+                # 这里改为包含匹配，防止大小写或前导0不一致情况
+                if func_id_hex.upper().lstrip('0') == panel_func_id.lstrip('0'):
+                    if self.error_logger:
+                        self.error_logger.log_info(f"匹配成功，向面板 {panel_instance.panel_id} 发送数据")
+                    panel_instance.dispatch_data(data_payload_ba)
+                    dispatched_to_a_panel = True
+        if not dispatched_to_a_panel and self.error_logger:
+            self.error_logger.log_warning(
+                f"[FRAME_PARSER] Frame FID {func_id_hex} has no matching parse panel. "
+                f"Available panels: {[p.get_target_func_id() for p in self.dynamic_panel_instances.values() if isinstance(p, AdaptedParsePanelWidget)]}"
+            )
+        if hasattr(self, 'data_processor'):
+            self.data_processor.add_data(func_id_hex, QByteArray(data_payload_ba))
 
     @Slot(str, QByteArray)
     def on_frame_checksum_error(self, error_message: str, faulty_frame: QByteArray):
@@ -848,7 +876,6 @@ class SerialDebugger(QMainWindow):
             head_ba = QByteArray.fromHex(cfg.head.encode('ascii'))
             saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii'))
             daddr_ba = QByteArray.fromHex(cfg.d_addr.encode('ascii'))
-            # 【修正 1】: 添加对 id_ba 的定义和转换
             # 从函数参数 panel_target_func_id_str 获取功能码的字节表示
             id_ba = QByteArray.fromHex(panel_target_func_id_str.encode('ascii'))
 
@@ -859,7 +886,7 @@ class SerialDebugger(QMainWindow):
                 self.error_logger.log_warning(msg)
             return None
 
-        # 长度检查现在可以正确工作了
+        # 长度检查
         if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
             msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"
             self.status_bar_label.setText(msg)
@@ -875,49 +902,36 @@ class SerialDebugger(QMainWindow):
                 self.status_bar_label.setText(msg)
                 if self.error_logger:
                     self.error_logger.log_warning(msg)
-                # 【修正 2】: 发现错误后必须立即中断函数，返回 None
                 return None
-            
-            # 【修正 3】: 将获取到的数据字节添加到数据内容中
             data_content_ba.append(item_bytes)
 
-        # 从这里开始，代码逻辑是正确的，但为了清晰和效率可以做一些小优化
-        
-        # 将所有需要计算校验和的部分组合起来
-        frame_part_for_checksum = QByteArray()
-        # 数据长度现在可以被正确计算
-        len_ba = QByteArray(bytes([data_content_ba.size()]))
+        # 组装帧
+        frame = QByteArray()
+        frame.append(head_ba)
+        frame.append(saddr_ba)
+        frame.append(daddr_ba)
+        frame.append(id_ba)
+        # 长度字段 (2字节，小端序)
+        frame.append(struct.pack('<H', data_content_ba.size()))
+        frame.append(data_content_ba)
 
-        frame_part_for_checksum.append(head_ba)
-        frame_part_for_checksum.append(saddr_ba)
-        frame_part_for_checksum.append(daddr_ba)
-        frame_part_for_checksum.append(id_ba)
-        frame_part_for_checksum.append(len_ba)
-        frame_part_for_checksum.append(data_content_ba)
-
-        checksum_bytes_to_append = QByteArray()
-        active_mode = self.active_checksum_mode
-        sum_check_text, add_check_text = "", ""
-
-        if active_mode == ChecksumMode.CRC16_CCITT_FALSE:
-            crc_val = calculate_frame_crc16(frame_part_for_checksum)
-            # 使用 struct.pack 来处理字节序，这是正确的
-            checksum_bytes_to_append.append(struct.pack('>H', crc_val))
+        # 计算校验和
+        if self.active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
+            crc_val = calculate_frame_crc16(frame)
+            frame.append(struct.pack('>H', crc_val))
             sum_check_text = f"0x{crc_val:04X}"
+            add_check_text = ""
         else:
-            sc_val, ac_val = calculate_original_checksums_python(frame_part_for_checksum)
-            checksum_bytes_to_append.append(bytes([sc_val]))
-            checksum_bytes_to_append.append(bytes([ac_val]))
+            sc_val, ac_val = calculate_original_checksums_python(frame)
+            frame.append(bytes([sc_val]))
+            frame.append(bytes([ac_val]))
             sum_check_text = f"0x{sc_val:02X}"
             add_check_text = f"0x{ac_val:02X}"
 
         if self.serial_config_panel_widget:
             self.serial_config_panel_widget.update_checksum_display(sum_check_text, add_check_text)
 
-        # 【优化建议】: 可以直接在 frame_part_for_checksum 上附加校验和，避免创建新变量 final_frame
-        frame_part_for_checksum.append(checksum_bytes_to_append)
-
-        return frame_part_for_checksum
+        return frame
 
     
     

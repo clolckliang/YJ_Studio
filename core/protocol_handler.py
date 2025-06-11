@@ -150,86 +150,81 @@ class FrameParser(QObject):
     def try_parse_frames(self, current_frame_config: FrameConfig,
                          parse_target_func_id_hex: str,  # Kept as per your FrameParser
                          active_checksum_mode: ChecksumMode):
-        try:
-            head_byte_int = int(current_frame_config.head, 16)
-        except ValueError:
+        frame_head_byte = bytes.fromhex(current_frame_config.head)  # 'AB' -> b'\xab'
+        frame_head_len = len(frame_head_byte)  # 现在 frame_head_len = 1
+
+        # 检查帧头配置是否为空或长度不为1
+        if not frame_head_byte or frame_head_len != 1:
             if self.error_logger:
-                self.error_logger.log_error(f"帧头配置无效 '{current_frame_config.head}'，无法解析。", "FRAME_PARSE")
-            self.frame_parse_error.emit(f"帧头配置无效 '{current_frame_config.head}'",
-                                        self.buffer.peek(self.buffer.get_count()))
+                self.error_logger.log_error(f"帧头配置无效或长度不为1 ({frame_head_len})，无法解析。", "FRAME_PARSE")
+            self.frame_parse_error.emit("帧头配置无效", self.buffer.peek(self.buffer.get_count()))
             return
 
-        while True:  # Loop to parse all possible frames in buffer
-            if self.buffer.get_count() < Constants.MIN_HEADER_LEN_FOR_DATA_LEN:
-                break  # Not enough data for even the smallest header to read data_len
+        head_byte_value = frame_head_byte[0] # 获取帧头字节的整数值
 
-            # 1. Find Frame Head
-            head_found_at_index = -1
-            # Peek a reasonable amount or the whole buffer if small. Peeking all can be inefficient if buffer is huge.
-            # Let's peek up to a certain limit or current count, whichever is smaller.
-            peek_len = min(self.buffer.get_count(), 2048)  # Peek up to 2KB to find head
-            peeked_data = self.buffer.peek(peek_len)
+        MAX_ATTEMPTS = 1000
+        for _ in range(MAX_ATTEMPTS):
+            # 需要至少有帧头长度 (1) 的数据才能尝试匹配帧头
+            if self.buffer.get_count() < 1:
+                break  # Not enough data for frame head
 
-            for i in range(peeked_data.size()):
-                if peeked_data.data()[i] == head_byte_int:
-                    head_found_at_index = i
-                    break
+            # 1. Find Frame Head (single byte)
+            # Peek one byte to check if it matches the frame head
+            first_byte_ba = self.buffer.peek(1)
+            first_byte = first_byte_ba.data() if hasattr(first_byte_ba, 'data') else bytes(first_byte_ba)
 
-            if head_found_at_index == -1:
-                # No head found in the peeked data.
-                # If buffer is very large and no head, we might want to discard some.
-                # Your original logic had a threshold. Let's adapt that.
-                if self.buffer.get_count() > 4096:  # Configurable threshold
-                    discard_amount = self.buffer.get_count() - 2048  # Keep last 2KB
-                    self.buffer.discard(discard_amount)
-                    if self.error_logger:
-                        self.error_logger.log_warning(
-                            f"接收缓冲区 ({self.buffer.get_count()}) 过大且未找到帧头，已丢弃 {discard_amount} 字节。")
-                break  # Exit parsing loop, wait for more data
+            if len(first_byte) < 1 or first_byte[0] != head_byte_value:
+                # If the first byte is not the frame head, discard it and continue searching
+                self.buffer.discard(1)
+                if self.error_logger and len(first_byte) > 0:
+                     self.error_logger.log_debug(f"FrameParser: Discarded byte 0x{first_byte[0]:02X}, not frame head 0x{head_byte_value:02X}.")
+                elif self.error_logger:
+                     self.error_logger.log_debug("FrameParser: Buffer empty or peek failed while looking for head.")
+                continue # Continue the while loop to check the next byte
 
-            if head_found_at_index > 0:
-                # Discard data before the found frame head
-                self.buffer.discard(head_found_at_index)
+            # At this point, the first byte in the buffer is the frame head.
+            # Ensure we have enough data for the minimal header (head + s_addr + d_addr + func_id + len)
+            # The minimal header length is Constants.MIN_HEADER_LEN_FOR_DATA_LEN (6 bytes: HEAD(1) + S_ADDR(1) + D_ADDR(1) + FUNC_ID(1) + LEN(2))
+            min_header_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN
+
+            if self.buffer.get_count() < min_header_len:
                 if self.error_logger:
-                    self.error_logger.log_debug(
-                        f"FrameParser: Discarded {head_found_at_index} bytes before frame head.")
-                # After discarding, re-check if enough data for header
-                if self.buffer.get_count() < Constants.MIN_HEADER_LEN_FOR_DATA_LEN:
-                    break
-
-                    # At this point, the head of the frame should be at self.buffer.tail
-            # Re-peek for consistent processing from the start of the (potential) frame
-            if self.buffer.get_count() < Constants.MIN_HEADER_LEN_FOR_DATA_LEN:  # Should be redundant but safe
+                    self.error_logger.log_debug(f"FrameParser: 数据不足以构成最小头部。当前: {self.buffer.get_count()}, 需要: {min_header_len}")
                 break
 
-            header_peek = self.buffer.peek(Constants.MIN_HEADER_LEN_FOR_DATA_LEN)
+            # Peek the minimal header to get the length field
+            header_peek = self.buffer.peek(min_header_len)
 
-            # 2. Extract data length
+            # 2. Extract data length using the correct offset (Constants.OFFSET_LEN = 4 relative to the start of the frame)
+            len_field_offset = Constants.OFFSET_LEN # Should be 4
+
             try:
-                # Assuming OFFSET_LEN_LOW is the start of the 2-byte length field from the beginning of the frame
-                len_bytes = header_peek.mid(Constants.OFFSET_LEN_LOW, 2)
-                if len_bytes.size() < 2:  # Should not happen due to MIN_HEADER_LEN_FOR_DATA_LEN check
-                    if self.error_logger: self.error_logger.log_debug("FrameParser: Incomplete length field.")
-                    break
-                data_len = struct.unpack('<H', len_bytes.data())[0]  # Little Endian
+                # 从 len_field_offset 位置读取2字节长度字段
+                len_bytes = header_peek[len_field_offset:len_field_offset + 2]
+                if len(len_bytes) < 2:  # This check should ideally be covered by the min_header_len check
+                     if self.error_logger: self.error_logger.log_debug("FrameParser: 长度字段不完整")
+                     break # Should not happen if previous check passed
+
+                data_len = struct.unpack('<H', len_bytes)[0]  # 小端序 (协议要求)
             except struct.error as e:
                 if self.error_logger:
                     self.error_logger.log_error(f"FrameParser: 解析数据长度字段时出错: {e}", "FRAME_PARSE")
                 self.frame_parse_error.emit("长度字段解析错误", header_peek)
-                self.buffer.discard(1)  # Skip one byte (the assumed head) and retry
-                continue  # Try parsing from the next byte
+                self.buffer.discard(1)  # Discard the frame head byte and continue searching
+                continue
 
-            # 3. Calculate expected total frame length and check if buffer has it
-            expected_total_frame_len = Constants.OFFSET_DATA_START + data_len + Constants.CHECKSUM_FIELD_LENGTH
+            # 3. 计算完整帧长度并检查缓冲区数据是否足够
+            # 帧总长度 = 最小头部长度 + 数据长度 + 校验和(2字节)
+            expected_total_frame_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN + data_len + Constants.CHECKSUM_FIELD_LENGTH
 
             if self.buffer.get_count() < expected_total_frame_len:
-                # Not enough data for the complete frame yet
+                # 数据不足以构成完整帧
                 if self.error_logger:
                     self.error_logger.log_debug(
-                        f"FrameParser: Incomplete frame. Have: {self.buffer.get_count()}, Need: {expected_total_frame_len}")
+                        f"FrameParser: 帧不完整。当前: {self.buffer.get_count()}, 需要: {expected_total_frame_len}")
                 break
 
-                # 4. Full frame is potentially available, peek it
+            # 4. 获取完整帧数据
             current_frame_ba = self.buffer.peek(expected_total_frame_len)
             frame_part_for_calc = current_frame_ba.left(expected_total_frame_len - Constants.CHECKSUM_FIELD_LENGTH)
             received_checksum_ba = current_frame_ba.mid(expected_total_frame_len - Constants.CHECKSUM_FIELD_LENGTH,
@@ -240,17 +235,18 @@ class FrameParser(QObject):
 
             if active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
                 if received_checksum_ba.size() == 2:
-                    received_crc_val = struct.unpack('>H', received_checksum_ba.data())[
-                        0]  # Assuming Big-Endian for CRC in frame
+                    # CRC-16/CCITT-FALSE typically uses Big-Endian in frame, but check protocol spec
+                    # Your original code assumed Big-Endian (>H), let's keep that for now.
+                    received_crc_val = struct.unpack('>H', received_checksum_ba.data())[0]
                     calculated_crc_val = calculate_frame_crc16(frame_part_for_calc)
                     if received_crc_val == calculated_crc_val:
                         is_valid = True
                     else:
                         error_msg = f"CRC校验失败! Recv:0x{received_crc_val:04X}, Calc:0x{calculated_crc_val:04X}"
                 else:
-                    error_msg = f"CRC校验错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)"
-            else:  # ORIGINAL_SUM_ADD
-                if received_checksum_ba.size() == 2:  # Assuming 2 bytes for SC+AC
+                    error_msg = f"CRC校验错误: 校验和长度不足 (需要 2 字节)" # CRC is 2 bytes
+            else:  # ORIGINAL_SUM_ADD (as per the image, SUM CHECK and ADD CHECK are 1 byte each)
+                if received_checksum_ba.size() == Constants.CHECKSUM_FIELD_LENGTH: # Should be 2 bytes for SC+AC
                     received_sc_val = received_checksum_ba.data()[0]
                     received_ac_val = received_checksum_ba.data()[1]
                     calculated_sc, calculated_ac = calculate_original_checksums_python(frame_part_for_calc)
@@ -260,16 +256,25 @@ class FrameParser(QObject):
                         error_msg = (f"原始校验失败! RecvSC:0x{received_sc_val:02X},CalcSC:0x{calculated_sc:02X}; "
                                      f"RecvAC:0x{received_ac_val:02X},CalcAC:0x{calculated_ac:02X}")
                 else:
-                    error_msg = f"原始校验和错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)"
+                    error_msg = f"原始校验和错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)" # SC+AC is 2 bytes
 
             if is_valid:
                 self._parsed_frame_count += 1
-                # FuncID is at OFFSET_FUNC_ID from the start of the frame
-                func_id_recv_ba = frame_part_for_calc.mid(Constants.OFFSET_FUNC_ID, 1)
-                # Data content starts at OFFSET_DATA_START and has length data_len
-                data_content_recv_ba = frame_part_for_calc.mid(Constants.OFFSET_DATA_START, data_len)
+                # 功能码位置：Constants.OFFSET_FUNC_ID (5)
+                func_id_offset = Constants.OFFSET_FUNC_ID
+                func_id_recv_ba = frame_part_for_calc.mid(func_id_offset, 1)
 
+                # 数据段位置：Constants.OFFSET_DATA_START (6)
+                data_content_offset = Constants.OFFSET_DATA_START
+                data_content_recv_ba = frame_part_for_calc.mid(data_content_offset, data_len)
+
+                # 将功能码字节数组转换为十六进制字符串（大写）
                 func_id_hex_str = func_id_recv_ba.toHex().data().decode('ascii').upper()
+
+                # 调试日志：记录解析结果
+                if self.error_logger:
+                    hex_frame = current_frame_ba.toHex(' ').data().decode()
+                    self.error_logger.log_info(f"FrameParser: 成功解析帧! FID={func_id_hex_str}, 长度={data_len}, 数据={data_content_recv_ba.toHex(' ').data().decode()}, 完整帧: {hex_frame}")
 
                 # Filter by target FuncID if provided (as per your original FrameParser logic)
                 try:
@@ -290,7 +295,9 @@ class FrameParser(QObject):
             else:
                 self.checksum_error.emit(error_msg, current_frame_ba)  # Emit with specific error message
                 if self.error_logger:
+                    hex_frame = current_frame_ba.toHex(' ').data().decode()
                     self.error_logger.log_warning(
-                        f"FrameParser: {error_msg} Frame: {current_frame_ba.toHex(' ').data().decode()}")
-                self.buffer.discard(1)  # Skip the assumed faulty head byte and retry
+                        f"FrameParser: {error_msg} Frame: {hex_frame}")
+                # Discard the frame head byte and continue searching
+                self.buffer.discard(1)
         # End of while loop

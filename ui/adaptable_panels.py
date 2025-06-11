@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, Dict, List, Any, TYPE_CHECKING  # Added Set
 from PySide6.QtCore import Slot, QByteArray, Qt
+import struct
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout,
     QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QMessageBox, QGroupBox, QScrollArea,
@@ -18,6 +19,7 @@ from ui.widgets import ReceiveDataContainerWidget, SendDataContainerWidget
 from core.protocol_handler import get_data_type_byte_length
 # Updated Plugin Architecture Imports
 from core.panel_interface import PanelInterface
+from utils.constants import Constants  # <-- Add this import for Constants
 if TYPE_CHECKING:
     from main import SerialDebugger  # Forward reference for type hinting
 # Core imports from your project structure
@@ -77,6 +79,11 @@ class AdaptedParsePanelWidget(PanelInterface):
         layout.addWidget(self.recv_display_group)
         self.setLayout(layout)
         self._update_panel_title_from_parse_id()  # Call after all UI elements are created
+        
+    def set_target_func_id(self, func_id: str):
+        """设置目标功能码并更新UI"""
+        self.parse_id_edit.setText(func_id)
+        self._update_panel_title_from_parse_id()
 
     def _update_panel_title_from_parse_id(self):
         func_id_str = self.get_target_func_id().upper() if hasattr(self,
@@ -88,10 +95,14 @@ class AdaptedParsePanelWidget(PanelInterface):
 
     @Slot()
     def _add_container_action_triggered(self):
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: Add container action triggered")
         self.add_receive_data_container()
 
     @Slot()
     def _remove_container_action_triggered(self):
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: Remove container action triggered")
         self.remove_receive_data_container()
 
     def add_receive_data_container(self, config: Optional[Dict[str, Any]] = None, silent: bool = False) -> None:
@@ -150,38 +161,142 @@ class AdaptedParsePanelWidget(PanelInterface):
         return ""
 
     def dispatch_data(self, data_payload_ba: QByteArray) -> None:
-        if not self.receive_data_containers: return
+        """
+        处理接收到的数据负载
+        :param data_payload_ba: 数据负载(QByteArray)
+        """
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: dispatch_data called with {data_payload_ba.size()} bytes (payload)")
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: Raw payload data: {data_payload_ba.toHex(' ').data().decode().upper()}")
+
+        if not self.receive_data_containers:
+            if self.error_logger:
+                self.error_logger.log_debug(f"Parse Panel {self.panel_id}: 没有接收容器")
+            return
+
+        # 调试：记录容器数量
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: 容器数量={len(self.receive_data_containers)}")
+
+            # 调试：检查每个容器的名称
+            for i, container in enumerate(self.receive_data_containers):
+                name = container.name_edit.text() if hasattr(container, 'name_edit') else "未命名"
+                self.error_logger.log_info(f"容器 #{i+1} 名称: {name}")
+
+        # 处理数据分发
         current_offset = 0
         parsed_data_for_log_export: Dict[str, str] = {}
         timestamp_now = datetime.now()
-        if self.data_mapping_combo.currentText() == "顺序填充 (Sequential)":
+
+        # 调试日志：记录接收到的数据长度
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: 开始数据分发，数据负载长度={data_payload_ba.size()}字节")
+
+            # 顺序填充模式分发数据
+            if self.error_logger:
+                self.error_logger.log_info(f"Parse Panel {self.panel_id}: 数据负载长度={data_payload_ba.size()}字节")
+
+            # 计算所需总字节数
+            total_bytes_required = 0
+            for container_widget in self.receive_data_containers:
+                config = container_widget.get_config()
+                data_type = config["type"]
+                byte_len = get_data_type_byte_length(data_type)
+                if byte_len > 0:  # 固定长度类型
+                    total_bytes_required += byte_len
+
+            # 检查数据是否足够
+            if total_bytes_required > data_payload_ba.size():
+                if self.error_logger:
+                    self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 数据不足! 需要 {total_bytes_required} 字节, 但只有 {data_payload_ba.size()} 字节")
+
             for container_widget in self.receive_data_containers:
                 config = container_widget.get_config()
                 data_type = config["type"]
                 byte_len = get_data_type_byte_length(data_type)
                 segment = QByteArray()
+                
+                # 处理变长数据类型
                 if byte_len == -1:
-                    if current_offset < data_payload_ba.size(): segment = data_payload_ba.mid(
-                        current_offset); current_offset = data_payload_ba.size()
+                    # 获取剩余所有数据
+                    if current_offset < data_payload_ba.size():
+                        segment = data_payload_ba.mid(current_offset)
+                        current_offset = data_payload_ba.size()
+                    else:
+                        segment = QByteArray()  # 无剩余数据
+                # 处理固定长度数据类型
                 elif byte_len > 0:
-                    if current_offset + byte_len <= data_payload_ba.size(): segment = data_payload_ba.mid(
-                        current_offset, byte_len); current_offset += byte_len
+                    # 检查是否有足够的字节
+                    if current_offset + byte_len <= data_payload_ba.size():
+                        segment = data_payload_ba.mid(current_offset, byte_len)
+                        current_offset += byte_len
+                    else:
+                        segment = QByteArray()  # 数据不足
+
+                if self.error_logger:
+                    # 记录分配的字节数据
+                    hex_data = segment.toHex(' ').data().decode('ascii').upper() if not segment.isEmpty() else "<空>"
+                    self.error_logger.log_info(f"Parse Panel {self.panel_id}: 分配容器 '{config['name']}' (类型={data_type}, 长度={segment.size()}字节, 数据={hex_data})")
+                
+                # 更新容器值
                 container_widget.set_value(segment, data_type)
+                
+                # 记录更新后的值
+                if self.error_logger:
+                    self.error_logger.log_info(f"Parse Panel {self.panel_id}: 容器 '{config['name']}' 新值: {container_widget.value_edit.text()}")
+                
+                # 检查容器是否报告错误
+                container_text = container_widget.value_edit.text()
+                if "长度不足" in container_text or "解析错误" in container_text:
+                    if self.error_logger:
+                        self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 容器 '{config['name']}' 报告错误: {container_text}")
+                    # 尝试使用原始数据负载作为十六进制字符串显示
+                    if data_type == "Hex (raw)" or data_type == "Hex String":
+                        hex_value = segment.toHex(' ').data().decode('ascii').upper()
+                        container_widget.value_edit.setText(hex_value)
+                        if self.error_logger:
+                            self.error_logger.log_info(f"Parse Panel {self.panel_id}: 容器 '{config['name']}' 显示原始十六进制数据: {hex_value}")
+                    # 尝试自动切换为uint16_t类型解析2字节数据
+                    elif segment.size() == 2:
+                        if self.error_logger:
+                            self.error_logger.log_info(f"Parse Panel {self.panel_id}: 尝试自动切换为 uint16_t 类型解析容器 '{config['name']}'")
+                        try:
+                            # 转换为uint16_t类型
+                            value = struct.unpack('<H', segment.data())[0]
+                            container_widget.value_edit.setText(str(value))
+                            if self.error_logger:
+                                self.error_logger.log_info(f"Parse Panel {self.panel_id}: 容器 '{config['name']}' 解析成功 (uint16_t): {value}")
+                        except Exception as e:
+                            if self.error_logger:
+                                self.error_logger.log_error(f"Parse Panel {self.panel_id}: 自动切换类型失败: {str(e)}")
+            
+            # 调试日志：记录容器更新
+            if self.error_logger:
+                for container_widget in self.receive_data_containers:
+                    config = container_widget.get_config()
+                    self.error_logger.log_info(f"Parse Panel {self.panel_id}: 更新容器 '{config['name']}' (类型: {config['type']}, 值: {container_widget.value_edit.text()})")
+            
+            # 记录日志
+            parsed_data_for_log_export = {}
+            for container_widget in self.receive_data_containers:
+                config = container_widget.get_config()
                 log_key_name = f"P{self.panel_id}_{config['name']}"
                 parsed_data_for_log_export[log_key_name] = container_widget.value_edit.text()
-                if PYQTGRAPH_AVAILABLE and config.get("plot_enabled", False) and config.get(
-                        "plot_target_id") is not None:
+                
+                # 处理绘图逻辑
+                if PYQTGRAPH_AVAILABLE and config.get("plot_enabled", False) and config.get("plot_target_id") is not None:
                     target_plot_id = config["plot_target_id"]
                     if target_plot_id in self.main_window_ref.dynamic_panel_instances:
-                        plot_panel_candidate = self.main_window_ref.dynamic_panel_instances[target_plot_id]
-                        if isinstance(plot_panel_candidate,
-                                      AdaptedPlotWidgetPanel) and plot_panel_candidate.plot_widget_container:
+                        plot_panel = self.main_window_ref.dynamic_panel_instances[target_plot_id]
+                        if isinstance(plot_panel, AdaptedPlotWidgetPanel) and plot_panel.plot_widget_container:
                             val_float = container_widget.get_value_as_float()
-                            if val_float is not None: curve_name = f"P{self.panel_id}:{config['name']}"; plot_panel_candidate.update_data(
-                                config["id"], val_float, curve_name)
-        if parsed_data_for_log_export and hasattr(self.main_window_ref,
-                                                  'data_recorder'): self.main_window_ref.data_recorder.add_parsed_frame_data(
-            timestamp_now, parsed_data_for_log_export)
+                            if val_float is not None:
+                                curve_name = f"P{self.panel_id}:{config['name']}"
+                                plot_panel.update_data(config["id"], val_float, curve_name)
+        
+        # 记录解析后的数据
+        if parsed_data_for_log_export and hasattr(self.main_window_ref, 'data_recorder'):
+            self.main_window_ref.data_recorder.add_parsed_frame_data(timestamp_now, parsed_data_for_log_export)
 
     def get_config(self) -> Dict[str, Any]:
         return {"parse_func_id": self.parse_id_edit.text() if hasattr(self, 'parse_id_edit') else "",
@@ -422,7 +537,7 @@ if PYQTGRAPH_AVAILABLE and pg is not None:  # Full implementation
             self.data[container_id]['y'].append(value)
             x_val = len(self.data[container_id]['y'])
             self.data[container_id]['x'].append(x_val)
-            if len(self.data[container_id]['y']) > self.max_data_points: self.data[container_id]['y'].pop(0);
+            if len(self.data[container_id]['y']) > self.max_data_points: self.data[container_id]['y'].pop(0)
             self.data[container_id]['x'].pop(0)
             if container_id in self.curves: self.curves[container_id].setData(self.data[container_id]['x'],
                                                                               self.data[container_id]['y'])

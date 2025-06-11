@@ -54,15 +54,12 @@ class Constants:
         # The names here will be used to generate the menu items.
     ]
 
-    # Offsets for frame parsing (example, if frame structure is fixed)
-    # These might be better in protocol_handler.py if FrameConfig drives them
+    # 修正帧解析偏移量（基于实际协议结构）
     OFFSET_HEAD: int = 0
     OFFSET_SADDR: int = 1
     OFFSET_DADDR: int = 2
     OFFSET_FUNC_ID: int = 3
-    OFFSET_LEN_LOW: int = 4
-    OFFSET_LEN_HIGH: int = 5
-    OFFSET_DATA_START: int = 6 # Start of data payload
-    CHECKSUM_LENGTH: int = 2 # SumCheck + AddCheck
-    CRC_LENGTH: int = 2  # For CRC-16
-    MIN_HEADER_LEN_FOR_DATA_LEN: int = 6 # Head to Len field (inclusive)
+    OFFSET_LEN: int = 4  # 长度字段是2字节，统一处理
+    OFFSET_DATA_START: int = 6  # 数据段起始位置
+    CHECKSUM_LENGTH: int = 2  # 校验和长度固定为2字节
+    MIN_HEADER_LEN_FOR_DATA_LEN: int = 6  # 解析数据长度所需的最小头部长度

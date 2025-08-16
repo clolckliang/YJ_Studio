@@ -181,8 +181,9 @@ class ThemeManager(QObject):
         for name in self.themes.keys():
             all_themes[name] = "内置主题"
         # 添加预设主题
-        for name in self.preset_themes.keys():
-            all_themes[name] = "预设主题"
+        if hasattr(self, 'preset_themes') and self.preset_themes:
+            for name in self.preset_themes.keys():
+                all_themes[name] = "预设主题"
         # 添加用户自定义主题
         for name in self.user_themes.keys():
             all_themes[name] = "自定义主题"
@@ -190,7 +191,7 @@ class ThemeManager(QObject):
     
     def get_themes_by_category(self, category: str = None) -> List[str]:
         """根据分类获取主题列表"""
-        if category and hasattr(self, 'theme_categories') and category in self.theme_categories:
+        if category and hasattr(self, 'theme_categories') and self.theme_categories and category in self.theme_categories:
             return self.theme_categories[category]
         return list(self.get_all_themes().keys())
     
@@ -221,7 +222,7 @@ class ThemeManager(QObject):
     
     def _get_theme_category(self, theme_name: str) -> str:
         """获取主题所属分类"""
-        if hasattr(self, 'theme_categories'):
+        if hasattr(self, 'theme_categories') and self.theme_categories:
             for category, themes in self.theme_categories.items():
                 if theme_name in themes:
                     return category

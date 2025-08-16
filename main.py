@@ -36,6 +36,8 @@ from ui.fixed_panels import (
     BasicCommPanelWidget,
     ScriptingPanelWidget
 )
+from ui.enhanced_script_editor import EnhancedScriptingPanelWidget
+from ui.vscode_style_layout import VSCodeStyleLayout
 from ui.adaptable_panels import (
     AdaptedParsePanelWidget,
     AdaptedSendPanelWidget,
@@ -158,42 +160,35 @@ class SerialDebugger(QMainWindow):
             self.plugin_manager.register_panel_type(AdaptedPlotWidgetPanel, module_name='__main__')
 
     def _init_fixed_panels_ui(self):
+        # 创建各个面板组件（不再使用停靠窗口）
         self.serial_config_panel_widget = SerialConfigDefinitionPanelWidget(parent_main_window=self)
-        self.dw_serial_config = QDockWidget("串口与帧定义", self)
-        self.dw_serial_config.setObjectName("SerialConfigDock")
-        self.dw_serial_config.setWidget(self.serial_config_panel_widget)
-        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dw_serial_config)
         self.serial_config_panel_widget.connect_button_toggled.connect(self.toggle_connection_action_handler)
         self.serial_config_panel_widget.refresh_ports_requested.connect(self.populate_serial_ports_ui)
         self.serial_config_panel_widget.config_changed.connect(self.update_current_serial_frame_configs_from_ui)
 
         self.custom_log_panel_widget = CustomLogPanelWidget(main_window_ref=self)
-        self.dw_custom_log = QDockWidget("协议帧原始数据", self)
-        self.dw_custom_log.setObjectName("CustomProtocolLogDock")
-        self.dw_custom_log.setWidget(self.custom_log_panel_widget)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_custom_log)
-
         self.basic_comm_panel_widget = BasicCommPanelWidget(main_window_ref=self)
-        self.dw_basic_serial = QDockWidget("基本收发", self)
-        self.dw_basic_serial.setObjectName("BasicSerialDock")
-        self.dw_basic_serial.setWidget(self.basic_comm_panel_widget)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_basic_serial)
         self.basic_comm_panel_widget.send_basic_data_requested.connect(self.send_basic_serial_data_action)
 
-        try:
-            self.tabifyDockWidget(self.dw_custom_log, self.dw_basic_serial)
-        except AttributeError as e:
-            self.error_logger.log_warning(f"[UI_SETUP] 无法标签页化停靠窗口 (日志/基本): {e}")
-
-        self.scripting_panel_widget = ScriptingPanelWidget(main_window_ref=self)
-        self.dw_scripting_panel = QDockWidget("脚本引擎", self)
-        self.dw_scripting_panel.setObjectName("ScriptingPanelDock")
-        self.dw_scripting_panel.setWidget(self.scripting_panel_widget)
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dw_scripting_panel)
-        if self.scripting_panel_widget: self.scripting_panel_widget.execute_script_requested.connect(
-            self._handle_script_execution_request)
+        # 创建VS Code风格的主布局
+        self.vscode_layout = VSCodeStyleLayout(main_window=self)
+        self.setCentralWidget(self.vscode_layout)
+        
+        # 初始化底部面板
+        self.vscode_layout.init_bottom_panels()
+        
+        # 获取脚本编辑器引用
+        self.scripting_panel_widget = self.vscode_layout.get_script_editor()
+        if self.scripting_panel_widget:
+            self.scripting_panel_widget.execute_script_requested.connect(self._handle_script_execution_request)
 
         self.statusBar().addWidget(self.status_bar_label)
+        
+        # 保留停靠窗口引用以兼容现有代码
+        self.dw_serial_config = None
+        self.dw_custom_log = None
+        self.dw_basic_serial = None
+        self.dw_scripting_panel = None
 
     def create_menus(self) -> None:
         file_menu = self.menuBar().addMenu("文件(&F)")
@@ -216,10 +211,8 @@ class SerialDebugger(QMainWindow):
         file_menu.addAction(exit_action)
 
         self.view_menu = self.menuBar().addMenu("视图(&V)")
-        if self.dw_serial_config: self.view_menu.addAction(self.dw_serial_config.toggleViewAction())
-        if self.dw_custom_log: self.view_menu.addAction(self.dw_custom_log.toggleViewAction())
-        if self.dw_basic_serial: self.view_menu.addAction(self.dw_basic_serial.toggleViewAction())
-        if self.dw_scripting_panel: self.view_menu.addAction(self.dw_scripting_panel.toggleViewAction())
+        # VS Code风格布局不需要停靠窗口的切换动作
+        # 面板切换通过侧边栏活动按钮控制
         self.view_menu.addSeparator()
 
         theme_menu = self.view_menu.addMenu("背景样式")

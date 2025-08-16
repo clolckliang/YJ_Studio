@@ -42,6 +42,10 @@ from ui.adaptable_panels import (
     AdaptedPlotWidgetPanel
 )
 from ui.dialogs import PluginManagementDialog
+from ui.theme_editor_dialog import ThemeEditorDialog
+from ui.theme_quick_switcher import ThemeQuickSwitcher
+from ui.theme_import_export_dialog import ThemeImportExportDialog
+from ui.theme_backup_dialog import ThemeBackupDialog
 from core.serial_manager import SerialManager
 from core.protocol_handler import ProtocolAnalyzer, FrameParser, calculate_frame_crc16, \
     calculate_original_checksums_python
@@ -220,6 +224,20 @@ class SerialDebugger(QMainWindow):
             action = QAction(f"{theme_name.replace('_', ' ').capitalize()} 主题", self)
             action.triggered.connect(lambda checked=False, tn=theme_name: self.apply_theme_action(tn))
             theme_menu.addAction(action)
+        theme_menu.addSeparator()
+        theme_switcher_action = QAction("主题快速切换...", self)
+        theme_switcher_action.triggered.connect(self.open_theme_quick_switcher)
+        theme_menu.addAction(theme_switcher_action)
+        theme_editor_action = QAction("主题编辑器...", self)
+        theme_editor_action.triggered.connect(self.open_theme_editor_dialog)
+        theme_menu.addAction(theme_editor_action)
+        theme_import_export_action = QAction("主题导入导出...", self)
+        theme_import_export_action.triggered.connect(self.open_theme_import_export_dialog)
+        theme_menu.addAction(theme_import_export_action)
+        theme_backup_action = QAction("主题备份与恢复...", self)
+        theme_backup_action.triggered.connect(self.open_theme_backup_dialog)
+        theme_menu.addAction(theme_backup_action)
+        theme_menu.addSeparator()
         load_external_qss_action = QAction("加载外部QSS文件...", self)
         load_external_qss_action.triggered.connect(self.load_external_qss_file_action)
         theme_menu.addAction(load_external_qss_action)
@@ -383,6 +401,42 @@ class SerialDebugger(QMainWindow):
     def open_plugin_manager_dialog(self):
         dialog = PluginManagementDialog(self.plugin_manager, self, self)
         dialog.plugin_status_changed_signal.connect(self._handle_plugin_status_change_from_dialog)
+        dialog.exec()
+    
+    @Slot()
+    def open_theme_quick_switcher(self):
+        """打开主题快速切换器"""
+        switcher = ThemeQuickSwitcher(self.theme_manager, self)
+        switcher.show()
+    
+    @Slot()
+    def open_theme_editor_dialog(self):
+        """打开主题编辑器对话框"""
+        dialog = ThemeEditorDialog(self.theme_manager, self)
+        # 连接主题变化信号，当在编辑器中应用主题时，更新所有动态面板
+        dialog.theme_manager.theme_changed.connect(self._on_theme_changed_from_editor)
+        dialog.exec()
+    
+    @Slot(str)
+    def _on_theme_changed_from_editor(self, theme_name: str):
+        """处理从主题编辑器应用主题的事件"""
+        # 更新所有动态面板的主题
+        for panel_instance in self.dynamic_panel_instances.values():
+            if hasattr(panel_instance, 'update_theme'):
+                panel_instance.update_theme()
+        
+        self.error_logger.log_info(f"主题已从编辑器应用: {theme_name}")
+    
+    @Slot()
+    def open_theme_import_export_dialog(self):
+        """打开主题导入导出对话框"""
+        dialog = ThemeImportExportDialog(self.theme_manager, self)
+        dialog.exec()
+    
+    @Slot()
+    def open_theme_backup_dialog(self):
+        """打开主题备份与恢复对话框"""
+        dialog = ThemeBackupDialog(self.theme_manager, self)
         dialog.exec()
 
     @Slot(str, str)
@@ -724,7 +778,11 @@ class SerialDebugger(QMainWindow):
 
     def update_fixed_panels_connection_status(self, connected: bool):
         if self.serial_config_panel_widget: self.serial_config_panel_widget.set_connection_status_display(connected)
-        if self.basic_comm_panel_widget: self.basic_comm_panel_widget.set_send_enabled(connected)
+        if self.basic_comm_panel_widget: 
+            self.basic_comm_panel_widget.set_send_enabled(connected)
+            # 通知基本发送面板串口连接状态变化
+            if hasattr(self.basic_comm_panel_widget, 'on_serial_connection_changed'):
+                self.basic_comm_panel_widget.on_serial_connection_changed(connected)
         for panel_instance in self.dynamic_panel_instances.values():
             if isinstance(panel_instance, AdaptedSendPanelWidget): panel_instance.update_send_button_state(connected)
         if not connected and self.serial_config_panel_widget:
@@ -734,28 +792,49 @@ class SerialDebugger(QMainWindow):
 
     @Slot(QByteArray)
     def on_serial_data_received(self, data: QByteArray):
+        """串口数据接收处理函数 - 修复版本"""
         self._flash_button("rx")
+        
+        # 增强的调试日志
         if self.error_logger:
-            self.error_logger.log_info(f"on_serial_data_received triggered with {data.size()} bytes: {data.toHex(' ').data().decode('ascii').upper()}")
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"接收到串口数据: {data.size()} 字节: {hex_data}")
+        
+        # 更新基本通信面板
         if self.basic_comm_panel_widget: 
             self._append_to_basic_receive_text_edit(data, source="RX")
+        
+        # 记录原始数据
         if hasattr(self, 'data_recorder'): 
-            self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
+            try:
+                self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
+            except Exception as e:
+                if self.error_logger:
+                    self.error_logger.log_error(f"数据记录失败: {e}", "DATA_RECORD")
         
-        # 确认数据是否被传递给frame_parser
-        if self.error_logger:
-            self.error_logger.log_info(f"传递 {data.size()} 字节数据给 frame_parser")
-        self.frame_parser.append_data(data)
-        
+        # 更新配置（确保使用最新的配置）
         self.update_current_serial_frame_configs_from_ui()
         
-        # 确认frame_parser是否尝试解析
+        # 将数据传递给帧解析器
         if self.error_logger:
-            self.error_logger.log_info("调用 frame_parser.try_parse_frames")
-        self.frame_parser.try_parse_frames( current_frame_config=self.current_frame_config, 
-                                            parse_target_func_id_hex= self.current_frame_config.func_id,  # 添加缺失的参数
-                                            active_checksum_mode=self.active_checksum_mode
-                                            )
+            self.error_logger.log_info(f"传递 {data.size()} 字节数据给帧解析器")
+        
+        try:
+            self.frame_parser.append_data(data)
+            
+            # 尝试解析帧
+            if self.error_logger:
+                self.error_logger.log_info(f"开始帧解析，当前配置: 帧头={self.current_frame_config.head}, 功能码={self.current_frame_config.func_id}, 校验模式={self.active_checksum_mode}")
+            
+            self.frame_parser.try_parse_frames(
+                current_frame_config=self.current_frame_config, 
+                parse_target_func_id_hex=self.current_frame_config.func_id,
+                active_checksum_mode=self.active_checksum_mode
+            )
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"帧解析过程中发生错误: {e}", "FRAME_PARSE")
+            self.status_bar_label.setText(f"帧解析错误: {str(e)}")
 
     @Slot(str, QByteArray)
     def on_frame_successfully_parsed(self, func_id_hex: str, data_payload_ba: QByteArray):
@@ -823,24 +902,52 @@ class SerialDebugger(QMainWindow):
         self.active_checksum_mode = self.serial_config_panel_widget.get_checksum_mode_from_ui()
 
     def _append_to_basic_receive_text_edit(self, data: QByteArray, source: str = "RX"):
+        """修复基本接收文本显示函数"""
         if self.error_logger:
-            self.error_logger.log_info(f"_append_to_basic_receive_text_edit triggered with {data.size()} bytes: {data.toHex(' ').data().decode('ascii').upper()}")
-        if not self.basic_comm_panel_widget or not self.basic_comm_panel_widget.receive_text_edit: return
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"更新基本接收面板: {data.size()} 字节: {hex_data}")
+        
+        if not self.basic_comm_panel_widget or not self.basic_comm_panel_widget.receive_text_edit: 
+            return
+        
         final_log_string = ""
-        if self.basic_comm_panel_widget.recv_timestamp_checkbox_is_checked(): final_log_string += datetime.now().strftime(
-            "[%H:%M:%S.%f")[:-3] + "] "
+        
+        # 添加时间戳
+        if self.basic_comm_panel_widget.recv_timestamp_checkbox_is_checked(): 
+            final_log_string += datetime.now().strftime("[%H:%M:%S.%f")[:-3] + "] "
+        
         final_log_string += f"{source}: "
+        
+        # 根据显示模式处理数据
         if self.basic_comm_panel_widget.recv_hex_checkbox_is_checked():
-            final_log_string += data.toHex(' ').data().decode('ascii', errors='ignore').upper()
+            # 十六进制显示
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            final_log_string += hex_data
         else:
+            # 文本显示 - 修复字符编码处理
             try:
-                final_log_string += data.data().decode('utf-8', errors='replace')
-            except UnicodeDecodeError:
-                try:
-                    final_log_string += data.data().decode('gbk', errors='replace')
-                except UnicodeDecodeError:
-                    final_log_string += data.data().decode('latin-1', errors='replace')
-        if not final_log_string.endswith('\n'): final_log_string += '\n'
+                data_bytes = data.data()
+                if isinstance(data_bytes, bytes):
+                    # 尝试多种编码方式
+                    try:
+                        final_log_string += data_bytes.decode('utf-8')
+                    except UnicodeDecodeError:
+                        try:
+                            final_log_string += data_bytes.decode('gbk')
+                        except UnicodeDecodeError:
+                            final_log_string += data_bytes.decode('latin-1', errors='replace')
+                else:
+                    final_log_string += str(data_bytes)
+            except Exception as e:
+                if self.error_logger:
+                    self.error_logger.log_warning(f"文本解码失败: {e}")
+                # 回退到十六进制显示
+                hex_data = data.toHex(' ').data().decode('ascii').upper()
+                final_log_string += f"[HEX] {hex_data}"
+        
+        if not final_log_string.endswith('\n'): 
+            final_log_string += '\n'
+        
         self.basic_comm_panel_widget.append_receive_text(final_log_string)
 
     def append_to_custom_protocol_log_formatted(self, timestamp: datetime, source: str, content: str,
@@ -868,42 +975,51 @@ class SerialDebugger(QMainWindow):
 
     def assemble_custom_frame_from_send_panel_data(self, panel_target_func_id_str: str,
                                              panel_send_data_containers: List[SendDataContainerWidget]) -> Optional[QByteArray]:
+        """修复帧组装函数"""
         msg = ""
         self.update_current_serial_frame_configs_from_ui()
         cfg = self.current_frame_config
         
         try:
+            # 修正：确保十六进制字符串处理正确
             head_ba = QByteArray.fromHex(cfg.head.encode('ascii'))
             saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii'))
             daddr_ba = QByteArray.fromHex(cfg.d_addr.encode('ascii'))
-            # 从函数参数 panel_target_func_id_str 获取功能码的字节表示
             id_ba = QByteArray.fromHex(panel_target_func_id_str.encode('ascii'))
 
         except ValueError as e:
-            msg = f"帧头/地址/面板功能码({panel_target_func_id_str}) Hex格式错误: {e}"
+            msg = f"帧头/地址/功能码({panel_target_func_id_str}) Hex格式错误: {e}"
             self.status_bar_label.setText(msg)
             if self.error_logger:
-                self.error_logger.log_warning(msg)
+                self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
             return None
 
         # 长度检查
         if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
-            msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"
+            msg = "帧头/地址/功能码 Hex长度必须为1字节 (2个Hex字符)"
             self.status_bar_label.setText(msg)
             if self.error_logger:
-                self.error_logger.log_warning(msg)
+                self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
             return None
 
+        # 组装数据内容
         data_content_ba = QByteArray()
         for scw_widget in panel_send_data_containers:
-            item_bytes = scw_widget.get_bytes()
-            if item_bytes is None:
-                msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"
+            try:
+                item_bytes = scw_widget.get_bytes()
+                if item_bytes is None:
+                    msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"
+                    self.status_bar_label.setText(msg)
+                    if self.error_logger:
+                        self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
+                    return None
+                data_content_ba.append(item_bytes)
+            except Exception as e:
+                msg = f"数据项处理错误: {e}"
                 self.status_bar_label.setText(msg)
                 if self.error_logger:
-                    self.error_logger.log_warning(msg)
+                    self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
                 return None
-            data_content_ba.append(item_bytes)
 
         # 组装帧
         frame = QByteArray()
@@ -911,25 +1027,46 @@ class SerialDebugger(QMainWindow):
         frame.append(saddr_ba)
         frame.append(daddr_ba)
         frame.append(id_ba)
+        
         # 长度字段 (2字节，小端序)
-        frame.append(struct.pack('<H', data_content_ba.size()))
+        length_bytes = struct.pack('<H', data_content_ba.size())
+        frame.append(QByteArray(length_bytes))
         frame.append(data_content_ba)
 
-        # 计算校验和
-        if self.active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
-            crc_val = calculate_frame_crc16(frame)
-            frame.append(struct.pack('>H', crc_val))
-            sum_check_text = f"0x{crc_val:04X}"
-            add_check_text = ""
-        else:
-            sc_val, ac_val = calculate_original_checksums_python(frame)
-            frame.append(bytes([sc_val]))
-            frame.append(bytes([ac_val]))
-            sum_check_text = f"0x{sc_val:02X}"
-            add_check_text = f"0x{ac_val:02X}"
+        # 计算并添加校验和
+        try:
+            if self.active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
+                crc_val = calculate_frame_crc16(frame)
+                # 修正：根据协议规范确定CRC字节序
+                crc_bytes = struct.pack('<H', crc_val)  # 使用小端序与长度字段一致
+                frame.append(QByteArray(crc_bytes))
+                sum_check_text = f"0x{crc_val:04X}"
+                add_check_text = ""
+                if self.error_logger:
+                    self.error_logger.log_info(f"添加CRC16校验和: 0x{crc_val:04X}")
+            else:
+                sc_val, ac_val = calculate_original_checksums_python(frame)
+                frame.append(QByteArray(bytes([sc_val])))
+                frame.append(QByteArray(bytes([ac_val])))
+                sum_check_text = f"0x{sc_val:02X}"
+                add_check_text = f"0x{ac_val:02X}"
+                if self.error_logger:
+                    self.error_logger.log_info(f"添加原始校验和: SC=0x{sc_val:02X}, AC=0x{ac_val:02X}")
+        except Exception as e:
+            msg = f"校验和计算错误: {e}"
+            self.status_bar_label.setText(msg)
+            if self.error_logger:
+                self.error_logger.log_error(msg, "CHECKSUM_CALC")
+            return None
 
+        # 更新校验和显示
         if self.serial_config_panel_widget:
             self.serial_config_panel_widget.update_checksum_display(sum_check_text, add_check_text)
+
+        # 记录组装的帧
+        if self.error_logger:
+            hex_frame = frame.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"成功组装帧: {hex_frame}")
 
         return frame
 

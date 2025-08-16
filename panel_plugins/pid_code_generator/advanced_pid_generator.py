@@ -50,7 +50,7 @@ class CSyntaxHighlighter(QSyntaxHighlighter):
         
         # 关键字格式
         keyword_format = QTextCharFormat()
-        keyword_format.setColor(QColor(86, 156, 214))  # 蓝色
+        keyword_format.setForeground(QColor(86, 156, 214))  # 蓝色
         keyword_format.setFontWeight(QFont.Bold)
         
         keywords = [
@@ -67,19 +67,19 @@ class CSyntaxHighlighter(QSyntaxHighlighter):
         
         # 字符串格式
         string_format = QTextCharFormat()
-        string_format.setColor(QColor(206, 145, 120))  # 橙色
+        string_format.setForeground(QColor(206, 145, 120))  # 橙色
         self.highlighting_rules.append((re.compile('".*?"'), string_format))
         
         # 注释格式
         comment_format = QTextCharFormat()
-        comment_format.setColor(QColor(106, 153, 85))  # 绿色
+        comment_format.setForeground(QColor(106, 153, 85))  # 绿色
         comment_format.setFontItalic(True)
         self.highlighting_rules.append((re.compile('//[^\n]*'), comment_format))
         self.highlighting_rules.append((re.compile('/\*.*?\*/', re.DOTALL), comment_format))
         
         # 数字格式
         number_format = QTextCharFormat()
-        number_format.setColor(QColor(181, 206, 168))  # 浅绿色
+        number_format.setForeground(QColor(181, 206, 168))  # 浅绿色
         self.highlighting_rules.append((re.compile('\\b\\d+\\.?\\d*[fF]?\\b'), number_format))
     
     def highlightBlock(self, text):
@@ -981,8 +981,36 @@ class AdvancedPIDGeneratorWidget(PanelInterface):
         layout.addWidget(self.tab_widget)
         
         # 操作按钮
+        button_layout = QHBoxLayout()
+        self.generate_button = QPushButton("生成代码")
+        self.export_button = QPushButton("导出代码")
+        
+        button_layout.addWidget(self.generate_button)
+        button_layout.addWidget(self.export_button)
+        button_layout.addStretch()
+        
+        layout.addLayout(button_layout)
+        
+        # 连接信号
         self.generate_button.clicked.connect(self._on_generate_code)
         self.export_button.clicked.connect(self._on_export_code)
+        
+        return widget
+    
+    def _connect_signals(self):
+        """连接信号"""
+        # 实例管理信号
+        self.add_button.clicked.connect(self._on_add_instance)
+        self.remove_button.clicked.connect(self._on_remove_instance)
+        self.rename_button.clicked.connect(self._on_rename_instance)
+        self.instance_list.currentRowChanged.connect(self._on_instance_selection_changed)
+        
+        # 参数和配置变化信号
+        self.param_widget.params_changed.connect(self._on_params_changed)
+        self.config_widget.config_changed.connect(self._on_config_changed)
+        
+        # 选项卡变化信号
+        self.tab_widget.currentChanged.connect(self._on_tab_changed)
     
     @Slot()
     def _on_add_instance(self):

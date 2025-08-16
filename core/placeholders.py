@@ -214,6 +214,7 @@ class CircularBuffer:
         # 修正：使用 bytearray 作为内部存储，更高效且支持索引赋值
         self._internal_buffer = bytearray(size)
         self.max_size = size
+        self.capacity = size  # 添加 capacity 属性以兼容现有代码
         self.head = 0
         self.tail = 0
         self.count = 0

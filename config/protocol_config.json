@@ -1,0 +1,65 @@
+{
+  "protocol_settings": {
+    "version": "1.0.0",
+    "description": "YJ Studio 增强协议配置",
+    "last_updated": "2024-01-01"
+  },
+  "frame_format": {
+    "header_byte": "AB",
+    "default_source_addr": "01",
+    "default_dest_addr": "02",
+    "checksum_mode": "ORIGINAL_SUM_ADD",
+    "max_data_payload_size": 1024,
+    "min_frame_length": 8
+  },
+  "ack_mechanism": {
+    "enabled": true,
+    "default_timeout_ms": 2000,
+    "max_retries": 3,
+    "window_size": 8,
+    "ack_func_id": "F0",
+    "nack_func_id": "F1"
+  },
+  "performance_settings": {
+    "buffer_size": 131072,
+    "max_frames_per_parse": 10,
+    "parse_timeout_warning_ms": 5.0,
+    "frame_timeout_warning_ms": 10.0,
+    "buffer_usage_warning_percent": 90.0,
+    "stats_update_interval_ms": 5000
+  },
+  "error_handling": {
+    "auto_recovery": true,
+    "max_consecutive_errors": 10,
+    "error_reset_timeout_ms": 5000,
+    "log_level": "INFO",
+    "detailed_error_logging": true
+  },
+  "optimization": {
+    "enable_performance_monitoring": true,
+    "enable_buffer_optimization": true,
+    "enable_adaptive_timeout": false,
+    "memory_usage_limit_mb": 100,
+    "cpu_usage_limit_percent": 80.0
+  },
+  "debugging": {
+    "enable_frame_logging": false,
+    "enable_timing_analysis": true,
+    "enable_statistics_collection": true,
+    "log_raw_data": false,
+    "verbose_error_messages": true
+  },
+  "network_simulation": {
+    "packet_loss_rate": 0.1,
+    "network_delay_ms": 10,
+    "jitter_ms": 5,
+    "enable_simulation": false
+  },
+  "advanced_features": {
+    "enable_large_data_transfer": true,
+    "fragmentation_size": 512,
+    "enable_compression": false,
+    "enable_encryption": false,
+    "flow_control": true
+  }
+}

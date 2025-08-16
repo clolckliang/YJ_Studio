@@ -1,12 +1,15 @@
 import time
 import struct
-from typing import Optional, Dict, Any, Tuple
-from PySide6.QtCore import QObject, Signal, QByteArray
+from typing import Optional, Dict, Any, Tuple, List
+from PySide6.QtCore import QObject, Signal, QByteArray, QTimer
+from dataclasses import dataclass
+from enum import Enum
 
 from core.placeholders import CircularBuffer
 from utils.constants import Constants,ChecksumMode
 from utils.data_models import FrameConfig
 from utils.logger import ErrorLogger
+from utils.protocol_config_manager import get_global_config_manager, ProtocolConfigManager
 import crcmod
 
 
@@ -29,6 +32,27 @@ crc16_func = crcmod.predefined.mkCrcFun('crc-ccitt-false')
 # Let's define it explicitly to ensure parameters are clear:
 crc16_ccitt_false_func = crcmod.mkCrcFun(poly=0x11021, initCrc=0xFFFF, rev=False, xorOut=0x0000)
 
+
+@dataclass
+class PendingFrame:
+    """待重传帧数据结构"""
+    data: bytes
+    dest_addr: int
+    func_id: int
+    send_time: float
+    retry_count: int = 0
+    seq_num: int = 0
+    max_retries: int = 3
+    timeout_ms: int = 1000
+
+class ProtocolError(Enum):
+    """协议错误类型枚举"""
+    CHECKSUM_MISMATCH = "checksum_mismatch"
+    FRAME_TOO_LONG = "frame_too_long"
+    INVALID_LENGTH = "invalid_length"
+    BUFFER_OVERFLOW = "buffer_overflow"
+    TIMEOUT = "timeout"
+    INVALID_SEQUENCE = "invalid_sequence"
 
 def calculate_frame_crc16(frame_part_for_crc: QByteArray) -> int:
     """Calculates CRC-16/CCITT-FALSE over the QByteArray data."""
@@ -70,6 +94,7 @@ def calculate_frame_crc16(frame_part_for_crc: QByteArray) -> int:
 class ProtocolAnalyzer(QObject): # Making it a QObject if it needs to emit signals later
     # statistics_updated = Signal(dict) # Example if stats updates were signaled
     checksum_error_signal = Signal(str, QByteArray)  # Generic name
+    performance_warning = Signal(str)  # 性能警告信号
 
     def __init__(self, error_logger: Optional[ErrorLogger] = None, parent: Optional[QObject] = None):
         super().__init__(parent)
@@ -79,16 +104,42 @@ class ProtocolAnalyzer(QObject): # Making it a QObject if it needs to emit signa
             'error_frames_rx': 0,
             'data_rate_rx_bps': 0,
             'last_rx_time': None,
-            'rx_byte_count': 0
+            'rx_byte_count': 0,
+            'buffer_overflows': 0,
+            'retransmissions': 0,
+            'timeouts': 0,
+            'avg_parse_time_ms': 0.0,
+            'max_parse_time_ms': 0.0
         }
         self.error_logger = error_logger
 
-    def analyze_frame(self, frame_data: QByteArray, direction: str, is_error: bool = False) -> None:
+    def analyze_frame(self, frame_data: QByteArray, direction: str, is_error: bool = False, 
+                     parse_time_ms: float = 0.0, error_type: Optional[ProtocolError] = None) -> None:
         now = time.monotonic() # Using monotonic clock for measuring intervals
+        
+        # 更新解析时间统计
+        if parse_time_ms > 0:
+            if direction == 'rx':
+                current_avg = self.statistics['avg_parse_time_ms']
+                total_frames = self.statistics['total_frames_rx']
+                if total_frames > 0:
+                    self.statistics['avg_parse_time_ms'] = (current_avg * (total_frames - 1) + parse_time_ms) / total_frames
+                else:
+                    self.statistics['avg_parse_time_ms'] = parse_time_ms
+                self.statistics['max_parse_time_ms'] = max(self.statistics['max_parse_time_ms'], parse_time_ms)
+                
+                # 性能警告
+                if parse_time_ms > 10.0:  # 超过10ms警告
+                    self.performance_warning.emit(f"帧解析耗时过长: {parse_time_ms:.2f}ms")
+        
         if direction == 'rx':
             self.statistics['total_frames_rx'] += 1
             if is_error:
                 self.statistics['error_frames_rx'] += 1
+                if error_type == ProtocolError.BUFFER_OVERFLOW:
+                    self.statistics['buffer_overflows'] += 1
+                elif error_type == ProtocolError.TIMEOUT:
+                    self.statistics['timeouts'] += 1
 
             current_byte_count = len(frame_data)
             self.statistics['rx_byte_count'] += current_byte_count
@@ -102,6 +153,8 @@ class ProtocolAnalyzer(QObject): # Making it a QObject if it needs to emit signa
             # self.statistics_updated.emit(self.statistics.copy())
         elif direction == 'tx':
             self.statistics['total_frames_tx'] += 1
+            if error_type == ProtocolError.TIMEOUT:
+                self.statistics['retransmissions'] += 1
             # self.statistics_updated.emit(self.statistics.copy())
 
 
@@ -139,27 +192,67 @@ def get_data_type_byte_length(data_type_str: str) -> int:
     return Constants.DATA_TYPE_SIZES.get(data_type_str, 0)
 
 
+# ProtocolSender 类将在 FrameParser 类之后定义
+
+
 class FrameParser(QObject):
     frame_successfully_parsed = Signal(str, QByteArray)  # func_id_hex, data_payload
     frame_parse_error = Signal(str, QByteArray)  # error_message, remaining_buffer_or_faulty_frame
     checksum_error = Signal(str, QByteArray)  # message, faulty_frame
+    ack_received = Signal(int)  # sequence_number
+    nack_received = Signal(int, str)  # sequence_number, error_reason
+    retransmission_needed = Signal(int)  # sequence_number
 
     # (Note: your original had checksum_error_signal)
 
     def __init__(self, error_logger: Optional[ErrorLogger] = None, parent: Optional[QObject] = None,
-                 buffer_size: int = 1024 * 32):  # Increased default buffer size
+                 buffer_size: int = 1024 * 32, config_manager: Optional[ProtocolConfigManager] = None):  # Increased default buffer size
         super().__init__(parent)
         self.error_logger = error_logger
         self._parsed_frame_count = 0
-        self.buffer = CircularBuffer(buffer_size)  # Using CircularBuffer
+        
+        # 配置管理器
+        self.config_manager = config_manager or get_global_config_manager()
+        
+        # 根据配置初始化缓冲区
+        actual_buffer_size = self.config_manager.performance.buffer_size if hasattr(self.config_manager, 'performance') else buffer_size
+        self.buffer = CircularBuffer(actual_buffer_size)  # Using CircularBuffer
+        
+        # 重传和ACK机制
+        self._pending_frames: Dict[int, PendingFrame] = {}
+        self._next_seq_num = 0
+        self._ack_enabled = self.config_manager.ack_mechanism.enabled if hasattr(self.config_manager, 'ack_mechanism') else True
+        self._window_size = self.config_manager.ack_mechanism.window_size if hasattr(self.config_manager, 'ack_mechanism') else 8
+        self._retry_timer = QTimer()
+        self._retry_timer.timeout.connect(self._check_timeouts)
+        self._retry_timer.start(100)  # 每100ms检查一次超时
+        
+        # 性能优化
+        self._max_buffer_usage = 0
+        self._parse_time_samples = []
+        self._analyzer = ProtocolAnalyzer(error_logger, self)
+        
+        # 连接配置更新信号
+        if hasattr(self.config_manager, 'config_updated'):
+            self.config_manager.config_updated.connect(self._on_config_updated)
 
     def append_data(self, new_data: QByteArray):
         if not new_data:
             return
+        
+        # 性能监控：缓冲区使用率
+        current_usage = (self.buffer.get_count() + new_data.size()) / self.buffer.capacity * 100
+        self._max_buffer_usage = max(self._max_buffer_usage, current_usage)
+        
+        warning_threshold = self.config_manager.performance.buffer_usage_warning_percent if hasattr(self.config_manager, 'performance') else 90
+        if current_usage > warning_threshold:  # 缓冲区使用率超过阈值警告
+            self._analyzer.performance_warning.emit(f"缓冲区使用率过高: {current_usage:.1f}%")
+        
         bytes_written = self.buffer.write(new_data)
         if bytes_written < new_data.size():
             # This indicates the circular buffer was full and overwrote old data.
             # This might be acceptable or an error depending on requirements.
+            self._analyzer.analyze_frame(new_data, "rx", True, 0.0, ProtocolError.BUFFER_OVERFLOW)
             if self.error_logger:
                 self.error_logger.log_warning(
                     f"FrameParser: CircularBuffer overflow. Attempted: {new_data.size()}, "
@@ -170,10 +263,131 @@ class FrameParser(QObject):
         self.buffer.clear()
         if self.error_logger:
             self.error_logger.log_debug("FrameParser buffer cleared.")
+    
+    def _check_timeouts(self):
+        """检查超时的待重传帧"""
+        current_time = time.time() * 1000  # 转换为毫秒
+        timeout_frames = []
+        
+        default_timeout = self.config_manager.ack_mechanism.default_timeout_ms if hasattr(self.config_manager, 'ack_mechanism') else 1000
+        
+        for seq_num, frame in self._pending_frames.items():
+            timeout_ms = getattr(frame, 'timeout_ms', default_timeout)
+            if current_time - frame.send_time > timeout_ms:
+                timeout_frames.append(seq_num)
+        
+        for seq_num in timeout_frames:
+            frame = self._pending_frames[seq_num]
+            max_retries = self.config_manager.ack_mechanism.max_retries if hasattr(self.config_manager, 'ack_mechanism') else 3
+            if frame.retry_count < max_retries:
+                frame.retry_count += 1
+                frame.send_time = current_time
+                self.retransmission_needed.emit(seq_num)
+                if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+                    self.error_logger.log_warning(f"帧重传 seq={seq_num}, 重试次数={frame.retry_count}")
+            else:
+                del self._pending_frames[seq_num]
+                self._analyzer.analyze_frame(QByteArray(), "tx", True, 0.0, ProtocolError.TIMEOUT)
+                if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+                    self.error_logger.log_error(f"帧传输失败 seq={seq_num}, 超过最大重试次数")
+    
+    def send_frame_with_ack(self, dest_addr: int, func_id: int, data: bytes, 
+                           max_retries: int = None, timeout_ms: int = None) -> int:
+        """发送需要ACK确认的帧"""
+        if not self._ack_enabled:
+            return -1
+        
+        if len(self._pending_frames) >= self._window_size:
+            if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+                self.error_logger.log_warning("发送窗口已满，无法发送新帧")
+            return -1
+        
+        seq_num = self._next_seq_num
+        self._next_seq_num = (self._next_seq_num + 1) % 65536
+        
+        # 使用配置管理器的默认值
+        if max_retries is None:
+            max_retries = self.config_manager.ack_mechanism.max_retries if hasattr(self.config_manager, 'ack_mechanism') else 3
+        if timeout_ms is None:
+            timeout_ms = self.config_manager.ack_mechanism.default_timeout_ms if hasattr(self.config_manager, 'ack_mechanism') else 1000
+        
+        frame = PendingFrame(
+            data=data,
+            dest_addr=dest_addr,
+            func_id=func_id,
+            send_time=time.time() * 1000,
+            seq_num=seq_num,
+            max_retries=max_retries,
+            timeout_ms=timeout_ms
+        )
+        
+        self._pending_frames[seq_num] = frame
+        return seq_num
+    
+    def handle_ack(self, seq_num: int):
+        """处理ACK确认"""
+        if seq_num in self._pending_frames:
+            del self._pending_frames[seq_num]
+            self.ack_received.emit(seq_num)
+            if self.error_logger:
+                self.error_logger.log_debug(f"收到ACK确认 seq={seq_num}")
+    
+    def handle_nack(self, seq_num: int, error_reason: str):
+        """处理NACK否定确认"""
+        if seq_num in self._pending_frames:
+            frame = self._pending_frames[seq_num]
+            if frame.retry_count < frame.max_retries:
+                frame.retry_count += 1
+                frame.send_time = time.time() * 1000
+                self.retransmission_needed.emit(seq_num)
+                self.nack_received.emit(seq_num, error_reason)
+                if self.error_logger:
+                    self.error_logger.log_warning(f"收到NACK seq={seq_num}, 原因={error_reason}, 重试={frame.retry_count}")
+            else:
+                del self._pending_frames[seq_num]
+                if self.error_logger:
+                    self.error_logger.log_error(f"NACK重试失败 seq={seq_num}, 超过最大重试次数")
+    
+    def set_ack_enabled(self, enabled: bool):
+        """启用/禁用ACK机制"""
+        self._ack_enabled = enabled
+        if not enabled:
+            self._pending_frames.clear()
+    
+    def set_window_size(self, size: int):
+        """设置滑动窗口大小"""
+        self._window_size = max(1, min(size, 32))  # 限制在1-32之间
+    
+    def get_performance_stats(self) -> Dict[str, Any]:
+        """获取性能统计信息"""
+        return {
+            'max_buffer_usage_percent': self._max_buffer_usage,
+            'pending_frames_count': len(self._pending_frames),
+            'window_size': self._window_size,
+            'ack_enabled': self._ack_enabled,
+            'parsed_frame_count': self._parsed_frame_count,
+            'config_manager_active': self.config_manager is not None
+        }
+    
+    def _on_config_updated(self):
+        """配置更新时的回调函数"""
+        if hasattr(self.config_manager, 'ack_mechanism'):
+            self._ack_enabled = self.config_manager.ack_mechanism.enabled
+            self._window_size = self.config_manager.ack_mechanism.window_size
+        
+        if self.error_logger:
+            self.error_logger.log_info("协议处理器配置已更新")
 
     def try_parse_frames(self, current_frame_config: FrameConfig,
                          parse_target_func_id_hex: str,  # Kept as per your FrameParser
                          active_checksum_mode: ChecksumMode):
+        """尝试解析缓冲区中的帧数据"""
+        parse_start_time = time.time()
+        frames_parsed_this_call = 0
+        
+        # 限制单次解析的帧数，防止阻塞
+        max_frames_per_parse = self.config_manager.performance.max_frames_per_parse if hasattr(self.config_manager, 'performance') else 10
+        
         frame_head_byte = bytes.fromhex(current_frame_config.head)  # 'AB' -> b'\xab'
         frame_head_len = len(frame_head_byte)  # 现在 frame_head_len = 1
 
@@ -186,7 +400,7 @@ class FrameParser(QObject):
 
         head_byte_value = frame_head_byte[0] # 获取帧头字节的整数值
 
-        MAX_ATTEMPTS = 1000
+        MAX_ATTEMPTS = max_frames_per_parse
         for _ in range(MAX_ATTEMPTS):
             # 需要至少有帧头长度 (1) 的数据才能尝试匹配帧头
             if self.buffer.get_count() < 1:
@@ -294,6 +508,8 @@ class FrameParser(QObject):
 
             if is_valid:
                 self._parsed_frame_count += 1
+                frames_parsed_this_call += 1
+                
                 # 功能码位置：Constants.OFFSET_FUNC_ID (5)
                 func_id_offset = Constants.OFFSET_FUNC_ID
                 func_id_recv_ba = frame_part_for_calc.mid(func_id_offset, 1)
@@ -304,6 +520,21 @@ class FrameParser(QObject):
 
                 # 将功能码字节数组转换为十六进制字符串（大写）
                 func_id_hex_str = func_id_recv_ba.toHex().data().decode('ascii').upper()
+                
+                # 检查是否为ACK/NACK帧
+                func_id_int = int(func_id_hex_str, 16)
+                ack_func_id = int(self.config_manager.ack_mechanism.ack_func_id, 16) if hasattr(self.config_manager, 'ack_mechanism') else 0xF0
+                nack_func_id = int(self.config_manager.ack_mechanism.nack_func_id, 16) if hasattr(self.config_manager, 'ack_mechanism') else 0xF1
+                
+                if func_id_int == ack_func_id:  # ACK
+                    if data_len >= 2:
+                        seq_num = struct.unpack('<H', data_content_recv_ba.data()[:2])[0]
+                        self.handle_ack(seq_num)
+                elif func_id_int == nack_func_id:  # NACK
+                    if data_len >= 2:
+                        seq_num = struct.unpack('<H', data_content_recv_ba.data()[:2])[0]
+                        error_reason = data_content_recv_ba.data()[2:].decode('utf-8', errors='ignore') if data_len > 2 else "Unknown"
+                        self.handle_nack(seq_num, error_reason)
 
                 # 调试日志：记录解析结果
                 if self.error_logger:
@@ -323,15 +554,198 @@ class FrameParser(QObject):
                     self.frame_successfully_parsed.emit(func_id_hex_str, data_content_recv_ba)
 
                 self.buffer.discard(expected_total_frame_len)  # Consume the valid frame
+                
+                # 性能统计
+                frame_parse_time = (time.time() - parse_start_time) * 1000
+                self._analyzer.analyze_frame(current_frame_ba, "rx", False, frame_parse_time)
+                
                 if self.error_logger:
                     self.error_logger.log_debug(
                         f"FrameParser: Successfully parsed frame FID {func_id_hex_str}, discarded {expected_total_frame_len} bytes.")
             else:
+                # 确定错误类型
+                error_type = ProtocolError.CHECKSUM_MISMATCH
+                if "长度" in error_msg:
+                    error_type = ProtocolError.INVALID_LENGTH
+                elif "超过最大值" in error_msg:
+                    error_type = ProtocolError.FRAME_TOO_LONG
+                
                 self.checksum_error.emit(error_msg, current_frame_ba)  # Emit with specific error message
+                
+                # 性能统计
+                frame_parse_time = (time.time() - parse_start_time) * 1000
+                self._analyzer.analyze_frame(current_frame_ba, "rx", True, frame_parse_time, error_type)
+                
                 if self.error_logger:
                     hex_frame = current_frame_ba.toHex(' ').data().decode()
                     self.error_logger.log_warning(
                         f"FrameParser: {error_msg} Frame: {hex_frame}")
                 # Discard the frame head byte and continue searching
                 self.buffer.discard(1)
+                
+            # 防止单次调用解析过多帧导致阻塞
+            if frames_parsed_this_call >= max_frames_per_parse:
+                if self.error_logger:
+                    self.error_logger.log_debug(f"FrameParser: 单次解析帧数达到限制({frames_parsed_this_call})，暂停解析")
+                break
+        
+        # 总体性能统计
+        total_parse_time = (time.time() - parse_start_time) * 1000
+        parse_warning_threshold = self.config_manager.performance.parse_timeout_warning_ms if hasattr(self.config_manager, 'performance') else 5.0
+        if total_parse_time > parse_warning_threshold:
+            self._analyzer.performance_warning.emit(f"帧解析总耗时过长: {total_parse_time:.2f}ms, 解析帧数: {frames_parsed_this_call}")
         # End of while loop
+
+
+class ProtocolSender(QObject):
+    """协议发送器，支持重传和ACK机制"""
+    frame_sent = Signal(int, bytes)  # seq_num, frame_data
+    send_failed = Signal(int, str)   # seq_num, error_reason
+    
+    def __init__(self, frame_parser: FrameParser, send_func, error_logger: Optional[ErrorLogger] = None, config_manager: Optional[ProtocolConfigManager] = None):
+        super().__init__()
+        self.frame_parser = frame_parser
+        self.send_func = send_func  # 实际发送函数
+        self.error_logger = error_logger
+        self.config_manager = config_manager or get_global_config_manager()
+        
+        # 连接信号
+        self.frame_parser.retransmission_needed.connect(self._handle_retransmission)
+        self.frame_parser.ack_received.connect(self._handle_ack_received)
+        self.frame_parser.nack_received.connect(self._handle_nack_received)
+        
+        # 连接配置更新信号
+        if hasattr(self.config_manager, 'config_updated'):
+            self.config_manager.config_updated.connect(self._on_config_updated)
+    
+    def send_frame(self, dest_addr: int, func_id: int, data: bytes, 
+                  use_ack: bool = True, max_retries: int = 3, timeout_ms: int = 1000) -> bool:
+        """发送帧数据，支持ACK机制"""
+        try:
+            if use_ack and self.frame_parser._ack_enabled:
+                # 使用ACK机制发送
+                seq_num = self.frame_parser.send_frame_with_ack(
+                    dest_addr, func_id, data, max_retries, timeout_ms
+                )
+                return seq_num >= 0
+            else:
+                # 直接发送，不等待ACK
+                frame_data = self._build_frame(dest_addr, func_id, data)
+                success = self._send_raw_frame(frame_data)
+                if success:
+                    self.frame_sent.emit(0, frame_data)  # seq_num=0 表示无ACK
+                return success
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(
+                    "SEND_FAILED", 
+                    f"发送帧失败: {str(e)}",
+                    {"dest_addr": dest_addr, "func_id": func_id, "data_len": len(data)}
+                )
+            self.send_failed.emit(0, str(e))
+            return False
+    
+    def send_ack(self, seq_num: int, dest_addr: int) -> bool:
+        """发送ACK确认帧"""
+        ack_func_code = getattr(self.config_manager.frame_format, 'ack_func_code', 0xF0)
+        ack_data = struct.pack('<H', seq_num)  # 序列号作为数据
+        return self.send_frame(dest_addr, ack_func_code, ack_data, use_ack=False)
+    
+    def send_nack(self, seq_num: int, dest_addr: int, error_reason: str = "") -> bool:
+        """发送NACK否定确认帧"""
+        nack_func_code = getattr(self.config_manager.frame_format, 'nack_func_code', 0xF1)
+        nack_data = struct.pack('<H', seq_num) + error_reason.encode('utf-8')[:32]  # 序列号+错误原因
+        return self.send_frame(dest_addr, nack_func_code, nack_data, use_ack=False)
+    
+    def _build_frame(self, dest_addr: int, func_id: int, data: bytes) -> bytes:
+        """构建标准帧"""
+        frame_header = getattr(self.config_manager.frame_format, 'frame_header', [0xAA, 0x55])
+        source_addr = getattr(self.config_manager.frame_format, 'source_addr', 0x01)
+        
+        frame = bytearray()
+        
+        # 帧头
+        frame.extend(frame_header)
+        
+        # 地址和功能码
+        frame.append(dest_addr)
+        frame.append(source_addr)
+        frame.append(func_id)
+        
+        # 数据长度和数据
+        frame.extend(struct.pack('<H', len(data)))
+        frame.extend(data)
+        
+        # 计算并添加校验和
+        checksum = self._calculate_checksum(frame)
+        frame.extend(checksum)
+        
+        return bytes(frame)
+    
+    def _build_frame_with_seq(self, dest_addr: int, func_id: int, data: bytes, seq_num: int) -> bytes:
+        """构建带序列号的帧"""
+        # 在数据前添加序列号
+        seq_data = struct.pack('<H', seq_num) + data
+        return self._build_frame(dest_addr, func_id, seq_data)
+    
+    def _calculate_checksum(self, frame_data: bytearray) -> bytes:
+        """计算校验和"""
+        checksum_mode = getattr(self.config_manager.frame_format, 'checksum_mode', 'original')
+        
+        if checksum_mode == 'crc16':
+            # CRC16校验
+            crc_value = crc16_func(frame_data)
+            return struct.pack('<H', crc_value)
+        else:
+            # 原始校验模式
+            checksum1 = sum(frame_data) & 0xFF
+            checksum2 = 0
+            for i, byte_val in enumerate(frame_data):
+                checksum2 += (i + 1) * byte_val
+            checksum2 &= 0xFF
+            return bytes([checksum1, checksum2])
+    
+    def _send_raw_frame(self, frame_data: bytes) -> bool:
+        """发送原始帧数据"""
+        try:
+            if self.send_func:
+                self.send_func(frame_data)
+                return True
+            return False
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(
+                    "RAW_SEND_FAILED", 
+                    f"原始帧发送失败: {str(e)}",
+                    {"frame_len": len(frame_data)}
+                )
+            return False
+    
+    def _handle_retransmission(self, seq_num: int):
+        """处理重传请求"""
+        # 这个方法由FrameParser调用，实际重传逻辑在FrameParser中
+        pass
+    
+    def _handle_ack_received(self, seq_num: int):
+        """处理ACK接收"""
+        # 这个方法由FrameParser调用，实际处理逻辑在FrameParser中
+        pass
+    
+    def _handle_nack_received(self, seq_num: int, error_reason: str):
+        """处理NACK接收"""
+        # 这个方法由FrameParser调用，实际处理逻辑在FrameParser中
+        pass
+    
+    def get_pending_count(self) -> int:
+        """获取待发送帧数量"""
+        return len(getattr(self.frame_parser, 'pending_frames', {}))
+    
+    def clear_pending_frames(self):
+        """清除所有待发送帧"""
+        if hasattr(self.frame_parser, 'pending_frames'):
+            self.frame_parser.pending_frames.clear()
+    
+    def _on_config_updated(self):
+        """配置更新回调"""
+        # 重新获取配置参数
+        pass

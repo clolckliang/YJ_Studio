@@ -1,12 +1,13 @@
 import re
 from typing import Optional, Dict, TYPE_CHECKING  # Added Set
 
-from PySide6.QtCore import Slot, Qt, Signal, QRegularExpression
+from PySide6.QtCore import Slot, Qt, Signal, QRegularExpression, QTimer
 from PySide6.QtGui import QTextCursor, QIntValidator, QFont, QRegularExpressionValidator
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout,
     QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QTextEdit,
-    QCheckBox, QMessageBox, QGroupBox, QPlainTextEdit,
+    QCheckBox, QMessageBox, QGroupBox, QPlainTextEdit, QFileDialog,
+    QSplitter,
     # For Plugin Management Dialog
 )
 
@@ -340,27 +341,55 @@ class CustomLogPanelWidget(QWidget):  # Full implementation
     def timestamp_checkbox_is_checked(self) -> bool: return self.timestamp_checkbox.isChecked()
 
 
-class BasicCommPanelWidget(QWidget):  # Full implementation
+class BasicCommPanelWidget(QWidget):  # Enhanced implementation
     send_basic_data_requested = Signal(str, bool)
-
+    
     def __init__(self, main_window_ref: 'SerialDebugger', parent: Optional[QWidget] = None):
         super().__init__(parent)
         self.main_window_ref = main_window_ref
+        
+        # 接收区域控件
         self.recv_hex_checkbox = QCheckBox("Hex显示")
         self.recv_timestamp_checkbox = QCheckBox("显示时间戳")
+        self.recv_auto_scroll_checkbox = QCheckBox("自动滚动")
+        self.recv_word_wrap_checkbox = QCheckBox("自动换行")
+        self.receive_text_edit: Optional[QTextEdit] = None
+        
+        # 发送区域控件
         self.send_hex_checkbox = QCheckBox("Hex发送")
         self.terminal_mode_checkbox = QCheckBox("终端模式")
+        self.auto_send_checkbox = QCheckBox("自动发送")
         self.send_button = QPushButton("发送")
-        self.receive_text_edit: Optional[QTextEdit] = None
         self.send_text_edit: Optional[QPlainTextEdit] = None
         
-        # 终端模式相关变量初始化
-        self.command_history = []  # 存储命令历史
-        self.history_index = -1    # 当前浏览的历史命令索引
-        self.max_history_size = 100  # 最大历史记录数量
+        # 快捷发送按钮
+        self.quick_send_buttons = []
+        self.quick_send_data = [
+            ("心跳包", "AA BB CC DD", True),
+            ("查询状态", "01 03 00 00", True),
+            ("复位命令", "FF FF FF FF", True),
+            ("Hello", "Hello World!", False)
+        ]
+        
+        # 终端模式相关变量
+        self.command_history = []
+        self.history_index = -1
+        self.max_history_size = 100
+        
+        # 自动发送相关
+        self.auto_send_timer = None
+        self.auto_send_interval = 1000  # 默认1秒
+        
+        # 统计信息
+        self.tx_count = 0
+        self.rx_count = 0
+        self.tx_bytes = 0
+        self.rx_bytes = 0
         
         self._init_ui()
         self._connect_signals()
+        self._setup_auto_send_timer()
+        self._setup_stats_timer()
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
@@ -369,66 +398,178 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
         self.setLayout(main_layout)
 
     def _create_receive_group(self, main_layout: QVBoxLayout):
-        recv_group = QGroupBox("基本接收 (原始串行数据)")
+        recv_group = QGroupBox("数据接收区域")
         recv_layout = QVBoxLayout()
+        
+        # 统计信息栏
+        stats_layout = QHBoxLayout()
+        self.rx_count_label = QLabel("接收: 0 包")
+        self.rx_bytes_label = QLabel("字节: 0")
+        self.rx_rate_label = QLabel("速率: 0 B/s")
+        stats_layout.addWidget(self.rx_count_label)
+        stats_layout.addWidget(self.rx_bytes_label)
+        stats_layout.addWidget(self.rx_rate_label)
+        stats_layout.addStretch()
+        recv_layout.addLayout(stats_layout)
+        
+        # 接收文本框
         self.receive_text_edit = QTextEdit()
         self.receive_text_edit.setReadOnly(True)
-        font = QFont("Courier New", 10)
+        font = QFont("Consolas", 10)
         font.setStyleHint(QFont.StyleHint.Monospace)
         self.receive_text_edit.setFont(font)
+        self.receive_text_edit.setStyleSheet("""
+            QTextEdit {
+                background-color: #1E1E1E;
+                color: #00FF00;
+                border: 1px solid #3F3F3F;
+                selection-background-color: #264F78;
+            }
+        """)
         recv_layout.addWidget(self.receive_text_edit)
+        
+        # 接收选项
         recv_options_layout = QHBoxLayout()
+        self.recv_hex_checkbox.setChecked(True)
+        self.recv_auto_scroll_checkbox.setChecked(True)
+        self.recv_word_wrap_checkbox.setChecked(False)
+        
         recv_options_layout.addWidget(self.recv_hex_checkbox)
         recv_options_layout.addWidget(self.recv_timestamp_checkbox)
+        recv_options_layout.addWidget(self.recv_auto_scroll_checkbox)
+        recv_options_layout.addWidget(self.recv_word_wrap_checkbox)
         recv_options_layout.addStretch()
-        clear_basic_recv_button = QPushButton("清空接收区")
-        clear_basic_recv_button.clicked.connect(self.receive_text_edit.clear)
-        recv_options_layout.addWidget(clear_basic_recv_button)
+        
+        # 接收区域按钮
+        clear_recv_button = QPushButton("清空")
+        clear_recv_button.setMaximumWidth(60)
+        clear_recv_button.clicked.connect(self.clear_receive_area)
+        save_recv_button = QPushButton("保存")
+        save_recv_button.setMaximumWidth(60)
+        save_recv_button.clicked.connect(self._save_receive_data)
+        
+        recv_options_layout.addWidget(save_recv_button)
+        recv_options_layout.addWidget(clear_recv_button)
+        
         recv_layout.addLayout(recv_options_layout)
         recv_group.setLayout(recv_layout)
         main_layout.addWidget(recv_group)
 
     def _create_send_group(self, main_layout: QVBoxLayout):
-        send_group = QGroupBox("基本发送 (原始串行数据)")
+        send_group = QGroupBox("数据发送区域")
         send_layout = QVBoxLayout()
         
-        # 创建发送文本框，根据终端模式切换类型
+        # 统计信息栏
+        send_stats_layout = QHBoxLayout()
+        self.tx_count_label = QLabel("发送: 0 包")
+        self.tx_bytes_label = QLabel("字节: 0")
+        self.tx_rate_label = QLabel("速率: 0 B/s")
+        send_stats_layout.addWidget(self.tx_count_label)
+        send_stats_layout.addWidget(self.tx_bytes_label)
+        send_stats_layout.addWidget(self.tx_rate_label)
+        send_stats_layout.addStretch()
+        send_layout.addLayout(send_stats_layout)
+        
+        # 快捷发送按钮区域
+        quick_send_group = QGroupBox("快捷发送")
+        quick_send_layout = QHBoxLayout()
+        
+        for i, (name, data, is_hex) in enumerate(self.quick_send_data):
+            btn = QPushButton(name)
+            btn.setMaximumWidth(80)
+            btn.clicked.connect(lambda checked, d=data, h=is_hex: self._quick_send(d, h))
+            self.quick_send_buttons.append(btn)
+            quick_send_layout.addWidget(btn)
+        
+        quick_send_layout.addStretch()
+        edit_quick_btn = QPushButton("编辑")
+        edit_quick_btn.setMaximumWidth(60)
+        edit_quick_btn.clicked.connect(self._edit_quick_send)
+        quick_send_layout.addWidget(edit_quick_btn)
+        
+        quick_send_group.setLayout(quick_send_layout)
+        send_layout.addWidget(quick_send_group)
+        
+        # 发送文本框
         self.send_text_edit = QPlainTextEdit()
-        self.send_text_edit.setMaximumHeight(100)
-        self.send_text_edit.setPlaceholderText("输入要发送的文本或Hex数据 (如: AB CD EF 或 Hello)")
+        self.send_text_edit.setMaximumHeight(120)
+        self.send_text_edit.setPlaceholderText("输入要发送的文本或Hex数据 (如: AB CD EF 或 Hello)\nCtrl+Enter快速发送")
+        font = QFont("Consolas", 10)
+        font.setStyleHint(QFont.StyleHint.Monospace)
+        self.send_text_edit.setFont(font)
         self.send_text_edit.setStyleSheet("""
             QPlainTextEdit {
                 background-color: #1E1E1E;
                 color: #CCCCCC;
-                font-family: Consolas, 'Courier New', monospace;
+                border: 1px solid #3F3F3F;
+                selection-background-color: #264F78;
             }
         """)
-        
-        self.setStyleSheet("""
-            QCheckBox::indicator:checked {
-                background-color: #0078D7;
-                border: 1px solid #0078D7;
-            }
-            QCheckBox::indicator:unchecked {
-                background-color: #333333;
-                border: 1px solid #555555;
-            }
-        """)
-
         send_layout.addWidget(self.send_text_edit)
         
-        send_options_layout = QHBoxLayout()
-        send_options_layout.addWidget(self.send_hex_checkbox)
-        send_options_layout.addWidget(self.terminal_mode_checkbox)
-        send_options_layout.addStretch()
+        # 发送选项第一行
+        send_options1_layout = QHBoxLayout()
+        self.send_hex_checkbox.setChecked(True)
+        send_options1_layout.addWidget(self.send_hex_checkbox)
+        send_options1_layout.addWidget(self.terminal_mode_checkbox)
+        send_options1_layout.addWidget(self.auto_send_checkbox)
         
+        # 自动发送间隔设置
+        send_options1_layout.addWidget(QLabel("间隔(ms):"))
+        self.auto_send_interval_edit = QLineEdit("1000")
+        self.auto_send_interval_edit.setMaximumWidth(80)
+        self.auto_send_interval_edit.setValidator(QIntValidator(100, 60000, self))
+        send_options1_layout.addWidget(self.auto_send_interval_edit)
+        
+        send_options1_layout.addStretch()
+        send_layout.addLayout(send_options1_layout)
+        
+        # 发送选项第二行
+        send_options2_layout = QHBoxLayout()
+        
+        # 发送格式选择
+        format_group = QGroupBox("发送格式")
+        format_layout = QHBoxLayout()
+        self.format_raw_radio = QPushButton("原始")
+        self.format_crlf_radio = QPushButton("+CRLF")
+        self.format_lf_radio = QPushButton("+LF")
+        self.format_cr_radio = QPushButton("+CR")
+        
+        for btn in [self.format_raw_radio, self.format_crlf_radio, self.format_lf_radio, self.format_cr_radio]:
+            btn.setCheckable(True)
+            btn.setMaximumWidth(60)
+            format_layout.addWidget(btn)
+        
+        self.format_raw_radio.setChecked(True)
+        format_group.setLayout(format_layout)
+        send_options2_layout.addWidget(format_group)
+        
+        send_options2_layout.addStretch()
+        
+        # 发送按钮区域
         clear_send_button = QPushButton("清空")
         clear_send_button.clicked.connect(self.clear_send_area)
-        send_options_layout.addWidget(clear_send_button)
+        send_options2_layout.addWidget(clear_send_button)
         
+        self.send_button.setStyleSheet("""
+            QPushButton {
+                background-color: #0078D7;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #106EBE;
+            }
+            QPushButton:pressed {
+                background-color: #005A9E;
+            }
+        """)
         self.send_button.clicked.connect(self._on_send_clicked)
-        send_options_layout.addWidget(self.send_button)
-        send_layout.addLayout(send_options_layout)
+        send_options2_layout.addWidget(self.send_button)
+        
+        send_layout.addLayout(send_options2_layout)
         send_group.setLayout(send_layout)
         main_layout.addWidget(send_group)
 
@@ -437,6 +578,15 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
             self.send_text_edit.keyPressEvent = self._on_send_text_key_press
         self.send_hex_checkbox.toggled.connect(self._on_hex_mode_toggled)
         self.terminal_mode_checkbox.toggled.connect(self._on_terminal_mode_toggled)
+        self.auto_send_checkbox.toggled.connect(self._on_auto_send_toggled)
+        self.recv_auto_scroll_checkbox.toggled.connect(self._on_auto_scroll_toggled)
+        self.recv_word_wrap_checkbox.toggled.connect(self._on_auto_wrap_toggled)
+        
+        # 连接发送格式按钮
+        self.format_raw_radio.clicked.connect(lambda: self._set_send_format('raw'))
+        self.format_crlf_radio.clicked.connect(lambda: self._set_send_format('crlf'))
+        self.format_lf_radio.clicked.connect(lambda: self._set_send_format('lf'))
+        self.format_cr_radio.clicked.connect(lambda: self._set_send_format('cr'))
 
     @Slot(bool)
     def _on_hex_mode_toggled(self, checked: bool):
@@ -474,6 +624,12 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
                 """)
 
     def _on_send_text_key_press(self, event):
+        # Ctrl+Enter 快速发送
+        if (event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter) and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self._on_send_clicked()
+            event.accept()
+            return
+            
         if not self.terminal_mode_checkbox.isChecked():
             # 非终端模式，保持原有行为
             QPlainTextEdit.keyPressEvent(self.send_text_edit, event)
@@ -534,6 +690,9 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
             QMessageBox.warning(self, "输入错误", "Hex数据格式不正确。\n请输入有效的十六进制数据，如: AB CD EF 或 ABCDEF")
             return
 
+        # 添加发送格式处理
+        formatted_text = self._apply_send_format(text_to_send)
+
         # 如果是终端模式，处理多行发送和命令历史
         if self.terminal_mode_checkbox.isChecked():
             # 添加到命令历史
@@ -544,12 +703,22 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
             self.history_index = -1
             
             # 发送后清空输入框
-            self.send_text_edit.clear()
+            if not self.auto_send_checkbox.isChecked():
+                self.send_text_edit.clear()
         else:
             # 非终端模式保持原有行为
-            self.send_text_edit.clear()
+            if not self.auto_send_checkbox.isChecked():
+                self.send_text_edit.clear()
 
-        self.send_basic_data_requested.emit(text_to_send, is_hex)
+        # 更新发送统计
+        if is_hex:
+            hex_data = re.sub(r'[\s\-:,]', '', formatted_text.upper())
+            byte_count = len(hex_data) // 2
+        else:
+            byte_count = len(formatted_text.encode('utf-8'))
+        
+        self.update_tx_stats(byte_count)
+        self.send_basic_data_requested.emit(formatted_text, is_hex)
 
 
     def _validate_hex_input(self, text: str) -> bool:
@@ -611,10 +780,146 @@ class BasicCommPanelWidget(QWidget):  # Full implementation
                 self.send_text_edit.clear()
 
     def get_send_text(self) -> str:
-        return self.send_text_edit.text() if self.send_text_edit else ""
+        return self.send_text_edit.toPlainText() if self.send_text_edit else ""
 
     def set_send_text(self, text: str):
-        if self.send_text_edit: self.send_text_edit.setText(text)
+        if self.send_text_edit: self.send_text_edit.setPlainText(text)
+
+    def _setup_auto_send_timer(self):
+        self.auto_send_timer = QTimer()
+        self.auto_send_timer.timeout.connect(self._auto_send_timeout)
+
+    def _setup_stats_timer(self):
+        self.stats_timer = QTimer()
+        self.stats_timer.timeout.connect(self._update_stats)
+        self.stats_timer.start(1000)  # 每秒更新一次统计信息
+
+    @Slot(bool)
+    def _on_auto_send_toggled(self, checked: bool):
+        if checked:
+            # 检查串口连接状态
+            if not hasattr(self.main_window_ref, 'serial_manager') or not self.main_window_ref.serial_manager.is_connected:
+                self.auto_send_checkbox.setChecked(False)
+                QMessageBox.warning(self, "错误", "请先连接串口后再启用自动发送功能")
+                return
+            
+            try:
+                interval = int(self.auto_send_interval_edit.text())
+                if interval < 100:
+                    interval = 100
+                    self.auto_send_interval_edit.setText("100")
+                self.auto_send_timer.start(interval)
+            except ValueError:
+                self.auto_send_checkbox.setChecked(False)
+                QMessageBox.warning(self, "错误", "无效的发送间隔时间")
+        else:
+            self.auto_send_timer.stop()
+
+    @Slot(bool)
+    def _on_auto_scroll_toggled(self, checked: bool):
+        # 自动滚动功能实现
+        pass
+
+    @Slot(bool)
+    def _on_auto_wrap_toggled(self, checked: bool):
+        if self.receive_text_edit:
+            if checked:
+                self.receive_text_edit.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
+            else:
+                self.receive_text_edit.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
+
+    def _set_send_format(self, format_type: str):
+        # 重置所有按钮状态
+        for btn in [self.format_raw_radio, self.format_crlf_radio, self.format_lf_radio, self.format_cr_radio]:
+            btn.setChecked(False)
+        
+        # 设置选中的按钮
+        if format_type == 'raw':
+            self.format_raw_radio.setChecked(True)
+        elif format_type == 'crlf':
+            self.format_crlf_radio.setChecked(True)
+        elif format_type == 'lf':
+            self.format_lf_radio.setChecked(True)
+        elif format_type == 'cr':
+            self.format_cr_radio.setChecked(True)
+
+    def _auto_send_timeout(self):
+        if self.auto_send_checkbox.isChecked():
+            # 检查串口连接状态，如果断开则停止自动发送
+            if not hasattr(self.main_window_ref, 'serial_manager') or not self.main_window_ref.serial_manager.is_connected:
+                self.auto_send_checkbox.setChecked(False)
+                self.auto_send_timer.stop()
+                return
+            self._on_send_clicked()
+
+    def _update_stats(self):
+        # 更新统计信息显示
+        self.tx_count_label.setText(f"发送: {self.tx_count} 包")
+        self.tx_bytes_label.setText(f"字节: {self.tx_bytes}")
+        self.rx_count_label.setText(f"接收: {self.rx_count} 包")
+        self.rx_bytes_label.setText(f"字节: {self.rx_bytes}")
+
+    def _quick_send(self, data: str, is_hex: bool):
+        if not hasattr(self.main_window_ref, 'serial_manager'):
+            QMessageBox.warning(self, "错误", "串口管理器未初始化。")
+            return
+        if not self.main_window_ref.serial_manager.is_connected:
+            QMessageBox.warning(self, "警告", "串口未打开，请先打开串口连接。")
+            return
+        
+        self.send_basic_data_requested.emit(data, is_hex)
+        self.tx_count += 1
+        if is_hex:
+            hex_data = re.sub(r'[\s\-:,]', '', data.upper())
+            self.tx_bytes += len(hex_data) // 2
+        else:
+            self.tx_bytes += len(data.encode('utf-8'))
+
+    def _edit_quick_send(self):
+        # 编辑快捷发送按钮的功能
+        QMessageBox.information(self, "提示", "快捷发送编辑功能待实现")
+
+    def _save_receive_data(self):
+        if not self.receive_text_edit or not self.receive_text_edit.toPlainText():
+            QMessageBox.information(self, "提示", "没有数据可保存")
+            return
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "保存接收数据", "", "文本文件 (*.txt);;所有文件 (*.*)"
+        )
+        if file_path:
+            try:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(self.receive_text_edit.toPlainText())
+                QMessageBox.information(self, "成功", f"数据已保存到: {file_path}")
+            except Exception as e:
+                QMessageBox.critical(self, "错误", f"保存失败: {str(e)}")
+
+    def update_rx_stats(self, byte_count: int):
+        self.rx_count += 1
+        self.rx_bytes += byte_count
+
+    def update_tx_stats(self, byte_count: int):
+        self.tx_count += 1
+        self.tx_bytes += byte_count
+    
+    def on_serial_connection_changed(self, connected: bool):
+        """当串口连接状态改变时调用此方法"""
+        if not connected and self.auto_send_checkbox.isChecked():
+            # 串口断开时自动停止自动发送
+            self.auto_send_checkbox.setChecked(False)
+            self.auto_send_timer.stop()
+
+    def _apply_send_format(self, text: str) -> str:
+        """根据选择的发送格式处理文本"""
+        if self.format_crlf_radio.isChecked():
+            return text + '\r\n'
+        elif self.format_lf_radio.isChecked():
+            return text + '\n'
+        elif self.format_cr_radio.isChecked():
+            return text + '\r'
+        else:  # raw format
+            return text
 
 
 class ScriptingPanelWidget(QWidget):  # Full implementation

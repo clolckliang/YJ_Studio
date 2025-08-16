@@ -35,13 +35,37 @@ def calculate_frame_crc16(frame_part_for_crc: QByteArray) -> int:
     return crc16_ccitt_false_func(frame_part_for_crc.data())
 
 def calculate_original_checksums_python(frame_part_data: QByteArray) -> Tuple[int, int]:
-    """ Python equivalent of the C original sum/add checksum """
+    """Python 实现的原始求和/累加校验算法，与 C 语言实现保持一致"""
     s_check = 0
     a_check = 0
-    for byte_val in frame_part_data.data(): # Iterate over bytes
+    
+    # 确保与 C 语言实现的字节处理方式一致
+    data_bytes = frame_part_data.data()
+    for byte_val in data_bytes:
+        # 确保字节值在 0-255 范围内
+        if isinstance(byte_val, int):
+            byte_val = byte_val & 0xFF
+        else:
+            byte_val = ord(byte_val) & 0xFF
+            
         s_check = (s_check + byte_val) & 0xFF
         a_check = (a_check + s_check) & 0xFF
+    
     return s_check, a_check
+
+def calculate_frame_crc16(frame_part_for_crc: QByteArray) -> int:
+    """计算 CRC-16/CCITT-FALSE 校验和"""
+    try:
+        data_bytes = frame_part_for_crc.data()
+        return crc16_ccitt_false_func(data_bytes)
+    except Exception as e:
+        # 如果出现错误，返回0并记录日志
+        print(f"CRC16 计算错误: {e}")
+        return 0
+
+# 移除旧的有问题的 calculate_checksums 函数
+# def calculate_checksums(frame_without_checksums: QByteArray) -> Tuple[bytes, bytes]:
+#     # 这个函数有问题，已被 calculate_original_checksums_python 替代
 
 class ProtocolAnalyzer(QObject): # Making it a QObject if it needs to emit signals later
     # statistics_updated = Signal(dict) # Example if stats updates were signaled
@@ -233,30 +257,40 @@ class FrameParser(QObject):
             is_valid = False
             error_msg = ""
 
+            # 在 try_parse_frames 方法中的校验和验证部分
             if active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
                 if received_checksum_ba.size() == 2:
-                    # CRC-16/CCITT-FALSE typically uses Big-Endian in frame, but check protocol spec
-                    # Your original code assumed Big-Endian (>H), let's keep that for now.
-                    received_crc_val = struct.unpack('>H', received_checksum_ba.data())[0]
+                    # 修正：根据协议规范确定字节序
+                    # 假设 CRC16 使用小端序存储（与数据长度字段一致）
+                    received_crc_val = struct.unpack('<H', received_checksum_ba.data())[0]
                     calculated_crc_val = calculate_frame_crc16(frame_part_for_calc)
                     if received_crc_val == calculated_crc_val:
                         is_valid = True
                     else:
                         error_msg = f"CRC校验失败! Recv:0x{received_crc_val:04X}, Calc:0x{calculated_crc_val:04X}"
                 else:
-                    error_msg = f"CRC校验错误: 校验和长度不足 (需要 2 字节)" # CRC is 2 bytes
-            else:  # ORIGINAL_SUM_ADD (as per the image, SUM CHECK and ADD CHECK are 1 byte each)
-                if received_checksum_ba.size() == Constants.CHECKSUM_FIELD_LENGTH: # Should be 2 bytes for SC+AC
-                    received_sc_val = received_checksum_ba.data()[0]
-                    received_ac_val = received_checksum_ba.data()[1]
+                    error_msg = f"CRC校验错误: 校验和长度不足 (需要 2 字节)"
+            else:  # ORIGINAL_SUM_ADD
+                if received_checksum_ba.size() == Constants.CHECKSUM_FIELD_LENGTH:
+                    received_checksum_data = received_checksum_ba.data()
+                    received_sc_val = received_checksum_data[0]
+                    received_ac_val = received_checksum_data[1]
+                    
+                    # 确保字节值正确转换
+                    if isinstance(received_sc_val, str):
+                        received_sc_val = ord(received_sc_val)
+                    if isinstance(received_ac_val, str):
+                        received_ac_val = ord(received_ac_val)
+                    
                     calculated_sc, calculated_ac = calculate_original_checksums_python(frame_part_for_calc)
+                    
                     if received_sc_val == calculated_sc and received_ac_val == calculated_ac:
                         is_valid = True
                     else:
                         error_msg = (f"原始校验失败! RecvSC:0x{received_sc_val:02X},CalcSC:0x{calculated_sc:02X}; "
-                                     f"RecvAC:0x{received_ac_val:02X},CalcAC:0x{calculated_ac:02X}")
+                                   f"RecvAC:0x{received_ac_val:02X},CalcAC:0x{calculated_ac:02X}")
                 else:
-                    error_msg = f"原始校验和错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)" # SC+AC is 2 bytes
+                    error_msg = f"原始校验和错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)"
 
             if is_valid:
                 self._parsed_frame_count += 1

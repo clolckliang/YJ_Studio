@@ -199,34 +199,54 @@ class SerialManager(QObject):
             if self.error_logger:
                 self.error_logger.log_info("串口已关闭")
 
+    @Slot()
+    def _read_data(self) -> None:
+        """Qt串口数据读取回调函数"""
+        if self.serial_port and self.serial_port.bytesAvailable() > 0:
+            data = self.serial_port.readAll()
+            if self.error_logger:
+                # 修正：确保数据转换正确
+                hex_data = data.toHex(' ').data().decode('ascii').upper()
+                self.error_logger.log_info(f"接收到 {data.size()} 字节数据 (Qt): {hex_data}")
+            self.data_received.emit(data)
+
     def write_data(self, data: QByteArray) -> int:
         if not self.is_connected:
             if self.error_logger:
                 self.error_logger.log_warning("尝试在未连接的串口上写入数据。")
-            return -1  # Indicate error or not connected
+            return -1
 
         if self.use_pyserial:
             try:
-                # 记录发送的数据
+                # 修正：确保数据转换正确
                 if self.error_logger:
-                    self.error_logger.log_info(f"发送数据 (pyserial): {data.toHex(' ').data().decode('ascii').upper()}")
-                bytes_written = self.serial_port.write(data.data())
+                    hex_data = data.toHex(' ').data().decode('ascii').upper()
+                    self.error_logger.log_info(f"发送数据 (pyserial): {hex_data}")
+                
+                # 确保数据正确转换为字节
+                data_bytes = data.data()
+                if isinstance(data_bytes, str):
+                    data_bytes = data_bytes.encode('latin-1')
+                
+                bytes_written = self.serial_port.write(data_bytes)
                 return bytes_written
             except Exception as e:
                 if self.error_logger:
                     self.error_logger.log_error(f"串口写入错误: {e}", "SEND")
                 return -1
         else:
-            # 记录发送的数据
+            # 修正：确保数据转换正确
             if self.error_logger:
-                self.error_logger.log_info(f"发送数据 (Qt): {data.toHex(' ').data().decode('ascii').upper()}")
+                hex_data = data.toHex(' ').data().decode('ascii').upper()
+                self.error_logger.log_info(f"发送数据 (Qt): {hex_data}")
+            
             bytes_written = self.serial_port.write(data)
             if bytes_written == -1:
                 if self.error_logger:
                     self.error_logger.log_error(f"串口写入错误: {self.serial_port.errorString()}", "SEND")
-            elif bytes_written != len(data):
+            elif bytes_written != data.size():
                 if self.error_logger:
-                    self.error_logger.log_warning(f"串口部分写入: {bytes_written}/{len(data)}字节。", "SEND")
+                    self.error_logger.log_warning(f"串口部分写入: {bytes_written}/{data.size()}字节。", "SEND")
             return bytes_written
 
     def _log_and_emit_error(self, message: str, error_type: str = "VALIDATION"):
@@ -245,17 +265,6 @@ class SerialManager(QObject):
 
     def get_connection_status(self) -> bool:
         return self.is_connected
-
-    @Slot()
-    def _read_data(self) -> None:
-        """Qt串口数据读取回调函数"""
-        if self.error_logger:
-            self.error_logger.log_info("_read_data triggered")
-        if self.serial_port and self.serial_port.bytesAvailable() > 0:
-            data = self.serial_port.readAll()
-            if self.error_logger:
-                self.error_logger.log_info(f"接收到 {data.size()} 字节数据 (Qt): {data.toHex(' ').data().decode('ascii').upper()}")
-            self.data_received.emit(data)
 
     @Slot(QSerialPort.SerialPortError)
     def _handle_serial_error(self, error: QSerialPort.SerialPortError) -> None:
@@ -279,19 +288,30 @@ class SerialReadThread(QThread):
         parent = self.parent()
         if parent and hasattr(parent, 'error_logger') and parent.error_logger:
             parent.error_logger.log_info("SerialReadThread started")
+        
         while self._running:
             try:
                 if self.serial_port.in_waiting > 0:
                     data = self.serial_port.read(self.serial_port.in_waiting)
-                    qdata = QByteArray(data)
+                    # 修正：确保数据正确转换为 QByteArray
+                    if isinstance(data, bytes):
+                        qdata = QByteArray(data)
+                    else:
+                        qdata = QByteArray(bytes(data))
+                    
                     if parent and hasattr(parent, 'error_logger') and parent.error_logger:
-                        parent.error_logger.log_info(f"接收到 {len(data)} 字节数据 (pyserial): {qdata.toHex(' ').data().decode('ascii').upper()}")
-                        parent.error_logger.log_info(f"发射 data_received 信号，包含 {len(data)} 字节数据")
+                        hex_data = qdata.toHex(' ').data().decode('ascii').upper()
+                        parent.error_logger.log_info(f"接收到 {len(data)} 字节数据 (pyserial): {hex_data}")
+                    
                     self.data_received.emit(qdata)
+                else:
+                    # 避免 CPU 占用过高
+                    self.msleep(1)
             except Exception as e:
                 if parent and hasattr(parent, 'error_logger') and parent.error_logger:
                     parent.error_logger.log_error(f"串口读取错误: {e}", "READ")
-            self.msleep(10)
+                self.msleep(10)  # 出错时稍微等待更长时间
+        
         if parent and hasattr(parent, 'error_logger') and parent.error_logger:
             parent.error_logger.log_info("SerialReadThread stopped")
 

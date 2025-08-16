@@ -81,8 +81,11 @@ except ImportError:
 
 
     class QByteArray:  # Basic QByteArray placeholder
-        def __init__(self, initial_data=None):
-            if isinstance(initial_data, QByteArray):
+        def __init__(self, initial_data=None, fill_value=None):
+            if isinstance(initial_data, int) and fill_value is not None:
+                # Handle QByteArray(size, fill_value) constructor
+                self._data = bytearray([fill_value] * initial_data)
+            elif isinstance(initial_data, QByteArray):
                 self._data = bytearray(initial_data._data)
             elif isinstance(initial_data, (bytes, bytearray)):
                 self._data = bytearray(initial_data)
@@ -92,6 +95,7 @@ except ImportError:
                 self._data = bytearray()
             else:
                 raise TypeError("Invalid data type for QByteArray")
+                
 
         def size(self) -> int:
             return len(self._data)
@@ -133,6 +137,12 @@ except ImportError:
 
         def __str__(self):
             return self.toStdString()
+
+        def __getitem__(self, index):
+            return self._data[index]
+
+        def __setitem__(self, index, value):
+            self._data[index] = value
 
 
 class ProtocolManager:
@@ -201,10 +211,8 @@ class CircularBuffer:
         if size <= 0:
             raise ValueError("Buffer size must be positive")
         
-# 修正：使用正确的 QByteArray 初始化方式
-        self.buffer = QByteArray()
-        self.buffer.resize(size)  # 先创建空 QByteArray 再调整大小
-        self.buffer.fill(0)       # 填充零
+        # 修正：使用 bytearray 作为内部存储，更高效且支持索引赋值
+        self._internal_buffer = bytearray(size)
         self.max_size = size
         self.head = 0
         self.tail = 0
@@ -213,19 +221,20 @@ class CircularBuffer:
 
     def write(self, data: QByteArray) -> int:
         """写入数据，返回实际写入字节数"""
-        if data.isEmpty():
+        if data.size() == 0:
             return 0
 
         self.mutex.lock()
         try:
             bytes_written = 0
-            for i in range(data.size()):
+            data_bytes = data.data()  # 获取字节数据
+            for byte_val in data_bytes:
                 if self.count == self.max_size:  # 缓冲区满时覆盖旧数据
                     self.tail = (self.tail + 1) % self.max_size
                     self.count -= 1
                 
-                # 使用 QByteArray 的 setByte 方法写入数据
-                self.buffer[self.head] = data[i]
+                # 修正：直接使用 bytearray 的索引赋值
+                self._internal_buffer[self.head] = byte_val
                 self.head = (self.head + 1) % self.max_size
                 self.count += 1
                 bytes_written += 1
@@ -254,11 +263,16 @@ class CircularBuffer:
             result = QByteArray()
             current_pos = self.tail
             
+            bytes_to_peek = min(length, self.count)
+            result_bytes = bytearray()
+            current_pos = self.tail
+            
             for _ in range(bytes_to_peek):
-                result.append(self.buffer[current_pos])
+                # 修正：从内部 bytearray 读取数据
+                result_bytes.append(self._internal_buffer[current_pos])
                 current_pos = (current_pos + 1) % self.max_size
                 
-            return result
+            return QByteArray(bytes(result_bytes))
         finally:
             self.mutex.unlock()
 
@@ -277,12 +291,13 @@ class CircularBuffer:
                 return QByteArray()
             
             physical_pos = (self.tail + pos) % self.max_size
-            result = QByteArray()
+            result_bytes = bytearray()
             
             for i in range(length):
-                result.append(self.buffer[(physical_pos + i) % self.max_size])
+                # 修正：从内部 bytearray 读取数据
+                result_bytes.append(self._internal_buffer[(physical_pos + i) % self.max_size])
             
-            return result
+            return QByteArray(bytes(result_bytes))
         finally:
             self.mutex.unlock()
 
@@ -346,9 +361,10 @@ class CircularBuffer:
         """调试用：打印缓冲区状态"""
         self.mutex.lock()
         try:
+            # 修正：使用内部 bytearray 进行调试输出
             return (f"CircularBuffer(size={self.max_size}, used={self.count})\n"
                    f"Head: {self.head}, Tail: {self.tail}\n"
-                   f"Data: {bytes(self.buffer).hex(' ')}")
+                   f"Data: {self._internal_buffer.hex(' ')}")
         finally:
             self.mutex.unlock()
 class DataProcessor(QThread):

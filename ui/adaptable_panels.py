@@ -109,12 +109,29 @@ class AdaptedParsePanelWidget(PanelInterface):
         container_id = self.main_window_ref.get_next_global_receive_container_id()
         container = ReceiveDataContainerWidget(container_id, self.main_window_ref)
         container.plot_target_changed_signal.connect(self.main_window_ref.handle_recv_container_plot_target_change)
+        
+        # 连接新的绘图配置变化信号
+        if PYQTGRAPH_AVAILABLE and hasattr(container, 'plot_config_changed_signal'):
+            container.plot_config_changed_signal.connect(self._on_container_plot_config_changed)
 
         if config:
             container.name_edit.setText(config.get("name", f"RecvData_{container_id}"))
             container.type_combo.setCurrentText(config.get("type", "uint8_t"))
             if PYQTGRAPH_AVAILABLE and hasattr(container, 'plot_checkbox') and container.plot_checkbox:
                 container.plot_checkbox.setChecked(config.get("plot_enabled", False))
+                # 应用新的绘图配置
+                if hasattr(container, 'plot_mode_combo') and config.get('plot_mode'):
+                    idx = container.plot_mode_combo.findText(config.get('plot_mode'))
+                    if idx >= 0:
+                        container.plot_mode_combo.setCurrentIndex(idx)
+                if hasattr(container, 'x_source_combo') and config.get('x_source'):
+                    idx = container.x_source_combo.findData(config.get('x_source'))
+                    if idx >= 0:
+                        container.x_source_combo.setCurrentIndex(idx)
+                if hasattr(container, 'y_source_combo') and config.get('y_source'):
+                    idx = container.y_source_combo.findData(config.get('y_source'))
+                    if idx >= 0:
+                        container.y_source_combo.setCurrentIndex(idx)
         else:
             container.name_edit.setText(f"RecvData_{container_id}")
             if PYQTGRAPH_AVAILABLE and hasattr(container, 'plot_checkbox') and container.plot_checkbox:
@@ -126,6 +143,9 @@ class AdaptedParsePanelWidget(PanelInterface):
 
         targets_for_dropdown = self.main_window_ref.get_available_plot_targets()
         container.update_plot_targets(targets_for_dropdown)
+        
+        # 更新容器的可用容器列表
+        self._update_container_available_containers()
 
         if config and PYQTGRAPH_AVAILABLE and hasattr(container, 'plot_target_combo') and container.plot_target_combo:
             plot_target_id = config.get("plot_target_id")
@@ -143,11 +163,37 @@ class AdaptedParsePanelWidget(PanelInterface):
 
         if not silent and self.error_logger:
             self.error_logger.log_info(f"Parse Panel {self.panel_id}: Added receive container {container_id}")
+    
+    @Slot(int)
+    def _on_container_plot_config_changed(self, container_id: int):
+        """处理容器绘图配置变化"""
+        if self.error_logger:
+            self.error_logger.log_debug(f"Parse Panel {self.panel_id}: 容器 {container_id} 绘图配置已变化")
+        # 这里可以添加额外的处理逻辑，比如验证配置或更新UI
+    
+    def _update_container_available_containers(self):
+        """更新所有容器的可用容器列表"""
+        if not PYQTGRAPH_AVAILABLE:
+            return
+            
+        # 构建可用容器字典
+        available_containers = {}
+        for container in self.receive_data_containers:
+            config = container.get_config()
+            available_containers[container.container_id] = config['name']
+        
+        # 更新每个容器的可用容器列表
+        for container in self.receive_data_containers:
+            if hasattr(container, 'update_available_containers'):
+                container.update_available_containers(available_containers)
 
     def remove_receive_data_container(self, silent: bool = False) -> None:
         if self.receive_data_containers:
             container_to_remove = self.receive_data_containers.pop()
             container_id_removed = container_to_remove.container_id
+            
+            # 更新剩余容器的可用容器列表
+            self._update_container_available_containers()
             self.recv_containers_layout.removeWidget(container_to_remove)
             container_to_remove.deleteLater()
             self.main_window_ref.clear_plot_curves_for_container(container_id_removed)
@@ -192,23 +238,24 @@ class AdaptedParsePanelWidget(PanelInterface):
         if self.error_logger:
             self.error_logger.log_info(f"Parse Panel {self.panel_id}: 开始数据分发，数据负载长度={data_payload_ba.size()}字节")
 
-            # 顺序填充模式分发数据
+        # 顺序填充模式分发数据
+        if self.error_logger:
+            self.error_logger.log_info(f"Parse Panel {self.panel_id}: 数据负载长度={data_payload_ba.size()}字节")
+
+        # 计算所需总字节数
+        total_bytes_required = 0
+        for container_widget in self.receive_data_containers:
+            config = container_widget.get_config()
+            data_type = config["type"]
+            byte_len = get_data_type_byte_length(data_type)
+            if byte_len > 0:  # 固定长度类型
+                total_bytes_required += byte_len
+
+        # 检查数据是否足够
+        if total_bytes_required > data_payload_ba.size():
             if self.error_logger:
-                self.error_logger.log_info(f"Parse Panel {self.panel_id}: 数据负载长度={data_payload_ba.size()}字节")
-
-            # 计算所需总字节数
-            total_bytes_required = 0
-            for container_widget in self.receive_data_containers:
-                config = container_widget.get_config()
-                data_type = config["type"]
-                byte_len = get_data_type_byte_length(data_type)
-                if byte_len > 0:  # 固定长度类型
-                    total_bytes_required += byte_len
-
-            # 检查数据是否足够
-            if total_bytes_required > data_payload_ba.size():
-                if self.error_logger:
-                    self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 数据不足! 需要 {total_bytes_required} 字节, 但只有 {data_payload_ba.size()} 字节")
+                self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 数据不足! 需要 {total_bytes_required} 字节, 但只有 {data_payload_ba.size()} 字节")
+            # 即使数据不足，也继续处理，让各个容器自己处理数据不足的情况
 
             for container_widget in self.receive_data_containers:
                 config = container_widget.get_config()
@@ -286,13 +333,36 @@ class AdaptedParsePanelWidget(PanelInterface):
                 # 处理绘图逻辑
                 if PYQTGRAPH_AVAILABLE and config.get("plot_enabled", False) and config.get("plot_target_id") is not None:
                     target_plot_id = config["plot_target_id"]
+                    if self.error_logger:
+                        self.error_logger.log_info(f"Parse Panel {self.panel_id}: 尝试向绘图面板 {target_plot_id} 发送数据")
+                    
                     if target_plot_id in self.main_window_ref.dynamic_panel_instances:
                         plot_panel = self.main_window_ref.dynamic_panel_instances[target_plot_id]
                         if isinstance(plot_panel, AdaptedPlotWidgetPanel) and plot_panel.plot_widget_container:
                             val_float = container_widget.get_value_as_float()
                             if val_float is not None:
                                 curve_name = f"P{self.panel_id}:{config['name']}"
-                                plot_panel.update_data(config["id"], val_float, curve_name)
+                                container_id = config["id"]
+                                
+                                # 构建绘图配置
+                                plot_config = {
+                                    'plot_mode': config.get('plot_mode', '时序图'),
+                                    'x_source': config.get('x_source', 'index'),
+                                    'y_source': config.get('y_source', f'container_{container_id}')
+                                }
+                                
+                                if self.error_logger:
+                                    self.error_logger.log_info(f"Parse Panel {self.panel_id}: 发送绘图数据 - 容器ID: {container_id}, 值: {val_float}, 曲线名: {curve_name}, 模式: {plot_config['plot_mode']}")
+                                plot_panel.update_data(container_id, val_float, curve_name, plot_config)
+                            else:
+                                if self.error_logger:
+                                    self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 容器 '{config['name']}' 无法转换为浮点数: {container_widget.value_edit.text()}")
+                        else:
+                            if self.error_logger:
+                                self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 绘图面板 {target_plot_id} 不可用或未初始化")
+                    else:
+                        if self.error_logger:
+                            self.error_logger.log_warning(f"Parse Panel {self.panel_id}: 找不到绘图面板 {target_plot_id}")
         
         # 记录解析后的数据
         if parsed_data_for_log_export and hasattr(self.main_window_ref, 'data_recorder'):
@@ -499,6 +569,13 @@ if PYQTGRAPH_AVAILABLE and pg is not None:  # Full implementation
             self.curves: Dict[int, pg.PlotDataItem] = {}
             self.data: Dict[int, Dict[str, list]] = {}
             self.plot_widget_container: Optional[pg.PlotWidget] = None
+            
+            # 新增：绘图配置存储
+            self.plot_configs: Dict[int, Dict[str, Any]] = {}  # 存储每个容器的绘图配置
+            self.container_data_cache: Dict[int, float] = {}  # 缓存容器的最新数据值
+            import time
+            self.start_time = time.time()  # 记录开始时间，用于时间戳计算
+            
             self._init_ui()
 
         def _init_ui(self):
@@ -529,24 +606,169 @@ if PYQTGRAPH_AVAILABLE and pg is not None:  # Full implementation
                 self.dock_title_changed.emit(self.plot_name)
                 self.main_window_ref.notify_plot_target_renamed(self.panel_id, self.plot_name)
 
-        def update_data(self, container_id: int, value: float, curve_name: str):
-            if not self.plot_widget_container: return
-            if container_id not in self.data: self.data[container_id] = {'x': [], 'y': []}; pen_color = pg.intColor(
-                len(self.curves) % 9, hues=9, values=1, alpha=200); self.curves[
-                container_id] = self.plot_widget_container.plot(name=curve_name, pen=pen_color)
+        def update_data(self, container_id: int, value: float, curve_name: str, plot_config: Optional[Dict[str, Any]] = None):
+            if not self.plot_widget_container: 
+                if self.error_logger:
+                    self.error_logger.log_warning(f"Plot Panel {self.panel_id}: plot_widget_container 未初始化")
+                return
+            
+            # 更新容器数据缓存
+            self.container_data_cache[container_id] = value
+            
+            # 更新绘图配置
+            if plot_config:
+                self.plot_configs[container_id] = plot_config
+            
+            # 获取绘图配置，默认为时序图模式
+            config = self.plot_configs.get(container_id, {'plot_mode': '时序图', 'x_source': 'index', 'y_source': f'container_{container_id}'})
+            plot_mode = config.get('plot_mode', '时序图')
+            
+            # 根据绘图模式处理数据
+            if plot_mode == '时序图':
+                self._update_time_series_data(container_id, value, curve_name)
+            elif plot_mode == 'XY散点图':
+                self._update_xy_scatter_data(container_id, value, curve_name, config)
+            elif plot_mode == '参数图':
+                self._update_parametric_data(container_id, value, curve_name, config)
+            else:
+                # 默认使用时序图模式
+                self._update_time_series_data(container_id, value, curve_name)
+        
+        def _update_time_series_data(self, container_id: int, value: float, curve_name: str):
+            """更新时序图数据"""
+            # 初始化容器数据
+            if container_id not in self.data: 
+                self.data[container_id] = {'x': [], 'y': [], 'point_counter': 0}
+                pen_color = pg.intColor(len(self.curves) % 9, hues=9, values=1, alpha=200)
+                self.curves[container_id] = self.plot_widget_container.plot(name=curve_name, pen=pen_color)
+                if self.error_logger:
+                    self.error_logger.log_info(f"Plot Panel {self.panel_id}: 为容器 {container_id} 创建新曲线 '{curve_name}' (时序图)")
+            
+            # 添加新数据点
             self.data[container_id]['y'].append(value)
-            x_val = len(self.data[container_id]['y'])
-            self.data[container_id]['x'].append(x_val)
-            if len(self.data[container_id]['y']) > self.max_data_points: self.data[container_id]['y'].pop(0)
-            self.data[container_id]['x'].pop(0)
-            if container_id in self.curves: self.curves[container_id].setData(self.data[container_id]['x'],
-                                                                              self.data[container_id]['y'])
+            self.data[container_id]['point_counter'] += 1
+            self.data[container_id]['x'].append(self.data[container_id]['point_counter'])
+            
+            # 限制数据点数量，保持x轴连续性
+            if len(self.data[container_id]['y']) > self.max_data_points:
+                self.data[container_id]['y'].pop(0)
+                self.data[container_id]['x'].pop(0)
+            
+            # 更新曲线显示
+            if container_id in self.curves: 
+                self.curves[container_id].setData(self.data[container_id]['x'], self.data[container_id]['y'])
+                if self.error_logger:
+                    self.error_logger.log_debug(f"Plot Panel {self.panel_id}: 更新容器 {container_id} 数据点 ({self.data[container_id]['point_counter']}, {value})")
+        
+        def _update_xy_scatter_data(self, container_id: int, value: float, curve_name: str, config: Dict[str, Any]):
+            """更新XY散点图数据"""
+            x_source = config.get('x_source', 'index')
+            y_source = config.get('y_source', f'container_{container_id}')
+            
+            # 获取X轴数据
+            x_value = self._get_axis_value(x_source, container_id)
+            if x_value is None:
+                return  # X轴数据不可用，跳过此次更新
+            
+            # 获取Y轴数据
+            y_value = self._get_axis_value(y_source, container_id)
+            if y_value is None:
+                return  # Y轴数据不可用，跳过此次更新
+            
+            # 初始化容器数据
+            if container_id not in self.data: 
+                self.data[container_id] = {'x': [], 'y': []}
+                pen_color = pg.intColor(len(self.curves) % 9, hues=9, values=1, alpha=200)
+                # XY散点图使用散点模式
+                self.curves[container_id] = self.plot_widget_container.plot(
+                    name=curve_name, pen=None, symbol='o', symbolBrush=pen_color, symbolSize=5
+                )
+                if self.error_logger:
+                    self.error_logger.log_info(f"Plot Panel {self.panel_id}: 为容器 {container_id} 创建新曲线 '{curve_name}' (XY散点图)")
+            
+            # 添加新数据点
+            self.data[container_id]['x'].append(x_value)
+            self.data[container_id]['y'].append(y_value)
+            
+            # 限制数据点数量
+            if len(self.data[container_id]['x']) > self.max_data_points:
+                self.data[container_id]['x'].pop(0)
+                self.data[container_id]['y'].pop(0)
+            
+            # 更新曲线显示
+            if container_id in self.curves: 
+                self.curves[container_id].setData(self.data[container_id]['x'], self.data[container_id]['y'])
+                if self.error_logger:
+                    self.error_logger.log_debug(f"Plot Panel {self.panel_id}: 更新容器 {container_id} XY数据点 ({x_value}, {y_value})")
+        
+        def _update_parametric_data(self, container_id: int, value: float, curve_name: str, config: Dict[str, Any]):
+            """更新参数图数据（类似XY散点图，但使用连线）"""
+            x_source = config.get('x_source', 'index')
+            y_source = config.get('y_source', f'container_{container_id}')
+            
+            # 获取X轴数据
+            x_value = self._get_axis_value(x_source, container_id)
+            if x_value is None:
+                return
+            
+            # 获取Y轴数据
+            y_value = self._get_axis_value(y_source, container_id)
+            if y_value is None:
+                return
+            
+            # 初始化容器数据
+            if container_id not in self.data: 
+                self.data[container_id] = {'x': [], 'y': []}
+                pen_color = pg.intColor(len(self.curves) % 9, hues=9, values=1, alpha=200)
+                # 参数图使用连线模式
+                self.curves[container_id] = self.plot_widget_container.plot(name=curve_name, pen=pen_color)
+                if self.error_logger:
+                    self.error_logger.log_info(f"Plot Panel {self.panel_id}: 为容器 {container_id} 创建新曲线 '{curve_name}' (参数图)")
+            
+            # 添加新数据点
+            self.data[container_id]['x'].append(x_value)
+            self.data[container_id]['y'].append(y_value)
+            
+            # 限制数据点数量
+            if len(self.data[container_id]['x']) > self.max_data_points:
+                self.data[container_id]['x'].pop(0)
+                self.data[container_id]['y'].pop(0)
+            
+            # 更新曲线显示
+            if container_id in self.curves: 
+                self.curves[container_id].setData(self.data[container_id]['x'], self.data[container_id]['y'])
+                if self.error_logger:
+                    self.error_logger.log_debug(f"Plot Panel {self.panel_id}: 更新容器 {container_id} 参数数据点 ({x_value}, {y_value})")
+        
+        def _get_axis_value(self, source: str, current_container_id: int) -> Optional[float]:
+            """获取轴数据值"""
+            if source == 'timestamp':
+                import time
+                return time.time() - self.start_time
+            elif source == 'index':
+                # 使用当前容器的点计数器
+                if current_container_id in self.data:
+                    return len(self.data[current_container_id]['x'])
+                else:
+                    return 0
+            elif source.startswith('container_'):
+                try:
+                    container_id = int(source.split('_')[1])
+                    return self.container_data_cache.get(container_id)
+                except (ValueError, IndexError):
+                    return None
+            else:
+                return None
 
         def clear_plot(self):
             if not self.plot_widget_container: return
-            for cid in list(self.curves.keys()): self.remove_curve_for_container(cid, silent=True)
+            for cid in list(self.curves.keys()): 
+                self.remove_curve_for_container(cid, silent=True)
             self.plot_widget_container.clear()
             self.plot_widget_container.addLegend()
+            # 重置所有数据
+            self.data.clear()
+            self.curves.clear()
             if self.error_logger: self.error_logger.log_info(
                 f"Plot Panel {self.panel_id} ('{self.plot_name}') cleared.")
 
@@ -555,6 +777,7 @@ if PYQTGRAPH_AVAILABLE and pg is not None:  # Full implementation
             if container_id in self.curves:
                 curve_to_remove = self.curves.pop(container_id)
                 self.plot_widget_container.removeItem(curve_to_remove)
+                # 清理对应的数据
                 self.data.pop(container_id, None)
                 if not silent and self.error_logger: self.error_logger.log_debug(
                     f"[Plot Panel {self.panel_id}] Removed curve for container {container_id}.")

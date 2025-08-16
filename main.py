@@ -142,6 +142,9 @@ class SerialDebugger(QMainWindow):
 
         self.error_logger.log_info("应用程序启动 (插件管理增强)。")
 
+        # 恢复上次使用的主题
+        self.theme_manager.restore_last_theme()
+
         self.flash_timer = QTimer(self)
         self.flash_timer.setSingleShot(True)
         self.flash_timer.timeout.connect(self._stop_flash)

@@ -36,6 +36,7 @@ from ui.fixed_panels import (
     BasicCommPanelWidget,
     ScriptingPanelWidget
 )
+from ui.enhanced_basic_comm_panel import EnhancedBasicCommPanel
 from ui.adaptable_panels import (
     AdaptedParsePanelWidget,
     AdaptedSendPanelWidget,
@@ -173,12 +174,12 @@ class SerialDebugger(QMainWindow):
         self.dw_custom_log.setWidget(self.custom_log_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_custom_log)
 
-        self.basic_comm_panel_widget = BasicCommPanelWidget(main_window_ref=self)
+        self.basic_comm_panel_widget = EnhancedBasicCommPanel(main_window_ref=self)
         self.dw_basic_serial = QDockWidget("基本收发", self)
         self.dw_basic_serial.setObjectName("BasicSerialDock")
         self.dw_basic_serial.setWidget(self.basic_comm_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_basic_serial)
-        self.basic_comm_panel_widget.send_basic_data_requested.connect(self.send_basic_serial_data_action)
+        self.basic_comm_panel_widget.send_data_requested.connect(self.send_basic_serial_data_action)
 
         try:
             self.tabifyDockWidget(self.dw_custom_log, self.dw_basic_serial)

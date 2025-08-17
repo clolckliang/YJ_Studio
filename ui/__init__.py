@@ -8,10 +8,29 @@
 
 from .widgets import ReceiveDataContainerWidget, SendDataContainerWidget, PlotWidgetContainer
 from .theme_manager import ThemeManager
-
+from .fixed_panels import (
+    SerialConfigDefinitionPanelWidget,
+    CustomLogPanelWidget,
+    BasicCommPanelWidget,
+    ScriptingPanelWidget
+)
+from .adaptable_panels import (
+    AdaptedParsePanelWidget,
+    AdaptedSendPanelWidget,
+    AdaptedPlotWidgetPanel
+)
+from .dialogs import PluginManagementDialog
 __all__ = [
     "ReceiveDataContainerWidget",
     "SendDataContainerWidget",
     "PlotWidgetContainer",
     "ThemeManager",
+    "SerialConfigDefinitionPanelWidget",
+     "CustomLogPanelWidget",
+    "BasicCommPanelWidget",
+    "ScriptingPanelWidget",
+    "AdaptedParsePanelWidget",
+    "AdaptedSendPanelWidget",
+    "AdaptedPlotWidgetPanel",
+    "PluginManagementDialog"
 ]

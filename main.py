@@ -1,24 +1,26 @@
+# main.py
+import re
 import struct
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict, List, Any
-
-from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal
-from PySide6.QtGui import QAction, QTextCursor, QIcon, QIntValidator
+from typing import Optional, Dict, List, Any, Set  # Added Set
+from PySide6.QtCore import Slot, QByteArray, Qt, QEvent, QObject, Signal, QSettings, QTimer
+from PySide6.QtGui import QAction, QIcon, QCloseEvent
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QGridLayout, QLabel, QComboBox, QLineEdit, QPushButton, QTextEdit,
-    QCheckBox, QMessageBox, QGroupBox, QScrollArea, QFileDialog,
-    QInputDialog,
-    QDockWidget
+    QApplication, QMainWindow, QWidget, QLabel, QLineEdit, QMessageBox, QFileDialog,
+    QInputDialog, QDockWidget, QDialog,  # For Plugin Management Dialog
 )
 
+# Core imports from your project structure
+from core.placeholders import DataProcessor, create_script_engine
+
 try:
-    import pyqtgraph as pg
+    import pyqtgraph as pg  # type: ignore
 
     PYQTGRAPH_AVAILABLE = True
 except ImportError:
+    pg = None
     PYQTGRAPH_AVAILABLE = False
     print("警告：pyqtgraph 未安装，波形图功能将不可用。请运行 'pip install pyqtgraph'")
 
@@ -27,698 +29,87 @@ from utils.data_models import SerialPortConfig, FrameConfig
 from utils.logger import ErrorLogger
 from utils.config_manager import ConfigManager
 from ui.theme_manager import ThemeManager
-from ui.widgets import ReceiveDataContainerWidget, SendDataContainerWidget, PlotWidgetContainer
+from ui.widgets import SendDataContainerWidget
+from ui.fixed_panels import (
+    SerialConfigDefinitionPanelWidget,
+    CustomLogPanelWidget,
+    BasicCommPanelWidget,
+    ScriptingPanelWidget
+)
+from ui.enhanced_basic_comm_panel import EnhancedBasicCommPanel
+from ui.adaptable_panels import (
+    AdaptedParsePanelWidget,
+    AdaptedSendPanelWidget,
+    AdaptedPlotWidgetPanel
+)
+from ui.dialogs import PluginManagementDialog
+from ui.theme_editor_dialog import ThemeEditorDialog
+from ui.theme_quick_switcher import ThemeQuickSwitcher
+from ui.theme_import_export_dialog import ThemeImportExportDialog
+from ui.theme_backup_dialog import ThemeBackupDialog
 from core.serial_manager import SerialManager
-from core.protocol_handler import ProtocolAnalyzer, FrameParser, get_data_type_byte_length, calculate_frame_crc16, calculate_original_checksums_python
+from core.protocol_handler import ProtocolAnalyzer, FrameParser, calculate_frame_crc16, \
+    calculate_original_checksums_python
 from core.data_recorder import DataRecorder
-
-
-# Assume ParsePanelWidget and SendPanelWidget classes are defined as in your uploaded file.
-# For brevity, their full code is not repeated here, but they are essential.
-
-# --- Panel Widget Classes (Ensure these are defined as previously discussed) ---
-class ParsePanelWidget(QWidget):  # Placeholder - Use your full class definition
-    def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger', initial_config: Optional[Dict] = None,
-                 parent: Optional[QWidget] = None):
-        super().__init__(parent)
-        self.panel_id = panel_id
-        self.main_window_ref = main_window_ref
-        self.error_logger = main_window_ref.error_logger
-        self.receive_data_containers: List[ReceiveDataContainerWidget] = []
-        self._init_ui()
-        if initial_config:
-            self.apply_config(initial_config)
-        else:
-            self.parse_id_edit.setText(f"C{self.panel_id}")
-            self.recv_display_group.setTitle(f"解析面板 {self.panel_id} (ID: C{self.panel_id})")
-
-    def _init_ui(self):
-        layout = QVBoxLayout(self)
-        self.recv_display_group = QGroupBox(f"解析面板 {self.panel_id}")
-        recv_display_main_layout = QVBoxLayout()
-        recv_container_controls_layout = QHBoxLayout()
-        self.add_recv_container_button = QPushButton("添加显示项 (+)")
-        self.add_recv_container_button.clicked.connect(self._add_container_action_triggered)
-        recv_container_controls_layout.addWidget(self.add_recv_container_button)
-        self.remove_recv_container_button = QPushButton("删除显示项 (-)")
-        self.remove_recv_container_button.clicked.connect(self._remove_container_action_triggered)
-        self.remove_recv_container_button.setEnabled(False)
-        recv_container_controls_layout.addWidget(self.remove_recv_container_button)
-        recv_container_controls_layout.addStretch()
-        recv_display_main_layout.addLayout(recv_container_controls_layout)
-        self.scroll_area_recv_containers = QScrollArea()
-        self.scroll_area_recv_containers.setWidgetResizable(True)
-        self.recv_containers_widget = QWidget()
-        self.recv_containers_layout = QVBoxLayout(self.recv_containers_widget)
-        self.recv_containers_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.scroll_area_recv_containers.setWidget(self.recv_containers_widget)
-        recv_display_main_layout.addWidget(self.scroll_area_recv_containers)
-        parse_config_layout = QGridLayout()
-        self.parse_id_label = QLabel("解析功能码(ID)[Hex]:")
-        parse_config_layout.addWidget(self.parse_id_label, 0, 0)
-        self.parse_id_edit = QLineEdit()
-        self.parse_id_edit.editingFinished.connect(self._update_panel_title_from_parse_id)
-        parse_config_layout.addWidget(self.parse_id_edit, 0, 1)
-        parse_config_layout.addWidget(QLabel("数据分配模式:"), 1, 0)
-        self.data_mapping_combo = QComboBox()
-        self.data_mapping_combo.addItems(["顺序填充 (Sequential)"])
-        parse_config_layout.addWidget(self.data_mapping_combo, 1, 1)
-        recv_display_main_layout.addLayout(parse_config_layout)
-        self.recv_display_group.setLayout(recv_display_main_layout)
-        layout.addWidget(self.recv_display_group)
-        self.setLayout(layout)
-
-    def _update_panel_title_from_parse_id(self):
-        new_title = f"解析面板 {self.panel_id} (ID: {self.get_target_func_id().upper()})"
-        self.recv_display_group.setTitle(new_title)
-        dock = self.main_window_ref.parse_panel_docks.get(self.panel_id)
-        if dock: dock.setWindowTitle(new_title)
-
-    @Slot()
-    def _add_container_action_triggered(self):
-        self.add_receive_data_container()
-
-    @Slot()
-    def _remove_container_action_triggered(self):
-        self.remove_receive_data_container()
-
-    def add_receive_data_container(self, config: Optional[Dict[str, Any]] = None, silent: bool = False) -> None:
-        container_id = self.main_window_ref.get_next_global_receive_container_id()
-        container = ReceiveDataContainerWidget(container_id, self.main_window_ref)
-        container.plot_target_changed_signal.connect(self.main_window_ref.handle_recv_container_plot_target_change)
-        if config:
-            container.name_edit.setText(config.get("name", f"RecvData_{container_id}"))
-            container.type_combo.setCurrentText(config.get("type", "uint8_t"))
-            if PYQTGRAPH_AVAILABLE and container.plot_checkbox: container.plot_checkbox.setChecked(
-                config.get("plot_enabled", False))
-        self.recv_containers_layout.addWidget(container)
-        self.receive_data_containers.append(container)
-        self.remove_recv_container_button.setEnabled(True)
-        targets_for_dropdown = {pid: pw.plot_name for pid, pw in self.main_window_ref.plot_widgets_map.items()}
-        container.update_plot_targets(targets_for_dropdown)
-        if config and PYQTGRAPH_AVAILABLE and container.plot_target_combo:
-            plot_target_id = config.get("plot_target_id")
-            if plot_target_id is not None:
-                idx = container.plot_target_combo.findData(plot_target_id)
-                if idx != -1: container.plot_target_combo.setCurrentIndex(idx)
-                container.plot_target_combo.setEnabled(
-                    container.plot_checkbox.isChecked() and bool(targets_for_dropdown))
-        if not silent and self.error_logger: self.error_logger.log_info(
-            f"Parse Panel {self.panel_id}: Added receive container {container_id}")
-
-    def remove_receive_data_container(self, silent: bool = False) -> None:
-        if self.receive_data_containers:
-            container_to_remove = self.receive_data_containers.pop()
-            container_id_removed = container_to_remove.container_id
-            self.recv_containers_layout.removeWidget(container_to_remove)
-            container_to_remove.deleteLater()
-            self.main_window_ref.clear_plot_curves_for_container(container_id_removed)
-            if not self.receive_data_containers: self.remove_recv_container_button.setEnabled(False)
-            if not silent and self.error_logger: self.error_logger.log_info(
-                f"Parse Panel {self.panel_id}: Removed receive container {container_id_removed}")
-
-    def get_target_func_id(self) -> str:
-        return self.parse_id_edit.text()
-
-    def dispatch_data(self, data_payload_ba: QByteArray) -> None:  # As previously defined
-        if not self.receive_data_containers: return
-        current_offset = 0
-        parsed_data_for_log_export: Dict[str, str] = {}
-        timestamp_now = datetime.now()
-        if self.data_mapping_combo.currentText() == "顺序填充 (Sequential)":
-            for container_widget in self.receive_data_containers:
-                config = container_widget.get_config()
-                data_type = config["type"]
-                byte_len = get_data_type_byte_length(data_type)
-                segment = QByteArray()
-                if byte_len == -1:
-                    if current_offset < data_payload_ba.length(): segment = data_payload_ba.mid(
-                        current_offset); current_offset = data_payload_ba.length()
-                elif byte_len > 0:
-                    if current_offset + byte_len <= data_payload_ba.length(): segment = data_payload_ba.mid(
-                        current_offset, byte_len); current_offset += byte_len
-                container_widget.set_value(segment, data_type)
-                log_key_name = f"P{self.panel_id}_{config['name']}"
-                parsed_data_for_log_export[log_key_name] = container_widget.value_edit.text()
-                if PYQTGRAPH_AVAILABLE and config["plot_enabled"] and config["plot_target_id"] is not None:
-                    target_plot_id = config["plot_target_id"]
-                    if target_plot_id in self.main_window_ref.plot_widgets_map:
-                        val_float = container_widget.get_value_as_float()
-                        if val_float is not None:
-                            curve_name = f"P{self.panel_id}:{config['name']}"
-                            self.main_window_ref.plot_widgets_map[target_plot_id].update_data(config["id"], val_float,
-                                                                                              curve_name)
-        if parsed_data_for_log_export: self.main_window_ref.data_recorder.add_parsed_frame_data(timestamp_now,
-                                                                                                parsed_data_for_log_export)
-
-    def get_config(self) -> Dict[str, Any]:  # As previously defined
-        return {"panel_id": self.panel_id, "parse_func_id": self.parse_id_edit.text(),
-                "data_mapping_mode": self.data_mapping_combo.currentText(),
-                "receive_containers": [c.get_config() for c in self.receive_data_containers],
-                "dock_name": self.recv_display_group.title()}
-
-    def apply_config(self, config: Dict[str, Any]):  # As previously defined
-        self.parse_id_edit.setText(config.get("parse_func_id", f"C{self.panel_id}"))
-        self._update_panel_title_from_parse_id()
-        self.data_mapping_combo.setCurrentText(config.get("data_mapping_mode", "顺序填充 (Sequential)"))
-        while self.receive_data_containers: self.remove_receive_data_container(silent=True)
-        for cfg in config.get("receive_containers", []): self.add_receive_data_container(config=cfg, silent=True)
-
-    def update_children_plot_targets(self):  # As previously defined
-        targets = {pid: pw.plot_name for pid, pw in self.main_window_ref.plot_widgets_map.items()}
-        for container in self.receive_data_containers:
-            current_target_id_data = container.plot_target_combo.currentData() if container.plot_target_combo and container.plot_target_combo.count() > 0 else None
-            current_target_id = current_target_id_data if current_target_id_data is not None else None
-            container.update_plot_targets(targets)
-            if current_target_id is not None and container.plot_target_combo:
-                idx = container.plot_target_combo.findData(current_target_id)
-                if idx != -1: container.plot_target_combo.setCurrentIndex(idx)
-            if container.plot_checkbox and container.plot_target_combo: container.plot_target_combo.setEnabled(
-                container.plot_checkbox.isChecked() and bool(targets))
-
-
-class SendPanelWidget(QWidget):  # Placeholder - Use your full class definition
-    def __init__(self, panel_id: int, main_window_ref: 'SerialDebugger', initial_config: Optional[Dict] = None,
-                 parent: Optional[QWidget] = None):
-        super().__init__(parent)
-        self.panel_id = panel_id
-        self.main_window_ref = main_window_ref
-        self.error_logger = main_window_ref.error_logger
-        self.send_data_containers: List[SendDataContainerWidget] = []
-        self._next_local_send_container_id: int = 1
-        self._init_ui()
-        if initial_config:
-            self.apply_panel_config(initial_config)
-        else:
-            self.panel_func_id_edit.setText(f"C{self.panel_id + 8:X}"); self._update_panel_title()
-
-    def _init_ui(self):
-        layout = QVBoxLayout(self)
-        self.send_data_group = QGroupBox(f"发送面板 {self.panel_id}")
-        send_data_main_layout = QVBoxLayout()
-        func_id_layout = QHBoxLayout()
-        func_id_layout.addWidget(QLabel("本面板功能码 (ID)[Hex,1B]:"))
-        self.panel_func_id_edit = QLineEdit()
-        self.panel_func_id_edit.setPlaceholderText("例如: C9")
-        self.panel_func_id_edit.editingFinished.connect(self._update_panel_title)
-        func_id_layout.addWidget(self.panel_func_id_edit)
-        send_data_main_layout.addLayout(func_id_layout)
-        send_container_controls_layout = QHBoxLayout()
-        self.add_button = QPushButton("添加发送项 (+)")
-        self.add_button.clicked.connect(self._add_container_action_triggered)
-        send_container_controls_layout.addWidget(self.add_button)
-        self.remove_button = QPushButton("删除发送项 (-)")
-        self.remove_button.clicked.connect(self._remove_container_action_triggered)
-        self.remove_button.setEnabled(False)
-        send_container_controls_layout.addWidget(self.remove_button)
-        send_container_controls_layout.addStretch()
-        send_data_main_layout.addLayout(send_container_controls_layout)
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        self.containers_widget = QWidget()
-        self.containers_layout = QVBoxLayout(self.containers_widget)
-        self.containers_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.scroll_area.setWidget(self.containers_widget)
-        send_data_main_layout.addWidget(self.scroll_area)
-        self.send_frame_button_panel = QPushButton("发送此面板帧")
-        self.send_frame_button_panel.clicked.connect(self._trigger_send_frame)
-        send_data_main_layout.addWidget(self.send_frame_button_panel)
-        self.send_data_group.setLayout(send_data_main_layout)
-        layout.addWidget(self.send_data_group)
-        self.setLayout(layout)
-
-    def _update_panel_title(self):
-        func_id_text = self.panel_func_id_edit.text().upper()
-        title = f"发送面板 {self.panel_id} (ID: {func_id_text if func_id_text else '未定义'})"
-        self.send_data_group.setTitle(title)
-        dock = self.main_window_ref.send_panel_docks.get(self.panel_id)
-        if dock: dock.setWindowTitle(title)
-
-    @Slot()
-    def _add_container_action_triggered(self):
-        self.add_send_data_container()
-
-    @Slot()
-    def _remove_container_action_triggered(self):
-        self.remove_send_data_container()
-
-    def add_send_data_container(self, config: Optional[Dict[str, Any]] = None,
-                                silent: bool = False):  # As previously defined
-        container_id = self._next_local_send_container_id
-        container = SendDataContainerWidget(container_id, self.main_window_ref)
-        if config: container.name_edit.setText(
-            config.get("name", f"Data_{container_id}")); container.type_combo.setCurrentText(
-            config.get("type", "uint8_t")); container.value_edit.setText(config.get("value", ""))
-        self.containers_layout.addWidget(container)
-        self.send_data_containers.append(container)
-        self._next_local_send_container_id += 1
-        self.remove_button.setEnabled(True)
-        if not silent and self.error_logger: self.error_logger.log_info(
-            f"Send Panel {self.panel_id}: Added send data container {container_id}")
-
-    def remove_send_data_container(self, silent: bool = False):  # As previously defined
-        if self.send_data_containers:
-            container_to_remove = self.send_data_containers.pop()
-            removed_id = container_to_remove.container_id
-            self.containers_layout.removeWidget(container_to_remove)
-            container_to_remove.deleteLater()
-            if not self.send_data_containers: self.remove_button.setEnabled(False)
-            if not silent and self.error_logger: self.error_logger.log_info(
-                f"Send Panel {self.panel_id}: Removed send data container {removed_id}")
-
-    def get_panel_config(self) -> Dict:  # As previously defined
-        return {"panel_id": self.panel_id, "panel_func_id": self.panel_func_id_edit.text(), "send_containers": [
-            {"name": c.name_edit.text(), "type": c.type_combo.currentText(), "value": c.value_edit.text()} for c in
-            self.send_data_containers], "dock_name": self.send_data_group.title()}
-
-    def apply_panel_config(self, config: Dict):  # As previously defined
-        self.panel_func_id_edit.setText(config.get("panel_func_id", f"C{self.panel_id + 8:X}"))
-        self._update_panel_title()
-        while self.send_data_containers: self.remove_send_data_container(silent=True)
-        for c_cfg in config.get("send_containers", []): self.add_send_data_container(config=c_cfg, silent=True)
-
-    @Slot()
-    def _trigger_send_frame(self):  # As previously defined
-        if not self.main_window_ref.serial_manager.is_connected: QMessageBox.warning(self.main_window_ref, "警告",
-                                                                                     "串口未打开。"); return
-        panel_func_id = self.panel_func_id_edit.text()
-        if not panel_func_id: QMessageBox.warning(self.main_window_ref, "功能码缺失",
-                                                  "请输入此发送面板的目标功能码。"); return
-        self.main_window_ref.update_current_configs_from_ui_panel()
-        final_frame = self.main_window_ref._assemble_custom_frame(panel_target_func_id_str=panel_func_id,
-                                                                  panel_send_data_containers=self.send_data_containers)
-        if final_frame:
-            bytes_written = self.main_window_ref.serial_manager.write_data(final_frame)
-            if bytes_written == final_frame.size():
-                hex_frame_str = final_frame.toHex(' ').data().decode('ascii').upper()
-                msg = f"发送面板 {self.panel_id} (ID:{panel_func_id}) 发送 {bytes_written} 字节: {hex_frame_str}"
-                self.main_window_ref.status_bar_label.setText(msg)
-                if self.error_logger: self.error_logger.log_info(msg)
-                self.main_window_ref.protocol_analyzer.analyze_frame(final_frame, 'tx')
-                self.main_window_ref.data_recorder.record_raw_frame(datetime.now(), final_frame.data(),
-                                                                    f"TX (SendPanel {self.panel_id} ID:{panel_func_id})")
-                self.main_window_ref._append_to_custom_protocol_log_formatted(datetime.now(),
-                                                                              "TX P{self.panel_id} ID:{panel_func_id}",
-                                                                              hex_frame_str, True)
-
-
-class SerialConfigDefinitionPanelWidget(QWidget):
-    connect_button_toggled = Signal(bool)
-    refresh_ports_requested = Signal()
-    config_changed = Signal()
-
-    def __init__(self, parent_main_window: 'SerialDebugger', parent: Optional[QWidget] = None):
-        super().__init__(parent)
-        self.main_window_ref = parent_main_window
-        # Configs (self._serial_config, self._frame_config, self._active_checksum_mode)
-        # will be synced via update_ui_from_main_configs from SerialDebugger's master versions.
-        self._init_ui()
-
-    def _init_ui(self):
-        main_panel_layout = QVBoxLayout(self)  # Main layout for this widget
-
-        # --- 串口配置 Group ---
-        config_group = QGroupBox("串口配置")
-        config_layout = QGridLayout()  # Layout for serial port settings
-
-        config_layout.addWidget(QLabel("端口:"), 0, 0, Qt.AlignmentFlag.AlignLeft)
-        self.port_combo = QComboBox()
-        config_layout.addWidget(self.port_combo, 0, 1)
-
-        config_layout.addWidget(QLabel("波特率:"), 1, 0, Qt.AlignmentFlag.AlignLeft)
-        self.baud_combo = QComboBox()
-        self.baud_combo.addItems(["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"])
-        self.baud_combo.setEditable(True)
-        if self.baud_combo.lineEdit():  # Check if lineEdit exists (it should after setEditable(True))
-            self.baud_combo.lineEdit().setValidator(QIntValidator(0, 4000000, self))  # Allow up to 4M baud
-        self.baud_combo.currentTextChanged.connect(
-            self._emit_config_changed)  # Use currentTextChanged for editable combo
-        config_layout.addWidget(self.baud_combo, 1, 1)
-
-        config_layout.addWidget(QLabel("数据位:"), 2, 0, Qt.AlignmentFlag.AlignLeft)
-        self.data_bits_combo = QComboBox()
-        self.data_bits_combo.addItems(["8", "7", "6", "5"])
-        self.data_bits_combo.currentTextChanged.connect(self._emit_config_changed)
-        config_layout.addWidget(self.data_bits_combo, 2, 1)
-
-        config_layout.addWidget(QLabel("校验位:"), 3, 0, Qt.AlignmentFlag.AlignLeft)
-        self.parity_combo = QComboBox()
-        self.parity_combo.addItems(["None", "Even", "Odd", "Space", "Mark"])
-        self.parity_combo.currentTextChanged.connect(self._emit_config_changed)
-        config_layout.addWidget(self.parity_combo, 3, 1)
-
-        config_layout.addWidget(QLabel("停止位:"), 4, 0, Qt.AlignmentFlag.AlignLeft)
-        self.stop_bits_combo = QComboBox()
-        self.stop_bits_combo.addItems(["1", "1.5", "2"])
-        self.stop_bits_combo.currentTextChanged.connect(self._emit_config_changed)
-        config_layout.addWidget(self.stop_bits_combo, 4, 1)
-
-        self.refresh_ports_button = QPushButton("刷新")
-        self.refresh_ports_button.clicked.connect(self.refresh_ports_requested.emit)
-        config_layout.addWidget(self.refresh_ports_button, 5, 0)
-
-        self.connect_button = QPushButton("打开串口")
-        self.connect_button.setCheckable(True)
-        self.connect_button.clicked.connect(lambda checked: self.connect_button_toggled.emit(checked))
-        config_layout.addWidget(self.connect_button, 5, 1)
-
-        # --- Control column stretch for config_layout (Serial Config Group) ---
-        config_layout.setColumnStretch(0, 0)  # Column 0 (Labels, Refresh button) - No stretch
-        config_layout.setColumnStretch(1, 1)  # Column 1 (Inputs, Connect button) - No stretch
-        config_layout.setColumnStretch(2, 0)  # Column 2 (Empty) - Takes all horizontal stretch
-
-        config_group.setLayout(config_layout)
-        main_panel_layout.addWidget(config_group)
-
-        # --- 全局帧结构定义 Group ---
-        frame_def_group = QGroupBox("全局帧结构定义 (发送用)")
-        frame_def_layout = QGridLayout()
-
-        frame_def_layout.addWidget(QLabel("帧头(H)[Hex,1B]:"), 0, 0, Qt.AlignmentFlag.AlignLeft)
-        self.head_edit = QLineEdit()
-        self.head_edit.editingFinished.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.head_edit, 0, 1)
-
-        frame_def_layout.addWidget(QLabel("源地址(S)[Hex,1B]:"), 1, 0, Qt.AlignmentFlag.AlignLeft)
-        self.saddr_edit = QLineEdit()
-        self.saddr_edit.editingFinished.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.saddr_edit, 1, 1)
-
-        frame_def_layout.addWidget(QLabel("目标地址(D)[Hex,1B]:"), 2, 0, Qt.AlignmentFlag.AlignLeft)
-        self.daddr_edit = QLineEdit()
-        self.daddr_edit.editingFinished.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.daddr_edit, 2, 1)
-
-        frame_def_layout.addWidget(QLabel("默认发送功能码(ID):"), 3, 0, Qt.AlignmentFlag.AlignLeft)
-        self.id_edit = QLineEdit()
-        self.id_edit.setPlaceholderText("面板可覆盖")
-        self.id_edit.editingFinished.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.id_edit, 3, 1)
-
-        frame_def_layout.addWidget(QLabel("最后帧校验1/CRC高:"), 4, 0, Qt.AlignmentFlag.AlignLeft)
-        self.sum_check_display = QLineEdit()
-        self.sum_check_display.setPlaceholderText("自动")
-        self.sum_check_display.setReadOnly(True)
-        frame_def_layout.addWidget(self.sum_check_display, 4, 1)
-
-        frame_def_layout.addWidget(QLabel("最后帧校验2/CRC低:"), 5, 0, Qt.AlignmentFlag.AlignLeft)
-        self.add_check_display = QLineEdit()
-        self.add_check_display.setPlaceholderText("自动")
-        self.add_check_display.setReadOnly(True)
-        frame_def_layout.addWidget(self.add_check_display, 5, 1)
-
-        frame_def_layout.addWidget(QLabel("校验模式:"), 6, 0, Qt.AlignmentFlag.AlignLeft)
-        self.checksum_mode_combo = QComboBox()
-        # Ensure ChecksumMode is imported where Constants is defined
-        self.checksum_mode_combo.addItem("原始校验 (Sum/Add)", ChecksumMode.ORIGINAL_SUM_ADD)
-        self.checksum_mode_combo.addItem("CRC-16/CCITT-FALSE", ChecksumMode.CRC16_CCITT_FALSE)
-        self.checksum_mode_combo.currentIndexChanged.connect(self._emit_config_changed)
-        frame_def_layout.addWidget(self.checksum_mode_combo, 6, 1)
-
-        # Optional: Apply similar column stretch to frame_def_layout if desired
-        frame_def_layout.setColumnStretch(0, 0)  # Labels
-        frame_def_layout.setColumnStretch(1, 1)  # Input fields in this group CAN stretch if desired
-        # Or set to 0 if you want them fixed, and add stretch to col 2
-        # frame_def_layout.setColumnStretch(2, 1) # If column 1 is set to 0 stretch
-
-        frame_def_group.setLayout(frame_def_layout)
-        main_panel_layout.addWidget(frame_def_group)
-
-        main_panel_layout.addStretch(1)  # Pushes both group boxes to the top
-        self.setLayout(main_panel_layout)
-
-    def _emit_config_changed(self):
-        self.config_changed.emit()
-
-    def update_ui_from_main_configs(self, serial_cfg: SerialPortConfig, frame_cfg: FrameConfig,
-                                    active_checksum: ChecksumMode):
-        # Block signals temporarily to prevent multiple config_changed emissions during update
-        self.baud_combo.blockSignals(True)
-        self.data_bits_combo.blockSignals(True)
-        self.parity_combo.blockSignals(True)
-        self.stop_bits_combo.blockSignals(True)
-        self.head_edit.blockSignals(True)
-        self.saddr_edit.blockSignals(True)
-        self.daddr_edit.blockSignals(True)
-        self.id_edit.blockSignals(True)
-        self.checksum_mode_combo.blockSignals(True)
-
-        baud_rate_str = str(serial_cfg.baud_rate)
-        if self.baud_combo.findText(baud_rate_str) == -1:
-            self.baud_combo.addItem(baud_rate_str)
-        self.baud_combo.setCurrentText(baud_rate_str)
-
-        self.data_bits_combo.setCurrentText(str(serial_cfg.data_bits))
-        self.parity_combo.setCurrentText(serial_cfg.parity)
-        self.stop_bits_combo.setCurrentText(str(serial_cfg.stop_bits))
-
-        # Port combo is updated via update_port_combo_display
-        if serial_cfg.port_name:
-            idx = self.port_combo.findData(serial_cfg.port_name)
-            if idx != -1:
-                self.port_combo.setCurrentIndex(idx)
-            # Consider else if port_name is not in combo (e.g. after refresh)
-
-        self.head_edit.setText(frame_cfg.head)
-        self.saddr_edit.setText(frame_cfg.s_addr)
-        self.daddr_edit.setText(frame_cfg.d_addr)
-        self.id_edit.setText(frame_cfg.func_id)
-
-        idx_cs = self.checksum_mode_combo.findData(active_checksum)
-        if idx_cs != -1:
-            self.checksum_mode_combo.setCurrentIndex(idx_cs)
-        else:
-            idx_def = self.checksum_mode_combo.findData(Constants.DEFAULT_CHECKSUM_MODE)  # Ensure Constants is imported
-            if idx_def != -1:
-                self.checksum_mode_combo.setCurrentIndex(idx_def)
-
-        # Unblock signals
-        self.baud_combo.blockSignals(False)
-        self.data_bits_combo.blockSignals(False)
-        self.parity_combo.blockSignals(False)
-        self.stop_bits_combo.blockSignals(False)
-        self.head_edit.blockSignals(False)
-        self.saddr_edit.blockSignals(False)
-        self.daddr_edit.blockSignals(False)
-        self.id_edit.blockSignals(False)
-        self.checksum_mode_combo.blockSignals(False)
-
-    def get_serial_config_from_ui(self) -> SerialPortConfig:
-        pn_data = self.port_combo.currentData()
-        port_name = pn_data if pn_data is not None else (
-            self.port_combo.currentText() if self.port_combo.currentText() != "无可用端口" else None)
-
-        try:
-            baud_rate = int(self.baud_combo.currentText())
-        except ValueError:
-            # Handle error or use default, inform user?
-            baud_rate = Constants.DEFAULT_BAUD_RATE  # Ensure Constants is imported
-            if self.main_window_ref.error_logger:
-                self.main_window_ref.error_logger.log_warning(
-                    f"无效的波特率输入: '{self.baud_combo.currentText()}', 使用默认值 {baud_rate}")
-            self.baud_combo.setCurrentText(str(baud_rate))  # Reset to a valid value
-
-        data_bits = int(self.data_bits_combo.currentText())
-        parity = self.parity_combo.currentText()
-        s_bits_str = self.stop_bits_combo.currentText()
-        stop_bits = float(s_bits_str) if s_bits_str == "1.5" else int(s_bits_str)
-        return SerialPortConfig(port_name, baud_rate, data_bits, parity, stop_bits)
-
-    def get_frame_config_from_ui(self) -> FrameConfig:
-        return FrameConfig(self.head_edit.text(), self.saddr_edit.text(), self.daddr_edit.text(), self.id_edit.text())
-
-    def get_checksum_mode_from_ui(self) -> ChecksumMode:
-        mode = self.checksum_mode_combo.currentData()
-        return mode if isinstance(mode,
-                                  ChecksumMode) else Constants.DEFAULT_CHECKSUM_MODE  # Ensure Constants is imported
-
-    def update_port_combo_display(self, available_ports: List[Dict], current_port_name: Optional[str]):
-        self.port_combo.blockSignals(True)  # Block signals during update
-        self.port_combo.clear()
-        if not available_ports:
-            self.port_combo.addItem("无可用端口")
-            self.port_combo.setEnabled(False)
-        else:
-            for port_info in available_ports:
-                self.port_combo.addItem(f"{port_info['name']} ({port_info['description']})", port_info['name'])
-            self.port_combo.setEnabled(True)
-            if current_port_name:
-                idx = self.port_combo.findData(current_port_name)
-                if idx != -1:
-                    self.port_combo.setCurrentIndex(idx)
-                elif self.port_combo.count() > 0:  # If current_port_name not found, select first available
-                    self.port_combo.setCurrentIndex(0)
-            elif self.port_combo.count() > 0:  # If no current_port_name, select first
-                self.port_combo.setCurrentIndex(0)
-        self.port_combo.blockSignals(False)  # Unblock signals
-        self._emit_config_changed()  # Emit config changed after port list update if selection changed
-
-    def set_connection_status_display(self, connected: bool):
-        self.port_combo.setEnabled(not connected)
-        self.baud_combo.setEnabled(not connected)
-        self.data_bits_combo.setEnabled(not connected)
-        self.parity_combo.setEnabled(not connected)
-        self.stop_bits_combo.setEnabled(not connected)
-        self.refresh_ports_button.setEnabled(not connected)
-        self.connect_button.setChecked(connected)
-        self.connect_button.setText("关闭串口" if connected else "打开串口")
-        if not self.port_combo.count() or self.port_combo.currentText() == "无可用端口":
-            self.connect_button.setEnabled(False)
-
-    def update_checksum_display(self, sum_check: str, add_check: str):
-        self.sum_check_display.setText(sum_check)
-        self.add_check_display.setText(add_check)
-
-class CustomLogPanelWidget(QWidget):
-    def __init__(self, main_window_ref: 'SerialDebugger', parent: Optional[QWidget] = None): # 添加 main_window_ref
-        super().__init__(parent)
-        self.main_window_ref = main_window_ref # 存储引用
-        self.error_logger = main_window_ref.error_logger
-        self._init_ui()
-
-    def _init_ui(self):
-        layout = QVBoxLayout(self)
-        log_group = QGroupBox("自定义协议原始帧记录")
-        log_layout = QVBoxLayout()
-        self.log_text_edit = QTextEdit()
-        self.log_text_edit.setReadOnly(True)
-        self.log_text_edit.setFontFamily("Courier New")
-        log_layout.addWidget(self.log_text_edit)
-        options_layout = QHBoxLayout()
-        self.hex_checkbox = QCheckBox("Hex显示")
-        options_layout.addWidget(self.hex_checkbox)
-        self.timestamp_checkbox = QCheckBox("显示时间戳")
-        options_layout.addWidget(self.timestamp_checkbox)
-        clear_button = QPushButton("清空记录区")
-        clear_button.clicked.connect(self.log_text_edit.clear)
-        options_layout.addWidget(clear_button)
-        options_layout.addStretch()
-        log_layout.addLayout(options_layout)
-        log_group.setLayout(log_layout)
-        layout.addWidget(log_group)
-        self.setLayout(layout)
-
-    def append_log(self, text: str): self.log_text_edit.moveCursor(
-        QTextCursor.MoveOperation.End); self.log_text_edit.insertPlainText(text); self.log_text_edit.moveCursor(
-        QTextCursor.MoveOperation.End)
-
-    def get_config(self) -> Dict: return {"hex_display": self.hex_checkbox.isChecked(),
-                                          "timestamp_display": self.timestamp_checkbox.isChecked()}
-
-    def apply_config(self, config: Dict): self.hex_checkbox.setChecked(
-        config.get("hex_display", False)); self.timestamp_checkbox.setChecked(config.get("timestamp_display", False))
-
-
-class BasicCommPanelWidget(QWidget):
-    send_basic_data_requested = Signal(str, bool)
-
-    def __init__(self, main_window_ref: 'SerialDebugger', parent: Optional[QWidget] = None):
-        super().__init__(parent)
-        self.main_window_ref = main_window_ref  # 存储主窗口引用
-        self._init_ui()
-
-
-    def _init_ui(self):
-        main_layout = QVBoxLayout(self)
-        recv_group = QGroupBox("基本接收 (原始串行数据)")
-        recv_layout = QVBoxLayout()
-        self.receive_text_edit = QTextEdit()
-        self.receive_text_edit.setReadOnly(True)
-        self.receive_text_edit.setFontFamily("Courier New")
-        recv_layout.addWidget(self.receive_text_edit)
-        recv_options_layout = QHBoxLayout()
-        self.recv_hex_checkbox = QCheckBox("Hex显示")
-        self.recv_timestamp_checkbox = QCheckBox("显示时间戳")
-        recv_options_layout.addWidget(self.recv_hex_checkbox)
-        recv_options_layout.addWidget(self.recv_timestamp_checkbox)
-        recv_options_layout.addStretch()
-        clear_basic_recv_button = QPushButton("清空接收区")
-        clear_basic_recv_button.clicked.connect(self.receive_text_edit.clear)
-        recv_options_layout.addWidget(clear_basic_recv_button)
-        recv_layout.addLayout(recv_options_layout)
-        recv_group.setLayout(recv_layout)
-        main_layout.addWidget(recv_group)
-        send_group = QGroupBox("基本发送 (原始串行数据)")
-        send_layout = QVBoxLayout()
-        self.send_text_edit = QLineEdit()
-        self.send_text_edit.setPlaceholderText("输入要发送的文本或Hex数据")
-        send_layout.addWidget(self.send_text_edit)
-        send_options_layout = QHBoxLayout()
-        self.send_hex_checkbox = QCheckBox("Hex发送")
-        send_options_layout.addWidget(self.send_hex_checkbox)
-        send_options_layout.addStretch()
-        self.send_button = QPushButton("发送")
-        self.send_button.setObjectName("basicSendButtonActual")
-        self.send_button.clicked.connect(self._on_send_clicked)
-        send_options_layout.addWidget(self.send_button)
-        send_layout.addLayout(send_options_layout)
-        send_group.setLayout(send_layout)
-        main_layout.addWidget(send_group)
-        self.setLayout(main_layout)
-
-    @Slot()
-    def _on_send_clicked(self):
-        if not self.main_window_ref.serial_manager.is_connected: QMessageBox.warning(self.main_window_ref, "警告",
-                                                                                     "串口未打开。"); return
-
-        # 如果串口已连接，再发射信号请求发送数据
-        text_to_send = self.send_text_edit.text()
-        is_hex = self.send_hex_checkbox.isChecked()
-        self.send_basic_data_requested.emit(text_to_send, is_hex)
-
-    def append_receive_text(self, text: str): self.receive_text_edit.moveCursor(
-        QTextCursor.MoveOperation.End); self.receive_text_edit.insertPlainText(text); self.receive_text_edit.moveCursor(
-        QTextCursor.MoveOperation.End)
-
-    def set_send_enabled(self, enabled: bool): self.send_button.setEnabled(enabled)
-
-    def get_config(self) -> Dict: return {"recv_hex_display": self.recv_hex_checkbox.isChecked(),
-                                          "recv_timestamp_display": self.recv_timestamp_checkbox.isChecked()}
-
-    def apply_config(self, config: Dict): self.recv_hex_checkbox.setChecked(
-        config.get("recv_hex_display", False)); self.recv_timestamp_checkbox.setChecked(
-        config.get("recv_timestamp_display", False))
+# Updated Plugin Architecture Imports
+from core.panel_interface import PanelInterface
+from core.plugin_manager import PluginManager  # Assumes plugin_manager_hot_reload_v2 is used
 
 
 
 class SerialDebugger(QMainWindow):
+    plot_target_renamed_signal = Signal(int, str)
+    plot_target_removed_signal = Signal(int)
+
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
-        self._setup_application_icon(self,"image.png")
-        self.setWindowTitle("big_DICK")
-        self.active_checksum_mode = ChecksumMode.ORIGINAL_SUM_ADD
         self.app_instance = QApplication.instance()
+        if self.app_instance is None: self.app_instance = QApplication(sys.argv)
+
         self.error_logger = ErrorLogger()
-        self.config_manager = ConfigManager(error_logger=self.error_logger)
+        self._setup_application_icon("resources/image.png")
+        self.setWindowTitle("YJ_Studio (Plugin Enhanced)")
+
+        self.config_manager = ConfigManager(error_logger=self.error_logger, filename="serial_debugger_config_v2.json")
         self.theme_manager = ThemeManager(self.app_instance, error_logger=self.error_logger)
         self.data_recorder = DataRecorder(error_logger=self.error_logger)
         self.protocol_analyzer = ProtocolAnalyzer(error_logger=self.error_logger)
-        self.serial_manager = SerialManager(error_logger=self.error_logger)
+        self.serial_manager = SerialManager(error_logger=self.error_logger, use_pyserial=True)
         self.frame_parser = FrameParser(error_logger=self.error_logger)
 
-        self.current_config = self.config_manager.load_config()
-        self.current_serial_config = SerialPortConfig(**self.current_config.get("serial_port", {}))
-        self.current_frame_config = FrameConfig(**self.current_config.get("frame_definition", {}))
-        checksum_mode_name = self.current_config.get("checksum_mode", Constants.DEFAULT_CHECKSUM_MODE.name)
-        try:
-            self.active_checksum_mode = ChecksumMode[checksum_mode_name]
-        except KeyError:
-            self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
-        self.setDockNestingEnabled(True)
+        self.current_serial_config = SerialPortConfig()
+        self.current_frame_config = FrameConfig()
+        self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
         self._parsed_frame_count: int = 0
 
-        self.parse_panel_widgets: Dict[int, ParsePanelWidget] = {}
-        self.parse_panel_docks: Dict[int, QDockWidget] = {}
-        self._next_parse_panel_id: int = 1
+        self.data_processor = DataProcessor(parent=self)
+        self.data_processor.processed_data_signal.connect(self.on_data_processor_processed_data)
+        self.data_processor.processing_error_signal.connect(self.on_data_processor_error)
+        self.data_processor.processing_stats_signal.connect(self.on_data_processor_stats)
+        self.data_processor.start()
+
+        script_engine_host_functions = {
+            'log_info': lambda msg: self.error_logger.log_info(f"[SCRIPT] {msg}"),
+            'log_error': lambda msg: self.error_logger.log_error(f"[SCRIPT] {msg}", "SCRIPT_ERROR"),
+            'send_serial_hex': self.send_serial_data_from_script_hex,
+            'send_serial_text': self.send_serial_data_from_script_text,
+            'get_panel_instance': self.get_dynamic_panel_instance_by_id,
+        }
+        self.script_engine = create_script_engine(
+            debugger_instance=self,
+            initial_host_functions=script_engine_host_functions,
+            add_example_logging_hooks=True
+        )
+
+        self.plugin_manager = PluginManager(self)
+        self._register_core_panels()
+
+        self.enabled_plugin_module_names: Set[str] = set()
+
+        self.dynamic_panel_instances: Dict[int, PanelInterface] = {}
+        self.dynamic_panel_docks: Dict[int, QDockWidget] = {}
+        self._next_dynamic_panel_id: int = 1
         self._next_global_receive_container_id: int = 1
-
-        self.send_panel_widgets: Dict[int, SendPanelWidget] = {}
-        self.send_panel_docks: Dict[int, QDockWidget] = {}
-        self._next_send_panel_id: int = 1
-
-        self.plot_widgets_map: Dict[int, PlotWidgetContainer] = {}
-        self.plot_docks_map: Dict[int, QDockWidget] = {}
-        self._next_plot_id: int = 1
 
         self.serial_config_panel_widget: Optional[SerialConfigDefinitionPanelWidget] = None
         self.dw_serial_config: Optional[QDockWidget] = None
@@ -726,16 +117,23 @@ class SerialDebugger(QMainWindow):
         self.dw_custom_log: Optional[QDockWidget] = None
         self.basic_comm_panel_widget: Optional[BasicCommPanelWidget] = None
         self.dw_basic_serial: Optional[QDockWidget] = None
+        self.scripting_panel_widget: Optional[ScriptingPanelWidget] = None
+        self.dw_scripting_panel: Optional[QDockWidget] = None
 
-        self._init_ui_dockable_layout()
+        self.status_bar_label = QLabel("未连接")
+        self.setDockNestingEnabled(True)
+        self._init_fixed_panels_ui()
         self.create_menus()
-        self.apply_loaded_config_to_ui()
+
+        self._load_configuration()
+
+        self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
+        self.plugin_manager.discover_plugins("panel_plugins", load_only_enabled=True)
+        self._update_add_panel_menu()
 
         self.populate_serial_ports_ui()
-        self.update_port_status_ui(False)
-        self.update_all_parse_panels_plot_targets()
+        self.update_fixed_panels_connection_status(False)
 
-        # Connect signals from core components
         self.serial_manager.connection_status_changed.connect(self.on_serial_connection_status_changed)
         self.serial_manager.data_received.connect(self.on_serial_data_received)
         self.serial_manager.error_occurred_signal.connect(self.on_serial_manager_error)
@@ -743,111 +141,68 @@ class SerialDebugger(QMainWindow):
         self.frame_parser.checksum_error.connect(self.on_frame_checksum_error)
         self.frame_parser.frame_parse_error.connect(self.on_frame_general_parse_error)
 
-        self.error_logger.log_info("应用程序启动。")
-        self.restore_geometry_and_state()
+        self.error_logger.log_info("应用程序启动 (插件管理增强)。")
 
-    def get_next_global_receive_container_id(self) -> int:
-        current_id = self._next_global_receive_container_id
-        self._next_global_receive_container_id += 1
-        return current_id
+        # 恢复上次使用的主题
+        self.theme_manager.restore_last_theme()
 
-    def clear_plot_curves_for_container(self, container_id: int):
-        for plot_widget_container in self.plot_widgets_map.values():
-            plot_widget_container.remove_curve_for_container(container_id)
+        self.flash_timer = QTimer(self)
+        self.flash_timer.setSingleShot(True)
+        self.flash_timer.timeout.connect(self._stop_flash)
 
-    def _init_ui_dockable_layout(self) -> None:
-        self.serial_config_panel_widget = SerialConfigDefinitionPanelWidget(parent_main_window=self, parent=self)
+    def _register_core_panels(self):
+        core_modules_to_enable = set()
+        self.plugin_manager.register_panel_type(AdaptedParsePanelWidget, module_name='__main__')
+        core_modules_to_enable.add('__main__')
+        self.plugin_manager.register_panel_type(AdaptedSendPanelWidget, module_name='__main__')
+        if PYQTGRAPH_AVAILABLE:
+            self.plugin_manager.register_panel_type(AdaptedPlotWidgetPanel, module_name='__main__')
+
+    def _init_fixed_panels_ui(self):
+        self.serial_config_panel_widget = SerialConfigDefinitionPanelWidget(parent_main_window=self)
         self.dw_serial_config = QDockWidget("串口与帧定义", self)
         self.dw_serial_config.setObjectName("SerialConfigDock")
         self.dw_serial_config.setWidget(self.serial_config_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dw_serial_config)
         self.serial_config_panel_widget.connect_button_toggled.connect(self.toggle_connection_action_handler)
         self.serial_config_panel_widget.refresh_ports_requested.connect(self.populate_serial_ports_ui)
-        self.serial_config_panel_widget.config_changed.connect(self.update_current_configs_from_ui_panel)
+        self.serial_config_panel_widget.config_changed.connect(self.update_current_serial_frame_configs_from_ui)
 
-        self.custom_log_panel_widget = CustomLogPanelWidget(main_window_ref=self, parent=self)
+        self.custom_log_panel_widget = CustomLogPanelWidget(main_window_ref=self)
         self.dw_custom_log = QDockWidget("协议帧原始数据", self)
         self.dw_custom_log.setObjectName("CustomProtocolLogDock")
         self.dw_custom_log.setWidget(self.custom_log_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_custom_log)
 
-        self.basic_comm_panel_widget = BasicCommPanelWidget(main_window_ref=self, parent=self)
+        self.basic_comm_panel_widget = EnhancedBasicCommPanel(main_window_ref=self)
         self.dw_basic_serial = QDockWidget("基本收发", self)
         self.dw_basic_serial.setObjectName("BasicSerialDock")
         self.dw_basic_serial.setWidget(self.basic_comm_panel_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dw_basic_serial)
-        self.basic_comm_panel_widget.send_basic_data_requested.connect(self.send_basic_serial_data_action)
+        self.basic_comm_panel_widget.send_data_requested.connect(self.send_basic_serial_data_action)
 
         try:
             self.tabifyDockWidget(self.dw_custom_log, self.dw_basic_serial)
         except AttributeError as e:
-            self.error_logger.log_warning(f"无法标签页化停靠窗口 (日志/基本): {e}")
+            self.error_logger.log_warning(f"[UI_SETUP] 无法标签页化停靠窗口 (日志/基本): {e}")
 
-        # --- Dynamic Panels ---
-        parse_panel_configs = self.current_config.get("parse_panels", [])
-        migrated_old_parse = False
-        if not parse_panel_configs and "receive_containers" in self.current_config:  # Old format check
-            self.add_new_parse_panel_action(config={
-                "parse_func_id": self.current_config.get("parse_func_id", "C1"),
-                "data_mapping_mode": self.current_config.get("data_mapping_mode", "顺序填充 (Sequential)"),
-                "receive_containers": self.current_config.get("receive_containers", []),
-                "dock_name": "默认解析面板 (旧)"  # This name will be used for QDockWidget
-            }, from_config=True, is_migration=True)
-            migrated_old_parse = True
-        elif parse_panel_configs:
-            for panel_cfg in parse_panel_configs:
-                self.add_new_parse_panel_action(config=panel_cfg, from_config=True)
-        if not self.parse_panel_docks and not migrated_old_parse:
-            self.add_new_parse_panel_action(panel_name_suggestion="默认解析面板 1", from_config=True)
+        self.scripting_panel_widget = ScriptingPanelWidget(main_window_ref=self)
+        self.dw_scripting_panel = QDockWidget("脚本引擎", self)
+        self.dw_scripting_panel.setObjectName("ScriptingPanelDock")
+        self.dw_scripting_panel.setWidget(self.scripting_panel_widget)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dw_scripting_panel)
+        if self.scripting_panel_widget: self.scripting_panel_widget.execute_script_requested.connect(
+            self._handle_script_execution_request)
 
-        send_panel_configs = self.current_config.get("send_panels", [])
-        migrated_old_send = False
-        if not send_panel_configs and "send_containers" in self.current_config:  # Old format check
-            migrated_send_panel_cfg = {
-                "panel_func_id": self.current_frame_config.func_id if self.current_frame_config.func_id else f"S{self._next_send_panel_id}",
-                "send_containers": self.current_config.get("send_containers", []),
-                "dock_name": "默认发送面板 (旧)"}  # This name will be used for QDockWidget
-            self.add_new_send_panel_action(config=migrated_send_panel_cfg, from_config=True, is_migration=True)
-            migrated_old_send = True
-        elif send_panel_configs:
-            for panel_cfg in send_panel_configs:
-                self.add_new_send_panel_action(config=panel_cfg, from_config=True)
-        if not self.send_panel_docks and not migrated_old_send:
-            self.add_new_send_panel_action(panel_name_suggestion="默认发送面板 1", from_config=True)
-
-        if self.dw_serial_config and self.send_panel_docks:
-            first_send_dock_id = min(self.send_panel_docks.keys(), default=None)
-            if first_send_dock_id is not None:
-                try:
-                    self.tabifyDockWidget(self.dw_serial_config, self.send_panel_docks[first_send_dock_id])
-                except AttributeError as e:
-                    self.error_logger.log_warning(f"无法标签页化停靠窗口 (串口/发送): {e}")
-        elif self.dw_serial_config and self.parse_panel_docks:
-            first_parse_dock_id = min(self.parse_panel_docks.keys(), default=None)
-            if first_parse_dock_id is not None:
-                try:
-                    self.tabifyDockWidget(self.dw_serial_config, self.parse_panel_docks[first_parse_dock_id])
-                except AttributeError as e:
-                    self.error_logger.log_warning(f"无法标签页化停靠窗口 (串口/解析): {e}")
-
-        plot_configs = self.current_config.get("plot_configs", [])
-        if not plot_configs and PYQTGRAPH_AVAILABLE:
-            self.add_new_plot_widget_action(name="主波形图", from_config=False)
-        elif plot_configs and PYQTGRAPH_AVAILABLE:
-            for plot_cfg in plot_configs:
-                self.add_new_plot_widget_action(name=plot_cfg.get("name", f"波形图 {self._next_plot_id}"),
-                                                plot_id_from_config=plot_cfg.get("id"), from_config=True)
-
-        self.status_bar_label = QLabel("未连接")
         self.statusBar().addWidget(self.status_bar_label)
 
     def create_menus(self) -> None:
         file_menu = self.menuBar().addMenu("文件(&F)")
         load_config_action = QAction("加载配置...", self)
-        load_config_action.triggered.connect(self.load_configuration_action)
+        load_config_action.triggered.connect(self.load_configuration_action_dialog)
         file_menu.addAction(load_config_action)
         save_config_action = QAction("保存配置...", self)
-        save_config_action.triggered.connect(self.save_configuration_action)
+        save_config_action.triggered.connect(self.save_configuration_action_dialog)
         file_menu.addAction(save_config_action)
         file_menu.addSeparator()
         export_parsed_data_action = QAction("导出已解析数据 (CSV)...", self)
@@ -865,34 +220,51 @@ class SerialDebugger(QMainWindow):
         if self.dw_serial_config: self.view_menu.addAction(self.dw_serial_config.toggleViewAction())
         if self.dw_custom_log: self.view_menu.addAction(self.dw_custom_log.toggleViewAction())
         if self.dw_basic_serial: self.view_menu.addAction(self.dw_basic_serial.toggleViewAction())
+        if self.dw_scripting_panel: self.view_menu.addAction(self.dw_scripting_panel.toggleViewAction())
         self.view_menu.addSeparator()
 
         theme_menu = self.view_menu.addMenu("背景样式")
-        for theme_name in Constants.THEME_OPTIONS:  # Assuming THEME_OPTIONS is defined in constants
+        for theme_name in Constants.THEME_OPTIONS:
             action = QAction(f"{theme_name.replace('_', ' ').capitalize()} 主题", self)
             action.triggered.connect(lambda checked=False, tn=theme_name: self.apply_theme_action(tn))
             theme_menu.addAction(action)
+        theme_menu.addSeparator()
+        theme_switcher_action = QAction("主题快速切换...", self)
+        theme_switcher_action.triggered.connect(self.open_theme_quick_switcher)
+        theme_menu.addAction(theme_switcher_action)
+        theme_editor_action = QAction("主题编辑器...", self)
+        theme_editor_action.triggered.connect(self.open_theme_editor_dialog)
+        theme_menu.addAction(theme_editor_action)
+        theme_import_export_action = QAction("主题导入导出...", self)
+        theme_import_export_action.triggered.connect(self.open_theme_import_export_dialog)
+        theme_menu.addAction(theme_import_export_action)
+        theme_backup_action = QAction("主题备份与恢复...", self)
+        theme_backup_action.triggered.connect(self.open_theme_backup_dialog)
+        theme_menu.addAction(theme_backup_action)
+        theme_menu.addSeparator()
         load_external_qss_action = QAction("加载外部QSS文件...", self)
         load_external_qss_action.triggered.connect(self.load_external_qss_file_action)
         theme_menu.addAction(load_external_qss_action)
 
         tools_menu = self.menuBar().addMenu("工具(&T)")
-        add_parse_panel_action = QAction("添加自定义解析面板...", self)
-        add_parse_panel_action.triggered.connect(lambda: self.add_new_parse_panel_action())
-        tools_menu.addAction(add_parse_panel_action)
-        add_send_panel_action = QAction("添加自定义发送面板...", self)
-        add_send_panel_action.triggered.connect(lambda: self.add_new_send_panel_action())
-        tools_menu.addAction(add_send_panel_action)
+        self.add_panel_menu = tools_menu.addMenu("添加面板")
+        self._update_add_panel_menu()
+
+        manage_plugins_action = QAction("插件管理器...", self)
+        manage_plugins_action.triggered.connect(self.open_plugin_manager_dialog)
+        tools_menu.addAction(manage_plugins_action)
+
+        reload_plugins_action = QAction("扫描/重载插件", self)
+        reload_plugins_action.triggered.connect(self.reload_all_plugins_action)
+        tools_menu.addAction(reload_plugins_action)
         tools_menu.addSeparator()
-        add_plot_action = QAction("添加波形图窗口(&P)", self)
-        add_plot_action.setEnabled(PYQTGRAPH_AVAILABLE)
-        add_plot_action.triggered.connect(lambda: self.add_new_plot_widget_action(from_config=False))
-        tools_menu.addAction(add_plot_action)
-        clear_all_plots_action = QAction("清空所有波形图", self)
-        clear_all_plots_action.setEnabled(PYQTGRAPH_AVAILABLE)
-        clear_all_plots_action.triggered.connect(self.clear_all_plots_action)
-        tools_menu.addAction(clear_all_plots_action)
-        tools_menu.addSeparator()
+
+        if PYQTGRAPH_AVAILABLE:
+            clear_all_plots_action = QAction("清空所有波形图", self)
+            clear_all_plots_action.triggered.connect(self.clear_all_plot_panels_action)
+            tools_menu.addAction(clear_all_plots_action)
+            tools_menu.addSeparator()
+
         self.start_raw_record_action = QAction("开始原始数据录制", self)
         self.start_raw_record_action.setCheckable(True)
         self.start_raw_record_action.triggered.connect(self.toggle_raw_data_recording_action)
@@ -905,373 +277,859 @@ class SerialDebugger(QMainWindow):
         reset_stats_action.triggered.connect(self.protocol_analyzer.reset_statistics)
         tools_menu.addAction(reset_stats_action)
 
-    @Slot()
-    def update_current_configs_from_ui_panel(self):
-        """Called when config in SerialConfigDefinitionPanelWidget changes."""
-        if not self.serial_config_panel_widget: return
-        self.current_serial_config = self.serial_config_panel_widget.get_serial_config_from_ui()
-        self.current_frame_config = self.serial_config_panel_widget.get_frame_config_from_ui()
-        self.active_checksum_mode = self.serial_config_panel_widget.get_checksum_mode_from_ui()
-        if self.error_logger:
-            self.error_logger.log_debug(
-                f"Main configs updated from panel. Serial: {vars(self.current_serial_config)}, Frame: {vars(self.current_frame_config)}, Checksum: {self.active_checksum_mode.name}")
+    def _update_add_panel_menu(self):
+        if not hasattr(self, 'add_panel_menu'): return
+        self.add_panel_menu.clear()
+        available_panel_types = self.plugin_manager.get_creatable_panel_types()
+        self.error_logger.log_info(f"[UI_SETUP] 可用动态面板插件: {available_panel_types}")
+        if not available_panel_types:
+            no_panels_action = QAction("无可用动态面板插件", self)
+            no_panels_action.setEnabled(False)
+            self.add_panel_menu.addAction(no_panels_action)
+        else:
+            for type_name, display_name in available_panel_types.items():
+                action = QAction(f"添加 {display_name}...", self)
+                action.triggered.connect(
+                    lambda checked=False, pt=type_name: self.add_dynamic_panel_action(panel_type_name=pt))
+                self.add_panel_menu.addAction(action)
 
-    def apply_loaded_config_to_ui(self) -> None:
-        # Update master config objects first from the loaded self.current_config
-        self.current_serial_config = SerialPortConfig(**self.current_config.get("serial_port", {}))
-        self.current_frame_config = FrameConfig(**self.current_config.get("frame_definition", {}))
-        checksum_mode_name = self.current_config.get("checksum_mode", Constants.DEFAULT_CHECKSUM_MODE.name)
+    def _load_configuration(self):
+        config_data = self.config_manager.load_config()
+        if not config_data:
+            self.error_logger.log_warning("[CONFIG] 未能加载配置文件，使用默认设置。")
+            self.current_serial_config = SerialPortConfig()
+            self.current_frame_config = FrameConfig()
+            self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
+            if self.serial_config_panel_widget: self.serial_config_panel_widget.update_ui_from_main_configs(
+                self.current_serial_config, self.current_frame_config, self.active_checksum_mode)
+            self._next_dynamic_panel_id = 1
+            self._next_global_receive_container_id = 1
+            self.enabled_plugin_module_names = set()
+            return
+
+        self.current_serial_config = SerialPortConfig(**config_data.get("serial_port", {}))
+        self.current_frame_config = FrameConfig(**config_data.get("frame_definition", {}))
+        checksum_mode_name = config_data.get("checksum_mode", Constants.DEFAULT_CHECKSUM_MODE.name)
         try:
             self.active_checksum_mode = ChecksumMode[checksum_mode_name]
         except KeyError:
             self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
-            if self.error_logger: self.error_logger.log_warning(
-                f"Invalid checksum_mode '{checksum_mode_name}' in config, using default.")
 
-        # Apply to SerialConfigDefinitionPanelWidget (it will set its own UI elements)
-        if self.serial_config_panel_widget:
-            self.serial_config_panel_widget.update_ui_from_main_configs(
-                self.current_serial_config,
-                self.current_frame_config,
-                self.active_checksum_mode
-            )
-        # Apply to CustomLogPanelWidget
-        if self.custom_log_panel_widget:
-            self.custom_log_panel_widget.apply_config(self.current_config.get("custom_log_panel", {}))
-        # Apply to BasicCommPanelWidget
-        if self.basic_comm_panel_widget:
-            self.basic_comm_panel_widget.apply_config(self.current_config.get("basic_comm_panel", {}))
+        if self.serial_config_panel_widget: self.serial_config_panel_widget.update_ui_from_main_configs(
+            self.current_serial_config, self.current_frame_config, self.active_checksum_mode)
+        if self.custom_log_panel_widget: self.custom_log_panel_widget.apply_config(
+            config_data.get("custom_log_panel", {}))
+        if self.basic_comm_panel_widget: self.basic_comm_panel_widget.apply_config(
+            config_data.get("basic_comm_panel", {}))
+        if self.scripting_panel_widget: self.scripting_panel_widget.apply_config(config_data.get("scripting_panel", {}))
 
-        loaded_theme_info = self.current_config.get("ui_theme_info",
-                                                    {"type": "internal", "name": "light", "path": None})
+        loaded_theme_info = config_data.get("ui_theme_info", {"type": "internal", "name": "light", "path": None})
         if loaded_theme_info["type"] == "internal" and loaded_theme_info.get("name"):
             self.theme_manager.apply_theme(loaded_theme_info["name"])
         elif loaded_theme_info["type"] == "external" and loaded_theme_info.get("path"):
             self.theme_manager.apply_external_qss(loaded_theme_info["path"])
-        else:
-            self.theme_manager.apply_theme("light")
 
-        self._clear_all_parse_panels()
-        parse_panel_configs = self.current_config.get("parse_panels", [])
-        migrated_old_parse = False
-        if not parse_panel_configs and "receive_containers" in self.current_config:  # Migration
-            self.add_new_parse_panel_action(config={
-                "parse_func_id": self.current_config.get("parse_func_id", "C1"),
-                "data_mapping_mode": self.current_config.get("data_mapping_mode", "顺序填充 (Sequential)"),
-                "receive_containers": self.current_config.get("receive_containers", []),
-                "dock_name": self.current_config.get("parse_panel_dock_name", "默认解析面板 (旧)")
-                # Use saved dock_name if available
-            }, from_config=True, is_migration=True)
-            migrated_old_parse = True
-        elif parse_panel_configs:
-            for panel_cfg in parse_panel_configs: self.add_new_parse_panel_action(config=panel_cfg, from_config=True)
+        self.enabled_plugin_module_names = set(config_data.get("enabled_plugins", []))
+        # self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names) # Moved to after __init__
 
-        # If still no parse panels after load/migration, create a default one.
-        if not self.parse_panel_docks and not migrated_old_parse:
-            self.add_new_parse_panel_action(panel_name_suggestion="默认解析面板 1", from_config=True)
+        dynamic_panels_config = config_data.get("dynamic_panels", [])
+        highest_panel_id = 0
+        for panel_cfg_item in dynamic_panels_config:
+            panel_type = panel_cfg_item.get("panel_type_name")
+            panel_id = panel_cfg_item.get("panel_id")
+            dock_name = panel_cfg_item.get("dock_name")
+            specific_config = panel_cfg_item.get("config", {})
 
-        self._clear_all_send_panels()
-        send_panel_configs = self.current_config.get("send_panels", [])
-        migrated_old_send = False
-        if not send_panel_configs and "send_containers" in self.current_config:  # Migration
-            migrated_send_cfg = {
-                "panel_func_id": self.current_frame_config.func_id,
-                "send_containers": self.current_config.get("send_containers", []),
-                "dock_name": self.current_config.get("send_panel_dock_name",
-                                                     "默认发送面板 (旧)")}  # Use saved dock_name
-            self.add_new_send_panel_action(config=migrated_send_cfg, from_config=True, is_migration=True)
-            migrated_old_send = True
-        elif send_panel_configs:
-            for panel_cfg in send_panel_configs: self.add_new_send_panel_action(config=panel_cfg, from_config=True)
+            module_name_of_panel_type = self.plugin_manager.get_module_name_for_panel_type(
+                panel_type) if panel_type else None
+            can_load_from_config = False
+            if module_name_of_panel_type == "__main__":
+                can_load_from_config = True
+            elif module_name_of_panel_type:
+                can_load_from_config = module_name_of_panel_type in self.enabled_plugin_module_names and \
+                                       module_name_of_panel_type not in self.plugin_manager.session_blocklisted_modules
 
-        # If still no send panels after load/migration, create a default one.
-        if not self.send_panel_docks and not migrated_old_send:
-            self.add_new_send_panel_action(panel_name_suggestion="默认发送面板 1", from_config=True)
+            if panel_type and panel_id is not None and can_load_from_config:
+                self.add_dynamic_panel_action(panel_type_name=panel_type, initial_config=specific_config,
+                                              panel_id_override=panel_id, dock_name_override=dock_name,
+                                              from_config_load=True)
+                if panel_id > highest_panel_id: highest_panel_id = panel_id
+            elif panel_type and panel_id is not None and not can_load_from_config:
+                self.error_logger.log_info(
+                    f"[CONFIG_LOAD] 面板 ID {panel_id} (类型: {panel_type}) 由于其模块未启用或被阻止而未加载。")
 
-        # Plots are loaded in _init_ui_dockable_layout
-        # We just need to make sure their plot targets are updated after parse panels are loaded
+        self._next_dynamic_panel_id = config_data.get("next_dynamic_panel_id", highest_panel_id + 1)
+        self._next_global_receive_container_id = config_data.get("next_global_receive_container_id", 1)
+
+        settings = QSettings("MyCompany", "SerialDebuggerProV2")
+        geom_b64_str = settings.value("window_geometry")
+        state_b64_str = settings.value("window_state")
+        if isinstance(geom_b64_str, str): self.restoreGeometry(QByteArray.fromBase64(geom_b64_str.encode()))
+        if isinstance(state_b64_str, str): self.restoreState(QByteArray.fromBase64(state_b64_str.encode()))
+
+        self.error_logger.log_info("[CONFIG] 配置已加载并应用到UI。")
         self.update_all_parse_panels_plot_targets()
-        if self.error_logger: self.error_logger.log_info("配置已加载并应用到UI。")
+        
+        # 确保所有数据解析面板功能码为F1，覆盖掉可能的旧配置
+        for panel_id, panel_instance in self.dynamic_panel_instances.items():
+            if isinstance(panel_instance, AdaptedParsePanelWidget):
+                # 即使配置中加载了其他功能码，这里也强制设置为F1
+                panel_instance.set_target_func_id("F1")
+                self.error_logger.log_info(f"Parse Panel {panel_id} 功能码已强制设置为 F1")
 
-    def gather_current_ui_config(self) -> Dict[str, Any]:
-        # Get latest values from the SerialConfigDefinitionPanelWidget
-        if self.serial_config_panel_widget:
-            self.current_serial_config = self.serial_config_panel_widget.get_serial_config_from_ui()
-            self.current_frame_config = self.serial_config_panel_widget.get_frame_config_from_ui()
-            self.active_checksum_mode = self.serial_config_panel_widget.get_checksum_mode_from_ui()
-
-        parse_panel_configs_list = [p.get_config() for p in self.parse_panel_widgets.values()]
-        send_panel_configs_list = [p.get_panel_config() for p in self.send_panel_widgets.values()]
-        # For plot_configs, ensure 'dock_name' is saved if that's used for restoring titles.
-        # PlotWidgetContainer.get_config() would need to provide this if desired.
-        # Assuming PlotWidgetContainer has a plot_name and the dock widget title is derived from it.
-        plot_configs = []
-        for pid, p_container in self.plot_widgets_map.items():
-            dock = self.plot_docks_map.get(pid)
-            plot_cfg = {"id": pid, "name": p_container.plot_name}
-            if dock:
-                plot_cfg["dock_name"] = dock.windowTitle()
-            plot_configs.append(plot_cfg)
+    def _gather_current_configuration(self) -> Dict[str, Any]:
+        self.update_current_serial_frame_configs_from_ui()
+        dynamic_panels_list = []
+        for panel_id, panel_instance in self.dynamic_panel_instances.items():
+            panel_type = self.plugin_manager.get_panel_type_from_instance(panel_instance)
+            dock_widget = self.dynamic_panel_docks.get(panel_id)
+            if panel_type and dock_widget:
+                dynamic_panels_list.append(
+                    {"panel_type_name": panel_type, "panel_id": panel_id, "dock_name": dock_widget.windowTitle(),
+                     "config": panel_instance.get_config()})
 
         config_data = {
-            "serial_port": vars(self.current_serial_config),
-            "frame_definition": vars(self.current_frame_config),
-            "checksum_mode": self.active_checksum_mode.name,
-            "ui_theme_info": self.theme_manager.current_theme_info,
-            "parse_panels": parse_panel_configs_list,
-            "send_panels": send_panel_configs_list,
-            "plot_configs": plot_configs,
+            "serial_port": vars(self.current_serial_config), "frame_definition": vars(self.current_frame_config),
+            "checksum_mode": self.active_checksum_mode.name, "ui_theme_info": self.theme_manager.current_theme_info,
             "custom_log_panel": self.custom_log_panel_widget.get_config() if self.custom_log_panel_widget else {},
             "basic_comm_panel": self.basic_comm_panel_widget.get_config() if self.basic_comm_panel_widget else {},
-            "window_geometry": self.saveGeometry().toBase64().data().decode(),
-            "window_state": self.saveState().toBase64().data().decode(),
+            "scripting_panel": self.scripting_panel_widget.get_config() if self.scripting_panel_widget else {},
+            "dynamic_panels": dynamic_panels_list,
+            "next_dynamic_panel_id": self._next_dynamic_panel_id,
+            "next_global_receive_container_id": self._next_global_receive_container_id,
+            "enabled_plugins": list(self.enabled_plugin_module_names)
         }
         return config_data
 
+    @Slot()
+    def open_plugin_manager_dialog(self):
+        dialog = PluginManagementDialog(self.plugin_manager, self, self)
+        dialog.plugin_status_changed_signal.connect(self._handle_plugin_status_change_from_dialog)
+        dialog.exec()
+    
+    @Slot()
+    def open_theme_quick_switcher(self):
+        """打开主题快速切换器"""
+        switcher = ThemeQuickSwitcher(self.theme_manager, self)
+        switcher.show()
+    
+    @Slot()
+    def open_theme_editor_dialog(self):
+        """打开主题编辑器对话框"""
+        dialog = ThemeEditorDialog(self.theme_manager, self)
+        # 连接主题变化信号，当在编辑器中应用主题时，更新所有动态面板
+        dialog.theme_manager.theme_changed.connect(self._on_theme_changed_from_editor)
+        dialog.exec()
+    
+    @Slot(str)
+    def _on_theme_changed_from_editor(self, theme_name: str):
+        """处理从主题编辑器应用主题的事件"""
+        # 更新所有动态面板的主题
+        for panel_instance in self.dynamic_panel_instances.values():
+            if hasattr(panel_instance, 'update_theme'):
+                panel_instance.update_theme()
+        
+        self.error_logger.log_info(f"主题已从编辑器应用: {theme_name}")
+    
+    @Slot()
+    def open_theme_import_export_dialog(self):
+        """打开主题导入导出对话框"""
+        dialog = ThemeImportExportDialog(self.theme_manager, self)
+        dialog.exec()
+    
+    @Slot()
+    def open_theme_backup_dialog(self):
+        """打开主题备份与恢复对话框"""
+        dialog = ThemeBackupDialog(self.theme_manager, self)
+        dialog.exec()
+
+    @Slot(str, str)
+    def _handle_plugin_status_change_from_dialog(self, module_name: str, new_status: str):
+        self.error_logger.log_info(f"插件管理器请求更新模块 '{module_name}' 状态为 '{new_status}'。", "PLUGIN_MGMT")
+        if new_status in ["enabled", "disabled", "session_blocked", "unblocked_needs_scan"]:
+            QMessageBox.information(self, "插件状态变更",
+                                    f"插件模块 '{module_name}' 的状态已更新。\n"
+                                    "将执行插件重载以应用更改。活动的面板实例可能会被关闭和尝试恢复。")
+            self.reload_all_plugins_action(preserve_configs=True)
+        self._update_add_panel_menu()
+
+    def update_plugin_enabled_status(self, module_name: str, enable: bool):
+        if enable:
+            self.enabled_plugin_module_names.add(module_name)
+            if module_name in self.plugin_manager.session_blocklisted_modules:
+                self.plugin_manager.unblock_module_for_session(module_name)
+            self.error_logger.log_info(f"模块 '{module_name}' 已标记为启用。", "PLUGIN_MGMT")
+        else:
+            self.enabled_plugin_module_names.discard(module_name)
+            self.error_logger.log_info(f"模块 '{module_name}' 已标记为禁用。", "PLUGIN_MGMT")
+            self._process_module_disable_or_block(module_name)
+
+        self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
+        # Persist the change to enabled_plugins list in the main config
+        current_app_config = self.config_manager.load_config()  # Load current full config
+        if not current_app_config: current_app_config = {}  # Handle case where config doesn't exist
+        current_app_config["enabled_plugins"] = list(self.enabled_plugin_module_names)
+        self.config_manager.save_config(current_app_config)  # Save updated full config
+
+    def session_block_plugin_module(self, module_name: str):
+        self.error_logger.log_info(f"请求会话级阻止模块: {module_name}", "PLUGIN_MGMT")
+        self._process_module_disable_or_block(module_name)
+        self.plugin_manager.block_module_for_session(module_name)
+        # Update enabled_plugins in config as blocking also implies disabling for persistence
+        if module_name in self.enabled_plugin_module_names:
+            self.enabled_plugin_module_names.discard(module_name)
+            self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
+            current_app_config = self.config_manager.load_config()
+            if not current_app_config: current_app_config = {}
+            current_app_config["enabled_plugins"] = list(self.enabled_plugin_module_names)
+            self.config_manager.save_config(current_app_config)
+
+    def _process_module_disable_or_block(self, module_name: str):
+        panel_ids_to_remove = []
+        for panel_id, panel_instance in list(self.dynamic_panel_instances.items()):
+            instance_panel_type = self.plugin_manager.get_panel_type_from_instance(panel_instance)
+            if instance_panel_type:
+                instance_module_name = self.plugin_manager.get_module_name_for_panel_type(instance_panel_type)
+                if instance_module_name == module_name:
+                    panel_ids_to_remove.append(panel_id)
+
+        if panel_ids_to_remove:
+            self.error_logger.log_info(f"正在关闭模块 {module_name} 的 {len(panel_ids_to_remove)} 个活动面板实例...",
+                                       "PLUGIN_MGMT")
+            for panel_id in panel_ids_to_remove:
+                self.remove_dynamic_panel(panel_id)
+
+        types_to_unregister = [
+            pt_name for pt_name, (_, _, mod_name) in self.plugin_manager.registered_panel_types.items()
+            if mod_name == module_name
+        ]
+        for pt_name in types_to_unregister:
+            self.plugin_manager.unregister_panel_type(pt_name)
+
+        self._update_add_panel_menu()
+
+    @Slot()
+    def reload_all_plugins_action(self, preserve_configs: bool = True):
+        self.error_logger.log_info("开始插件热重载流程...")
+
+        if preserve_configs:
+            self.plugin_manager.store_active_panel_configs(self.dynamic_panel_instances)
+
+        active_panel_ids = list(self.dynamic_panel_instances.keys())
+        if active_panel_ids:
+            self.error_logger.log_info(f"将要移除 {len(active_panel_ids)} 个活动面板实例...")
+            for panel_id in active_panel_ids:
+                self.remove_dynamic_panel(panel_id)
+
+        if self.dynamic_panel_instances or self.dynamic_panel_docks:
+            self.error_logger.log_warning(
+                f"热重载后仍有残留面板实例或停靠窗口! Instances: {len(self.dynamic_panel_instances)}, Docks: {len(self.dynamic_panel_docks)}")
+            self.dynamic_panel_instances.clear()
+            self.dynamic_panel_docks.clear()
+
+        self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
+
+        self.error_logger.log_info("正在重新扫描和加载插件模块...")
+        reloaded_panel_type_names = self.plugin_manager.discover_plugins(
+            "panel_plugins",
+            reload_modules=True,
+            load_only_enabled=True
+        )
+        self.error_logger.log_info(
+            f"插件模块扫描/重载完毕。活动类型: {list(self.plugin_manager.get_creatable_panel_types().keys())}")
+
+        self._update_add_panel_menu()
+        self.error_logger.log_info("“添加面板”菜单已更新。")
+
+        restored_count = 0
+        if preserve_configs:
+            self.error_logger.log_info("正在尝试恢复之前活动的面板...")
+            for panel_type_name_to_restore in self.plugin_manager.get_creatable_panel_types().keys():
+                stored_configs = self.plugin_manager.get_stored_configs_for_reload(panel_type_name_to_restore)
+                for panel_data in stored_configs:
+                    restored_panel = self.add_dynamic_panel_action(
+                        panel_type_name=panel_type_name_to_restore,
+                        initial_config=panel_data.get("config"),
+                        panel_id_override=panel_data.get("panel_id"),
+                        dock_name_override=panel_data.get("dock_name"),
+                        from_config_load=True
+                    )
+                    if restored_panel: restored_count += 1
+            self.plugin_manager.clear_stored_configs()
+
+        self.error_logger.log_info(f"插件热重载流程完毕。成功恢复 {restored_count} 个面板实例。")
+        sender_obj = self.sender()
+        if not isinstance(sender_obj, QDialog) or (
+                isinstance(sender_obj, QDialog) and sender_obj.windowTitle() != "插件管理器"):
+            QMessageBox.information(self, "插件重载", f"插件已重新加载。\n成功恢复 {restored_count} 个面板实例。")
+
+    def _setup_application_icon(self, icon_filename: str):
+        try:
+            base_path = Path(sys._MEIPASS) if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS') else Path(
+                __file__).resolve().parent
+            icon_path = base_path / icon_filename
+            if icon_path.exists():
+                self.setWindowIcon(QIcon(str(icon_path)))
+            else:
+                self.error_logger.log_warning(f"应用程序图标文件未找到: {icon_path}")
+        except Exception as e:
+            self.error_logger.log_error(f"设置应用程序图标时出错: {e}", "APPLICATION_ICON_SETUP")
+
+    @Slot(str)
+    def add_dynamic_panel_action(self, panel_type_name: str, initial_config: Optional[Dict[str, Any]] = None,
+                                 panel_id_override: Optional[int] = None, dock_name_override: Optional[str] = None,
+                                 from_config_load: bool = False) -> Optional[PanelInterface]:
+        panel_id_to_use = panel_id_override if panel_id_override is not None else self._next_dynamic_panel_id
+        panel_widget = self.plugin_manager.create_panel_instance(panel_type_name, panel_id_to_use, initial_config)
+        if not panel_widget: self.error_logger.log_error(f"创建面板实例失败: {panel_type_name}",
+                                                         "UI_ACTION"); return None
+        actual_dock_title = dock_name_override
+        if not actual_dock_title:
+            if not from_config_load:
+                default_title_from_panel = panel_widget.get_initial_dock_title()
+                text, ok = QInputDialog.getText(self, f"新{panel_widget.PANEL_DISPLAY_NAME}", "面板显示名称:",
+                                                QLineEdit.EchoMode.Normal, default_title_from_panel)
+                if not ok or not text.strip(): self.error_logger.log_info(
+                    f"[UI_ACTION] 用户取消添加新面板 '{panel_type_name}'."); return None
+                actual_dock_title = text.strip()
+            else:
+                actual_dock_title = panel_widget.get_initial_dock_title()
+        dw_panel = QDockWidget(actual_dock_title, self)
+        dw_panel.setObjectName(f"{panel_type_name}_Dock_{panel_id_to_use}")
+        dw_panel.setWidget(panel_widget)
+        dw_panel.installEventFilter(self)
+        panel_widget.dock_title_changed.connect(dw_panel.setWindowTitle)
+        all_current_dynamic_docks = list(self.dynamic_panel_docks.values())
+        target_tab_dock = None
+        if all_current_dynamic_docks:
+            target_tab_dock = all_current_dynamic_docks[-1]
+        elif self.dw_scripting_panel:
+            target_tab_dock = self.dw_scripting_panel
+        if target_tab_dock:
+            self.tabifyDockWidget(target_tab_dock, dw_panel)
+        else:
+            self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dw_panel)
+        self.dynamic_panel_instances[panel_id_to_use] = panel_widget
+        self.dynamic_panel_docks[panel_id_to_use] = dw_panel
+        if panel_id_override is None:
+            self._next_dynamic_panel_id += 1
+        elif panel_id_to_use >= self._next_dynamic_panel_id:
+            self._next_dynamic_panel_id = panel_id_to_use + 1
+        if hasattr(self, 'view_menu'): self.view_menu.addAction(dw_panel.toggleViewAction())
+        panel_widget.on_panel_added()
+        dw_panel.show()
+        if isinstance(panel_widget, AdaptedParsePanelWidget): panel_widget.update_children_plot_targets()
+        if isinstance(panel_widget, AdaptedPlotWidgetPanel): self.update_all_parse_panels_plot_targets()
+        if self.error_logger and not from_config_load: self.error_logger.log_info(
+            f"[UI_ACTION] 已添加动态面板: 类型='{panel_type_name}', ID={panel_id_to_use}, 名称='{actual_dock_title}'")
+        return panel_widget
+
+    def remove_dynamic_panel(self, panel_id_to_remove: int):
+        panel_widget = self.dynamic_panel_instances.pop(panel_id_to_remove, None)
+        dock_widget = self.dynamic_panel_docks.pop(panel_id_to_remove, None)
+        if panel_widget: panel_widget.on_panel_removed(); panel_widget.deleteLater()
+        if dock_widget:
+            if hasattr(self, 'view_menu'): view_action = dock_widget.toggleViewAction();
+            if view_action: self.view_menu.removeAction(view_action)
+            self.removeDockWidget(dock_widget)
+            dock_widget.deleteLater()
+            self.error_logger.log_info(
+                f"[UI_ACTION] 已移除动态面板 ID: {panel_id_to_remove}, 名称: '{dock_widget.windowTitle()}'")
+        self.update_all_parse_panels_plot_targets()
+        if PYQTGRAPH_AVAILABLE and isinstance(panel_widget,
+                                              AdaptedPlotWidgetPanel): self.plot_target_removed_signal.emit(
+            panel_id_to_remove)
+
+    def eventFilter(self, watched_object: QObject, event: QEvent) -> bool:
+        if event.type() == QEvent.Type.Close and isinstance(watched_object, QDockWidget):
+            panel_id_to_remove = None
+            for pid, dock in self.dynamic_panel_docks.items():
+                if dock == watched_object:
+                    reply = QMessageBox.question(self, "关闭/卸载面板确认",
+                                                 f"您确定要关闭并卸载面板 '{dock.windowTitle()}' 吗？\n此操作将移除该面板实例，并且在下次保存配置前不会自动加载。",
+                                                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                                                 QMessageBox.StandardButton.No)
+                    if reply == QMessageBox.StandardButton.Yes:
+                        panel_id_to_remove = pid
+                    else:
+                        event.ignore(); return True
+                    break
+            if panel_id_to_remove is not None: self.remove_dynamic_panel(
+                panel_id_to_remove); event.accept(); return True
+        return super().eventFilter(watched_object, event)
+
+    @Slot()
+    def load_configuration_action_dialog(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "加载配置文件", "", "JSON 文件 (*.json);;所有文件 (*)")
+        if file_path:
+            # Clear existing dynamic panels before loading new config
+            for panel_id in list(self.dynamic_panel_instances.keys()):  # Iterate over a copy of keys
+                self.remove_dynamic_panel(panel_id)
+
+            # Reset panel ID counters before loading
+            self._next_dynamic_panel_id = 1
+            self._next_global_receive_container_id = 1
+            self.plugin_manager.session_blocklisted_modules.clear()  # Clear session blocklist on full config load
+
+            temp_loader = ConfigManager(filename=file_path, error_logger=self.error_logger)
+            loaded_cfg = temp_loader.load_config()
+            if loaded_cfg:
+                self.current_serial_config = SerialPortConfig(**loaded_cfg.get("serial_port", {}))
+                self.current_frame_config = FrameConfig(**loaded_cfg.get("frame_definition", {}))
+                checksum_mode_name = loaded_cfg.get("checksum_mode", Constants.DEFAULT_CHECKSUM_MODE.name)
+                try:
+                    self.active_checksum_mode = ChecksumMode[checksum_mode_name]
+                except KeyError:
+                    self.active_checksum_mode = Constants.DEFAULT_CHECKSUM_MODE
+                if self.custom_log_panel_widget: self.custom_log_panel_widget.apply_config(
+                    loaded_cfg.get("custom_log_panel", {}))
+                if self.basic_comm_panel_widget: self.basic_comm_panel_widget.apply_config(
+                    loaded_cfg.get("basic_comm_panel", {}))
+                if self.scripting_panel_widget: self.scripting_panel_widget.apply_config(
+                    loaded_cfg.get("scripting_panel", {}))
+                loaded_theme_info = loaded_cfg.get("ui_theme_info", {"type": "internal", "name": "light", "path": None})
+                if loaded_theme_info["type"] == "internal" and loaded_theme_info.get("name"):
+                    self.theme_manager.apply_theme(loaded_theme_info["name"])
+                elif loaded_theme_info["type"] == "external" and loaded_theme_info.get("path"):
+                    self.theme_manager.apply_external_qss(loaded_theme_info["path"])
+
+                self.enabled_plugin_module_names = set(loaded_cfg.get("enabled_plugins", []))
+                self.plugin_manager.update_enabled_plugins(self.enabled_plugin_module_names)
+                # Re-discover based on the *newly loaded* enabled list
+                # Do not reload modules here, just discover based on new enabled list after clearing old registrations
+                self.plugin_manager.clear_all_registered_types()  # Clear old types
+                self._register_core_panels()  # Re-register core panels
+                self.plugin_manager.discover_plugins("panel_plugins", reload_modules=False, load_only_enabled=True)
+                self._update_add_panel_menu()
+
+                dynamic_panels_config = loaded_cfg.get("dynamic_panels", [])
+                highest_panel_id = 0
+                for panel_cfg_item in dynamic_panels_config:
+                    panel_type = panel_cfg_item.get("panel_type_name")
+                    panel_id = panel_cfg_item.get("panel_id")
+                    dock_name = panel_cfg_item.get("dock_name")
+                    specific_config = panel_cfg_item.get("config", {})
+
+                    # Check if the panel type is actually available (registered) after discovery
+                    if panel_type in self.plugin_manager.get_creatable_panel_types():
+                        self.add_dynamic_panel_action(panel_type_name=panel_type, initial_config=specific_config,
+                                                      panel_id_override=panel_id, dock_name_override=dock_name,
+                                                      from_config_load=True)
+                        if panel_id > highest_panel_id: highest_panel_id = panel_id
+                    else:
+                        self.error_logger.log_warning(
+                            f"[CONFIG_LOAD] 面板类型 '{panel_type}' 在配置中，但在当前已启用/可用的插件中未找到，跳过加载。")
+
+                self._next_dynamic_panel_id = loaded_cfg.get("next_dynamic_panel_id", highest_panel_id + 1)
+                self._next_global_receive_container_id = loaded_cfg.get("next_global_receive_container_id", 1)
+                if self.serial_config_panel_widget: self.serial_config_panel_widget.update_ui_from_main_configs(
+                    self.current_serial_config, self.current_frame_config, self.active_checksum_mode)
+                self.update_all_parse_panels_plot_targets()
+                self.config_manager.config_file = Path(file_path)
+                QMessageBox.information(self, "配置加载", f"配置已从 '{file_path}' 加载。")
+            else:
+                QMessageBox.warning(self, "配置加载", f"无法从 '{file_path}' 加载有效配置，或文件为空/默认。")
+
+    @Slot()
+    def save_configuration_action_dialog(self):
+        current_config_path = str(self.config_manager.config_file)
+        file_path, _ = QFileDialog.getSaveFileName(self, "保存配置文件", current_config_path,
+                                                   "JSON 文件 (*.json);;所有文件 (*)")
+        if file_path:
+            config_to_save = self._gather_current_configuration()
+            temp_saver = ConfigManager(filename=file_path, error_logger=self.error_logger)
+            temp_saver.save_config(config_to_save)
+            self.config_manager.config_file = Path(file_path)
+            QMessageBox.information(self, "配置保存", f"配置已保存到 {file_path}。")
+
     @Slot(bool)
     def toggle_connection_action_handler(self, connect_request: bool):
+        if self.error_logger:
+            self.error_logger.log_info(f"toggle_connection_action_handler: connect_request={connect_request}")
         if connect_request:
             if not self.serial_manager.is_connected:
-                self.update_current_configs_from_ui_panel()
-                if not self.current_serial_config.port_name or self.current_serial_config.port_name == "无可用端口":
+                self.update_current_serial_frame_configs_from_ui()
+                if not self.current_serial_config.port_name or self.current_serial_config.port_name == "无可用端口": 
                     QMessageBox.warning(self, "连接错误", "未选择有效的串口。")
-                    if self.serial_config_panel_widget: self.serial_config_panel_widget.connect_button.setChecked(False)
+                    if self.serial_config_panel_widget and hasattr(self.serial_config_panel_widget, 'connect_button'):
+                        self.serial_config_panel_widget.connect_button.setChecked(False)
                     return
                 self.serial_manager.connect_port(self.current_serial_config)
-                if self.serial_manager.is_connected:
-                    self.frame_parser.clear_buffer(); self._parsed_frame_count = 0
-                else:
-                    if self.serial_config_panel_widget: self.serial_config_panel_widget.connect_button.setChecked(False)
+                if self.serial_manager.is_connected: 
+                    self.frame_parser.clear_buffer()
+                    self._parsed_frame_count = 0
         else:
-            if self.serial_manager.is_connected: self.serial_manager.disconnect_port()
+            if self.serial_manager.is_connected: 
+                self.serial_manager.disconnect_port()
 
     @Slot()
     def populate_serial_ports_ui(self) -> None:
         available_ports = self.serial_manager.get_available_ports()
-        # Ensure current_serial_config is up-to-date if called before config load (e.g. initial refresh)
-        if hasattr(self, 'current_serial_config') and self.serial_config_panel_widget:
-            self.serial_config_panel_widget.update_port_combo_display(available_ports,
-                                                                      self.current_serial_config.port_name)
-        elif self.serial_config_panel_widget:  # Fallback if current_serial_config not fully ready
-            self.serial_config_panel_widget.update_port_combo_display(available_ports, None)
-        self.update_port_status_ui(self.serial_manager.is_connected)
+        if self.error_logger:
+            self.error_logger.log_info(f"populate_serial_ports_ui: 获取到的串口列表: {[port['name'] for port in available_ports]}")
+        if self.serial_config_panel_widget: 
+            current_port = self.current_serial_config.port_name if self.current_serial_config else None
+            if self.error_logger:
+                self.error_logger.log_info(f"populate_serial_ports_ui: 当前选中的串口: {current_port}")
+            self.serial_config_panel_widget.update_port_combo_display(available_ports, current_port)
+        self.update_fixed_panels_connection_status(self.serial_manager.is_connected)
 
-    def update_port_status_ui(self, connected: bool) -> None:
-        if self.serial_config_panel_widget:
-            self.serial_config_panel_widget.set_connection_status_display(connected)
-        for panel in self.send_panel_widgets.values():
-            panel.send_frame_button_panel.setEnabled(connected)
-        if self.basic_comm_panel_widget:
+    @Slot(bool, str)
+    def on_serial_connection_status_changed(self, is_connected: bool, message: str):
+        self.update_fixed_panels_connection_status(is_connected)
+        self.status_bar_label.setText(message)
+        if not is_connected and "资源错误" in message: QMessageBox.critical(self, "串口错误", message)
+
+    def update_fixed_panels_connection_status(self, connected: bool):
+        if self.serial_config_panel_widget: self.serial_config_panel_widget.set_connection_status_display(connected)
+        if self.basic_comm_panel_widget: 
             self.basic_comm_panel_widget.set_send_enabled(connected)
-
-        if hasattr(self, 'status_bar_label'):
-            if not connected and self.serial_config_panel_widget and \
-                    (not self.serial_config_panel_widget.port_combo.count() or
-                     self.serial_config_panel_widget.port_combo.currentText() == "无可用端口"):
-                self.status_bar_label.setText("无可用串口")
-            # else: self.status_bar_label.setText("已连接" if connected else "未连接") # This is handled by on_serial_connection_status_changed
-
-    @Slot(str, bool)
-    def send_basic_serial_data_action(self, text_to_send: str, is_hex: bool) -> None:
-        if not self.serial_manager.is_connected:
-            QMessageBox.warning(self, "警告", "串口未打开。")
-            if self.basic_comm_panel_widget: self.basic_comm_panel_widget.append_receive_text("错误: 串口未打开。\n")
-            return
-        if not text_to_send: return
-        data_to_write = QByteArray()
-        if is_hex:
-            hex_clean = "".join(text_to_send.replace("0x", "").replace("0X", "").split())
-            if len(hex_clean) % 2 != 0: hex_clean = "0" + hex_clean
-            try:
-                data_to_write = QByteArray.fromHex(hex_clean.encode('ascii'))
-            except ValueError:
-                msg = f"Hex发送错误: '{text_to_send}' 包含无效Hex字符."
-                QMessageBox.warning(self, "Hex格式错误", msg)
-                if self.basic_comm_panel_widget: self.basic_comm_panel_widget.append_receive_text(f"错误: {msg}\n")
-                return
-        else:
-            data_to_write.append(text_to_send.encode('utf-8', errors='replace'))
-        if data_to_write:
-            bytes_written = self.serial_manager.write_data(data_to_write)
-            if bytes_written == data_to_write.size():  # Use .size() for QByteArray
-                display_sent_data = data_to_write.toHex(' ').data().decode('ascii').upper() if is_hex else text_to_send
-                if len(display_sent_data) > 60: display_sent_data = display_sent_data[:60] + "..."
-                if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(
-                    f"基本发送 {bytes_written} 字节: {display_sent_data}")
-                if self.error_logger: self.error_logger.log_info(f"基本发送 {bytes_written} 字节")
-                self._append_to_basic_receive(data_to_write, source="TX")
-                self.data_recorder.record_raw_frame(datetime.now(), data_to_write.data(), "TX (Basic)")
-
-    def _append_to_basic_receive(self, data: QByteArray, source: str = "RX"):
-        if not self.basic_comm_panel_widget: return
-        final_log_string = ""
-        if self.basic_comm_panel_widget.recv_timestamp_checkbox.isChecked():
-            final_log_string += datetime.now().strftime("[%H:%M:%S.%f")[:-3] + "] "
-        final_log_string += f"{source}: "
-        if self.basic_comm_panel_widget.recv_hex_checkbox.isChecked():
-            final_log_string += data.toHex(' ').data().decode('ascii', errors='ignore').upper()
-        else:
-            try:
-                final_log_string += data.data().decode('utf-8')
-            except UnicodeDecodeError:
-                try:
-                    final_log_string += data.data().decode('gbk', errors='replace')
-                except UnicodeDecodeError:
-                    final_log_string += data.data().decode('latin-1', errors='replace')
-        if not final_log_string.endswith('\n'): final_log_string += '\n'
-        self.basic_comm_panel_widget.append_receive_text(final_log_string)
-
-    def _append_to_custom_protocol_log_formatted(self, timestamp: datetime, source: str, content: str,
-                                                 is_content_hex: bool):
-        if not self.custom_log_panel_widget: return
-        final_log_string = ""
-        if self.custom_log_panel_widget.timestamp_checkbox.isChecked():
-            final_log_string += timestamp.strftime("[%H:%M:%S.%f")[:-3] + "] "
-        final_log_string += f"{source}: "
-
-        # If the custom log panel's hex checkbox is checked, we assume 'content' should be hex.
-        # If 'is_content_hex' is True, 'content' is already hex.
-        # If checkbox is checked but 'is_content_hex' is False, this implies 'content' might be raw bytes needing hex conversion.
-        # This logic can be complex. For now, assuming 'content' is mostly ready.
-        # A more robust solution would involve passing raw QByteArray to CustomLogPanelWidget and letting it format.
-        if self.custom_log_panel_widget.hex_checkbox.isChecked():
-            if not is_content_hex:  # If content is not already hex but should be
-                try:  # Try to interpret content as bytes then hexify (this is speculative)
-                    final_log_string += QByteArray(content.encode('latin-1')).toHex(' ').data().decode().upper()
-                except:
-                    final_log_string += content  # Fallback to content as is
-            else:
-                final_log_string += content  # Content is already hex
-        else:  # Not hex display
-            if is_content_hex:  # If content is hex but should be text (needs de-hexify or indicate it's hex)
-                final_log_string += content  # Show hex as is, or attempt to de-hexify if possible
-            else:
-                final_log_string += content  # Content is already text
-
-        if not final_log_string.endswith('\n'): final_log_string += '\n'
-        self.custom_log_panel_widget.append_log(final_log_string)
+            # 通知基本发送面板串口连接状态变化
+            if hasattr(self.basic_comm_panel_widget, 'on_serial_connection_changed'):
+                self.basic_comm_panel_widget.on_serial_connection_changed(connected)
+        for panel_instance in self.dynamic_panel_instances.values():
+            if isinstance(panel_instance, AdaptedSendPanelWidget): panel_instance.update_send_button_state(connected)
+        if not connected and self.serial_config_panel_widget:
+            if hasattr(self.serial_config_panel_widget, 'port_combo') and (
+                    not self.serial_config_panel_widget.port_combo.count() or self.serial_config_panel_widget.port_combo.currentText() == "无可用端口"): self.status_bar_label.setText(
+                "无可用串口")
 
     @Slot(QByteArray)
     def on_serial_data_received(self, data: QByteArray):
-        self._append_to_basic_receive(data, source="RX")
-        self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
-        self.frame_parser.append_data(data)
-        self.update_current_configs_from_ui_panel()  # Get latest frame config from panel
-        current_ui_checksum_mode = self.active_checksum_mode
-        self.frame_parser.try_parse_frames(self.current_frame_config, current_ui_checksum_mode)
+        """串口数据接收处理函数 - 修复版本"""
+        self._flash_button("rx")
+        
+        # 增强的调试日志
+        if self.error_logger:
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"接收到串口数据: {data.size()} 字节: {hex_data}")
+        
+        # 更新基本通信面板
+        if self.basic_comm_panel_widget: 
+            self._append_to_basic_receive_text_edit(data, source="RX")
+        
+        # 记录原始数据
+        if hasattr(self, 'data_recorder'): 
+            try:
+                self.data_recorder.record_raw_frame(datetime.now(), data.data(), "RX")
+            except Exception as e:
+                if self.error_logger:
+                    self.error_logger.log_error(f"数据记录失败: {e}", "DATA_RECORD")
+        
+        # 更新配置（确保使用最新的配置）
+        self.update_current_serial_frame_configs_from_ui()
+        
+        # 将数据传递给帧解析器
+        if self.error_logger:
+            self.error_logger.log_info(f"传递 {data.size()} 字节数据给帧解析器")
+        
+        try:
+            self.frame_parser.append_data(data)
+            
+            # 尝试解析帧
+            if self.error_logger:
+                self.error_logger.log_info(f"开始帧解析，当前配置: 帧头={self.current_frame_config.head}, 功能码={self.current_frame_config.func_id}, 校验模式={self.active_checksum_mode}")
+            
+            self.frame_parser.try_parse_frames(
+                current_frame_config=self.current_frame_config, 
+                parse_target_func_id_hex=self.current_frame_config.func_id,
+                active_checksum_mode=self.active_checksum_mode
+            )
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"帧解析过程中发生错误: {e}", "FRAME_PARSE")
+            self.status_bar_label.setText(f"帧解析错误: {str(e)}")
 
     @Slot(str, QByteArray)
     def on_frame_successfully_parsed(self, func_id_hex: str, data_payload_ba: QByteArray):
         self._parsed_frame_count += 1
         hex_payload_str = data_payload_ba.toHex(' ').data().decode('ascii').upper()
-        self._append_to_custom_protocol_log_formatted(datetime.now(), "RX Parsed",
-                                                      f"FID:{func_id_hex} Payload:{hex_payload_str}", True)
+        self.append_to_custom_protocol_log_formatted(datetime.now(), "RX Parsed",
+                                                     f"FID:{func_id_hex} Payload:{hex_payload_str}", True)
         msg = f"成功解析帧: #{self._parsed_frame_count}, FID: {func_id_hex.upper()}"
-        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(msg)
-        if self.error_logger: self.error_logger.log_info(f"{msg} Payload len: {data_payload_ba.size()}")
-        self.protocol_analyzer.analyze_frame(data_payload_ba, 'rx')
+        self.status_bar_label.setText(msg)
+        if self.error_logger:
+            self.error_logger.log_info(f"{msg} Payload len: {data_payload_ba.size()}")
+        if hasattr(self, 'protocol_analyzer'):
+            self.protocol_analyzer.analyze_frame(data_payload_ba, 'rx')
         dispatched_to_a_panel = False
-        for panel_widget in self.parse_panel_widgets.values():
-            if func_id_hex.upper() == panel_widget.get_target_func_id().upper():
-                panel_widget.dispatch_data(data_payload_ba)
-                dispatched_to_a_panel = True
-        if not dispatched_to_a_panel and self.error_logger: self.error_logger.log_debug(
-            f"Frame FID {func_id_hex} no target panel.")
+        if self.error_logger:
+            self.error_logger.log_info(f"尝试将帧分发到匹配功能码的解析面板，功能码: {func_id_hex.upper()}")
+        for panel_instance in self.dynamic_panel_instances.values():
+            if self.error_logger:
+                 self.error_logger.log_info(f"检查动态面板 ID {panel_instance.panel_id}, 类型: {type(panel_instance).__name__}")
+            if isinstance(panel_instance, AdaptedParsePanelWidget):
+                panel_func_id = panel_instance.get_target_func_id().strip().upper()
+                if not panel_func_id:
+                    if self.error_logger:
+                        self.error_logger.log_warning(f"Parse Panel {panel_instance.panel_id} has no function ID set!")
+                    continue
+                if self.error_logger:
+                    self.error_logger.log_info(f"检查面板 {panel_instance.panel_id} 的功能码: {panel_func_id}")
+                # 这里改为包含匹配，防止大小写或前导0不一致情况
+                if func_id_hex.upper().lstrip('0') == panel_func_id.lstrip('0'):
+                    if self.error_logger:
+                        self.error_logger.log_info(f"匹配成功，向面板 {panel_instance.panel_id} 发送数据")
+                    panel_instance.dispatch_data(data_payload_ba)
+                    dispatched_to_a_panel = True
+        if not dispatched_to_a_panel and self.error_logger:
+            self.error_logger.log_warning(
+                f"[FRAME_PARSER] Frame FID {func_id_hex} has no matching parse panel. "
+                f"Available panels: {[p.get_target_func_id() for p in self.dynamic_panel_instances.values() if isinstance(p, AdaptedParsePanelWidget)]}"
+            )
+        if hasattr(self, 'data_processor'):
+            self.data_processor.add_data(func_id_hex, QByteArray(data_payload_ba))
 
-    def eventFilter(self, watched_object: QObject, event: QEvent) -> bool:
-        if event.type() == QEvent.Type.Close:
-            processed = False
-            for dock_map, remove_method in [
-                (self.plot_docks_map, self.remove_plot_widget_and_update),
-                (self.parse_panel_docks, self.remove_parse_panel_and_update),
-                (self.send_panel_docks, self.remove_send_panel_and_update)
-            ]:
-                for item_id, dock in list(dock_map.items()):
-                    if dock == watched_object:
-                        remove_method(item_id, dock)
-                        processed = True
-                        break
-                if processed: break
-            if processed: event.accept(); return True
-        return super().eventFilter(watched_object, event)
+    @Slot(str, QByteArray)
+    def on_frame_checksum_error(self, error_message: str, faulty_frame: QByteArray):
+        self.status_bar_label.setText("校验和错误!")
+        hex_frame_str = faulty_frame.toHex(' ').data().decode('ascii').upper()
+        self.append_to_custom_protocol_log_formatted(datetime.now(), "RX Error",
+                                                     f"ChecksumError: {error_message} Frame: {hex_frame_str}", True)
+        if hasattr(self, 'protocol_analyzer'): self.protocol_analyzer.analyze_frame(faulty_frame, 'rx', is_error=True)
 
-    def restore_geometry_and_state(self) -> None:
-        geom_b64 = self.current_config.get("window_geometry")
-        state_b64 = self.current_config.get("window_state")
-        if geom_b64:
+    @Slot(str, QByteArray)
+    def on_frame_general_parse_error(self, error_message: str, buffer_state: QByteArray):
+        self.status_bar_label.setText(f"协议解析错误: {error_message}")
+
+    @Slot(str)
+    def on_serial_manager_error(self, error_message: str):
+        self.status_bar_label.setText(error_message); QMessageBox.warning(self, "串口通讯警告", error_message)
+
+    def get_next_global_receive_container_id(self) -> int:
+        current_id = self._next_global_receive_container_id; self._next_global_receive_container_id += 1; return current_id
+
+    def update_current_serial_frame_configs_from_ui(self):
+        if not self.serial_config_panel_widget: return
+        self.current_serial_config = self.serial_config_panel_widget.get_serial_config_from_ui()
+        self.current_frame_config = self.serial_config_panel_widget.get_frame_config_from_ui()
+        self.active_checksum_mode = self.serial_config_panel_widget.get_checksum_mode_from_ui()
+
+    def _append_to_basic_receive_text_edit(self, data: QByteArray, source: str = "RX"):
+        """修复基本接收文本显示函数"""
+        if self.error_logger:
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"更新基本接收面板: {data.size()} 字节: {hex_data}")
+        
+        if not self.basic_comm_panel_widget or not self.basic_comm_panel_widget.receive_text_edit: 
+            return
+        
+        final_log_string = ""
+        
+        # 添加时间戳
+        if self.basic_comm_panel_widget.recv_timestamp_checkbox_is_checked(): 
+            final_log_string += datetime.now().strftime("[%H:%M:%S.%f")[:-3] + "] "
+        
+        final_log_string += f"{source}: "
+        
+        # 根据显示模式处理数据
+        if self.basic_comm_panel_widget.recv_hex_checkbox_is_checked():
+            # 十六进制显示
+            hex_data = data.toHex(' ').data().decode('ascii').upper()
+            final_log_string += hex_data
+        else:
+            # 文本显示 - 修复字符编码处理
             try:
-                self.restoreGeometry(QByteArray.fromBase64(geom_b64.encode()))
+                data_bytes = data.data()
+                if isinstance(data_bytes, bytes):
+                    # 尝试多种编码方式
+                    try:
+                        final_log_string += data_bytes.decode('utf-8')
+                    except UnicodeDecodeError:
+                        try:
+                            final_log_string += data_bytes.decode('gbk')
+                        except UnicodeDecodeError:
+                            final_log_string += data_bytes.decode('latin-1', errors='replace')
+                else:
+                    final_log_string += str(data_bytes)
             except Exception as e:
-                if self.error_logger: self.error_logger.log_warning(f"Error restoring geometry: {e}")
-        if state_b64:
-            try:
-                self.restoreState(QByteArray.fromBase64(state_b64.encode()))
-            except Exception as e:
-                if self.error_logger: self.error_logger.log_warning(f"Error restoring state: {e}")
+                if self.error_logger:
+                    self.error_logger.log_warning(f"文本解码失败: {e}")
+                # 回退到十六进制显示
+                hex_data = data.toHex(' ').data().decode('ascii').upper()
+                final_log_string += f"[HEX] {hex_data}"
+        
+        if not final_log_string.endswith('\n'): 
+            final_log_string += '\n'
+        
+        self.basic_comm_panel_widget.append_receive_text(final_log_string)
 
-    def remove_plot_widget_and_update(self, plot_id_to_remove: int, associated_dock_widget: QDockWidget):
-        self.plot_widgets_map.pop(plot_id_to_remove, None)
-        self.plot_docks_map.pop(plot_id_to_remove, None)
-        if hasattr(self, 'view_menu') and self.view_menu and associated_dock_widget:
-            view_action = associated_dock_widget.toggleViewAction()
-            if view_action: self.view_menu.removeAction(view_action)
-        if associated_dock_widget: associated_dock_widget.deleteLater()
-        self.update_all_parse_panels_plot_targets()
-        if self.error_logger: self.error_logger.log_info(
-            f"Removed plot widget ID: {plot_id_to_remove}, Name: '{associated_dock_widget.windowTitle()}'")
-
-    def remove_parse_panel_and_update(self, panel_id_to_remove: int, associated_dock_widget: QDockWidget):
-        panel_widget = self.parse_panel_widgets.pop(panel_id_to_remove, None)
-        self.parse_panel_docks.pop(panel_id_to_remove, None)
-        if hasattr(self, 'view_menu') and self.view_menu and associated_dock_widget:
-            view_action = associated_dock_widget.toggleViewAction()
-            if view_action: self.view_menu.removeAction(view_action)
-        if panel_widget: panel_widget.deleteLater()
-        if associated_dock_widget: associated_dock_widget.deleteLater()
-        if self.error_logger: self.error_logger.log_info(
-            f"Removed parse panel ID: {panel_id_to_remove}, Name: '{associated_dock_widget.windowTitle()}'")
-
-    def remove_send_panel_and_update(self, panel_id_to_remove: int, associated_dock_widget: QDockWidget):
-        panel_widget = self.send_panel_widgets.pop(panel_id_to_remove, None)
-        self.send_panel_docks.pop(panel_id_to_remove, None)
-        if hasattr(self, 'view_menu') and self.view_menu and associated_dock_widget:
-            view_action = associated_dock_widget.toggleViewAction()
-            if view_action: self.view_menu.removeAction(view_action)
-        if panel_widget: panel_widget.deleteLater()
-        if associated_dock_widget: associated_dock_widget.deleteLater()
-        if self.error_logger: self.error_logger.log_info(
-            f"Removed send panel ID: {panel_id_to_remove}, Name: '{associated_dock_widget.windowTitle()}'")
-
-    def load_configuration_action(self) -> None:
-        file_path, _ = QFileDialog.getOpenFileName(self, "加载配置文件", "", "JSON 文件 (*.json);;所有文件 (*)")
-        if file_path:
-            temp_loader = ConfigManager(filename=file_path, error_logger=self.error_logger)
-            loaded_cfg = temp_loader.load_config()
-            if loaded_cfg != temp_loader.default_config or Path(file_path).exists():
-                self.current_config = loaded_cfg
-                self.apply_loaded_config_to_ui()
-                QMessageBox.information(self, "配置加载", f"配置已从 '{file_path}' 加载。")
+    def append_to_custom_protocol_log_formatted(self, timestamp: datetime, source: str, content: str,
+                                                is_content_hex: bool):
+        final_log_string = ""
+        if not self.custom_log_panel_widget: return
+        if self.custom_log_panel_widget.timestamp_checkbox_is_checked(): final_log_string += timestamp.strftime(
+            "[%H:%M:%S.%f")[:-3] + "] "
+        final_log_string += f"{source}: "
+        if self.custom_log_panel_widget.hex_checkbox_is_checked():
+            if not is_content_hex:
+                try:
+                    final_log_string += QByteArray(content.encode('latin-1')).toHex(' ').data().decode().upper()
+                except Exception:
+                    final_log_string += content
             else:
-                QMessageBox.warning(self, "配置加载", f"无法从 '{file_path}' 加载有效配置。")
+                final_log_string += content
+        else:
+            if is_content_hex:
+                final_log_string += content
+            else:
+                final_log_string += content
+        if not final_log_string.endswith('\n'): final_log_string += '\n'
+        self.custom_log_panel_widget.append_log(final_log_string)
 
-    def save_configuration_action(self) -> None:
-        current_config_path = self.config_manager.config_file
-        file_path, _ = QFileDialog.getSaveFileName(self, "保存配置文件", str(current_config_path),
-                                                   "JSON 文件 (*.json);;所有文件 (*)")
-        if file_path:
-            current_ui_cfg = self.gather_current_ui_config()
-            temp_saver = ConfigManager(filename=file_path, error_logger=self.error_logger)
-            temp_saver.save_config(current_ui_cfg)
-            QMessageBox.information(self, "配置保存", f"配置已保存到 {file_path}。")
+    def assemble_custom_frame_from_send_panel_data(self, panel_target_func_id_str: str,
+                                             panel_send_data_containers: List[SendDataContainerWidget]) -> Optional[QByteArray]:
+        """修复帧组装函数"""
+        msg = ""
+        self.update_current_serial_frame_configs_from_ui()
+        cfg = self.current_frame_config
+        
+        try:
+            # 修正：确保十六进制字符串处理正确
+            head_ba = QByteArray.fromHex(cfg.head.encode('ascii'))
+            saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii'))
+            daddr_ba = QByteArray.fromHex(cfg.d_addr.encode('ascii'))
+            id_ba = QByteArray.fromHex(panel_target_func_id_str.encode('ascii'))
 
-    def apply_theme_action(self, theme_name: str) -> None:
+        except ValueError as e:
+            msg = f"帧头/地址/功能码({panel_target_func_id_str}) Hex格式错误: {e}"
+            self.status_bar_label.setText(msg)
+            if self.error_logger:
+                self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
+            return None
+
+        # 长度检查
+        if not (head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):
+            msg = "帧头/地址/功能码 Hex长度必须为1字节 (2个Hex字符)"
+            self.status_bar_label.setText(msg)
+            if self.error_logger:
+                self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
+            return None
+
+        # 组装数据内容
+        data_content_ba = QByteArray()
+        for scw_widget in panel_send_data_containers:
+            try:
+                item_bytes = scw_widget.get_bytes()
+                if item_bytes is None:
+                    msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"
+                    self.status_bar_label.setText(msg)
+                    if self.error_logger:
+                        self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
+                    return None
+                data_content_ba.append(item_bytes)
+            except Exception as e:
+                msg = f"数据项处理错误: {e}"
+                self.status_bar_label.setText(msg)
+                if self.error_logger:
+                    self.error_logger.log_error(msg, "FRAME_ASSEMBLY")
+                return None
+
+        # 组装帧
+        frame = QByteArray()
+        frame.append(head_ba)
+        frame.append(saddr_ba)
+        frame.append(daddr_ba)
+        frame.append(id_ba)
+        
+        # 长度字段 (2字节，小端序)
+        length_bytes = struct.pack('<H', data_content_ba.size())
+        frame.append(QByteArray(length_bytes))
+        frame.append(data_content_ba)
+
+        # 计算并添加校验和
+        try:
+            if self.active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
+                crc_val = calculate_frame_crc16(frame)
+                # 修正：根据协议规范确定CRC字节序
+                crc_bytes = struct.pack('<H', crc_val)  # 使用小端序与长度字段一致
+                frame.append(QByteArray(crc_bytes))
+                sum_check_text = f"0x{crc_val:04X}"
+                add_check_text = ""
+                if self.error_logger:
+                    self.error_logger.log_info(f"添加CRC16校验和: 0x{crc_val:04X}")
+            else:
+                sc_val, ac_val = calculate_original_checksums_python(frame)
+                frame.append(QByteArray(bytes([sc_val])))
+                frame.append(QByteArray(bytes([ac_val])))
+                sum_check_text = f"0x{sc_val:02X}"
+                add_check_text = f"0x{ac_val:02X}"
+                if self.error_logger:
+                    self.error_logger.log_info(f"添加原始校验和: SC=0x{sc_val:02X}, AC=0x{ac_val:02X}")
+        except Exception as e:
+            msg = f"校验和计算错误: {e}"
+            self.status_bar_label.setText(msg)
+            if self.error_logger:
+                self.error_logger.log_error(msg, "CHECKSUM_CALC")
+            return None
+
+        # 更新校验和显示
+        if self.serial_config_panel_widget:
+            self.serial_config_panel_widget.update_checksum_display(sum_check_text, add_check_text)
+
+        # 记录组装的帧
+        if self.error_logger:
+            hex_frame = frame.toHex(' ').data().decode('ascii').upper()
+            self.error_logger.log_info(f"成功组装帧: {hex_frame}")
+
+        return frame
+
+    
+    
+    def get_available_plot_targets(self) -> Dict[int, str]:
+        targets = {}
+        if not PYQTGRAPH_AVAILABLE: return targets
+        for panel_id, panel_instance in self.dynamic_panel_instances.items():
+            if isinstance(panel_instance, AdaptedPlotWidgetPanel): targets[panel_id] = panel_instance.plot_name
+        return targets
+
+    def update_all_parse_panels_plot_targets(self):
+        if not PYQTGRAPH_AVAILABLE: return
+        for panel_instance in self.dynamic_panel_instances.values():
+            if isinstance(panel_instance, AdaptedParsePanelWidget): panel_instance.update_children_plot_targets()
+
+    @Slot(int, str)
+    def notify_plot_target_renamed(self, plot_panel_id: int, new_plot_name: str):
+        if self.error_logger: self.error_logger.log_info(
+            f"Plot panel {plot_panel_id} renamed to '{new_plot_name}'. Updating parse panels.")
+        self.update_all_parse_panels_plot_targets()
+
+    @Slot(int)
+    def notify_plot_target_removed(self, plot_panel_id: int):
+        if self.error_logger: self.error_logger.log_info(f"Plot panel {plot_panel_id} removed. Updating parse panels.")
+        self.update_all_parse_panels_plot_targets()
+
+    def clear_plot_curves_for_container(self, receive_container_id: int):
+        if not PYQTGRAPH_AVAILABLE: return
+        for plot_panel in self.dynamic_panel_instances.values():
+            if isinstance(plot_panel, AdaptedPlotWidgetPanel): plot_panel.remove_curve_for_container(
+                receive_container_id)
+
+    @Slot(int, int)
+    def handle_recv_container_plot_target_change(self, container_id: int, target_plot_id: int) -> None:
+        if self.error_logger: self.error_logger.log_info(
+            f"接收容器 {container_id} 的绘图目标已更改为 Plot Panel ID: {target_plot_id}")
+
+    @Slot()
+    def clear_all_plot_panels_action(self):
+        if not PYQTGRAPH_AVAILABLE: return
+        for panel_instance in self.dynamic_panel_instances.values():
+            if isinstance(panel_instance, AdaptedPlotWidgetPanel): panel_instance.clear_plot()
+        if self.error_logger: self.error_logger.log_info("所有波形图面板已清空。")
+
+    @Slot(str)
+    def apply_theme_action(self, theme_name: str):
         self.theme_manager.apply_theme(theme_name)
+        for panel in self.dynamic_panel_instances.values(): panel.update_theme()
 
-    def load_external_qss_file_action(self) -> None:
+    @Slot()
+    def load_external_qss_file_action(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "选择QSS样式文件", "", "QSS 文件 (*.qss);;所有文件 (*)")
-        if file_path: self.theme_manager.apply_external_qss(file_path)
+        if file_path: self.theme_manager.apply_external_qss(file_path);
+        for panel in self.dynamic_panel_instances.values(): panel.update_theme()
 
-    def export_parsed_data_action(self) -> None:
+    @Slot()
+    def export_parsed_data_action(self):
         if not self.data_recorder.historical_data: QMessageBox.information(self, "导出数据",
                                                                            "没有可导出的已解析数据。"); return
         path, _ = QFileDialog.getSaveFileName(self, "保存已解析数据", "", "CSV 文件 (*.csv)")
@@ -1281,7 +1139,8 @@ class SerialDebugger(QMainWindow):
             else:
                 QMessageBox.warning(self, "导出失败", "导出已解析数据失败，请查看日志。")
 
-    def save_raw_recorded_data_action(self) -> None:
+    @Slot()
+    def save_raw_recorded_data_action(self):
         if not self.data_recorder.recorded_raw_data: QMessageBox.information(self, "保存原始数据",
                                                                              "没有已录制的原始数据。"); return
         path, _ = QFileDialog.getSaveFileName(self, "保存原始录制数据", "",
@@ -1289,290 +1148,182 @@ class SerialDebugger(QMainWindow):
         if path: self.data_recorder.save_raw_to_file(path); QMessageBox.information(self, "保存成功",
                                                                                     f"原始录制数据已保存到:\n{path}")
 
-    def show_statistics_action(self) -> None:
-        stats = self.protocol_analyzer.get_statistics()
-        stats_str_parts = [f"接收总帧数: {stats['total_frames_rx']}", f"发送总帧数: {stats['total_frames_tx']}",
-                           f"错误帧数: {stats['error_frames_rx']}", f"接收速率: {stats['data_rate_rx_bps']:.2f} bps",
-                           f"总接收字节: {stats['rx_byte_count']} B"]
-        QMessageBox.information(self, "协议统计信息", "\n".join(stats_str_parts))
-
-    @Slot(int, int)
-    def handle_recv_container_plot_target_change(self, container_id: int, target_plot_id: int) -> None:
-        if self.error_logger: self.error_logger.log_info(f"接收容器 {container_id} 目标图更改为 {target_plot_id}")
-
-    @Slot()
-    def add_new_plot_widget_action(self, name: Optional[str] = None, plot_id_from_config: Optional[int] = None,
-                                   from_config: bool = False) -> None:
-        if not PYQTGRAPH_AVAILABLE: QMessageBox.information(self, "提示", "pyqtgraph未安装。"); return
-        plot_id_to_use = plot_id_from_config if plot_id_from_config is not None else self._next_plot_id
-        while plot_id_to_use in self.plot_widgets_map: plot_id_to_use = self._next_plot_id; self._next_plot_id += 1
-        plot_name_input = name
-        if not from_config and name is None:
-            text, ok = QInputDialog.getText(self, "新波形图", "名称:", QLineEdit.EchoMode.Normal,
-                                            f"波形图 {plot_id_to_use}")
-            if not ok or not text.strip(): return
-            plot_name_input = text.strip()
-        elif name is None:
-            plot_name_input = f"波形图 {plot_id_to_use}"
-        plot_container = PlotWidgetContainer(plot_id_to_use, plot_name_input, self)
-        dw_plot = QDockWidget(plot_name_input, self)
-        dw_plot.setObjectName(f"PlotDock_{plot_id_to_use}");
-        dw_plot.setWidget(plot_container);
-        dw_plot.installEventFilter(self)
-        all_dyn_docks = (
-                    [d for d in self.parse_panel_docks.values()] + [d for d in self.send_panel_docks.values()] + [d for
-                                                                                                                  d in
-                                                                                                                  self.plot_docks_map.values()])
-        if all_dyn_docks:
-            self.tabifyDockWidget(all_dyn_docks[-1], dw_plot)
-        else:
-            self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dw_plot)
-        self.plot_widgets_map[plot_id_to_use] = plot_container;
-        self.plot_docks_map[plot_id_to_use] = dw_plot
-        if plot_id_from_config is None or plot_id_to_use >= self._next_plot_id: self._next_plot_id = plot_id_to_use + 1
-        if hasattr(self, 'view_menu'): self.view_menu.addAction(dw_plot.toggleViewAction())
-        self.update_all_parse_panels_plot_targets();
-        dw_plot.show()
-        if not from_config and self.error_logger: self.error_logger.log_info(
-            f"添加波形图: ID={plot_id_to_use}, Name='{plot_name_input}'")
-
-    def update_all_parse_panels_plot_targets(self) -> None:
-        for panel_widget in self.parse_panel_widgets.values(): panel_widget.update_children_plot_targets()
-
-    @Slot()
-    def clear_all_plots_action(self) -> None:
-        if not PYQTGRAPH_AVAILABLE: return
-        for plot_container in self.plot_widgets_map.values(): plot_container.clear_plot()
-        if self.error_logger: self.error_logger.log_info("所有波形图已清空。")
-
-    @Slot(str, QByteArray)
-    def on_frame_checksum_error(self, error_message: str, faulty_frame: QByteArray):
-        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText("校验和错误!")
-        hex_frame_str = faulty_frame.toHex(' ').data().decode('ascii').upper()
-        self._append_to_custom_protocol_log_formatted(datetime.now(), "RX Error",
-                                                      f"ChecksumError: {error_message} Frame: {hex_frame_str}", True)
-        self.protocol_analyzer.analyze_frame(faulty_frame, 'rx', is_error=True)
-
-    @Slot(str, QByteArray)
-    def on_frame_general_parse_error(self, error_message: str, buffer_state: QByteArray):
-        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(f"协议解析错误: {error_message}")
-
-    @Slot(str)
-    def on_serial_manager_error(self, error_message: str):
-        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(error_message)
-        QMessageBox.warning(self, "串口通讯警告", error_message)
-
-    @Slot(bool, str)
-    def on_serial_connection_status_changed(self, is_connected: bool, message: str):
-        self.update_port_status_ui(is_connected)
-        if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(message)
-        if not is_connected and "资源错误" in message: QMessageBox.critical(self, "串口错误", message)
-
     @Slot(bool)
     def toggle_raw_data_recording_action(self, checked: bool):
         if checked:
-            self.data_recorder.start_raw_recording();
-            self.start_raw_record_action.setText("停止录制");
-            if hasattr(self, 'status_bar_label'): self.status_bar_label.setText("录制中...")
+            self.data_recorder.start_raw_recording()
+            self.start_raw_record_action.setText("停止录制")
+            self.status_bar_label.setText("录制中...")
         else:
-            self.data_recorder.stop_raw_recording();
-            self.start_raw_record_action.setText("开始录制");
-            if hasattr(self, 'status_bar_label'): self.status_bar_label.setText("录制停止。")
+            self.data_recorder.stop_raw_recording()
+            self.start_raw_record_action.setText("开始录制")
+            self.status_bar_label.setText("录制停止。")
             if self.data_recorder.recorded_raw_data:
                 if QMessageBox.question(self, "保存数据", "保存已录制的原始数据?",
                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                                         QMessageBox.StandardButton.Yes) == QMessageBox.StandardButton.Yes:
                     self.save_raw_recorded_data_action()
 
-    def closeEvent(self, event: Any) -> None:
-        if self.error_logger: self.error_logger.log_info("关闭应用程序。")
+    @Slot()
+    def show_statistics_action(self):
+        stats = self.protocol_analyzer.get_statistics()
+        stats_str_parts = [f"接收总帧数: {stats['total_frames_rx']}", f"发送总帧数: {stats['total_frames_tx']}",
+                           f"错误帧数: {stats['error_frames_rx']}", f"接收速率: {stats['data_rate_rx_bps']:.2f} bps",
+                           f"总接收字节: {stats['rx_byte_count']} B"]
+        QMessageBox.information(self, "协议统计信息", "\n".join(stats_str_parts))
+
+    @Slot(str)
+    def _handle_script_execution_request(self, script_text: str):
+        if not self.scripting_panel_widget: return
+        if not self.script_engine:
+            if self.error_logger: self.error_logger.log_error("Script engine not initialized!", "SCRIPTING")
+            self.scripting_panel_widget.display_script_result("错误: 脚本引擎未初始化。")
+            return
+        result = self.script_engine.execute(script_text, mode='exec')
+        output_display = []
+        if result.get("output"): output_display.append("脚本输出:\n" + result["output"])
+        if result.get("error_message"):
+            output_display.append("错误:\n" + result["error_message"])
+        elif not result.get("success"):
+            output_display.append("脚本执行失败，未返回特定错误。")
+        if not output_display: output_display.append("脚本执行完毕，无明确输出。")
+        self.scripting_panel_widget.display_script_result("\n\n".join(output_display).strip())
+        if self.error_logger: self.error_logger.log_info(
+            f"脚本执行完毕. 成功: {result['success']}. 时间: {result.get('execution_time_seconds', 0):.4f}s")
+
+    def send_serial_data_from_script_hex(self, hex_string: str) -> bool:
+        if not self.serial_manager.is_connected: self.error_logger.log_warning(
+            "[SCRIPT_SEND] Serial port not connected. Cannot send hex data.", "SCRIPTING"); return False
+        try:
+            data_to_write = QByteArray.fromHex(hex_string.encode('ascii'))
+            bytes_written = self.serial_manager.write_data(data_to_write)
+            success = bytes_written == data_to_write.size()
+            if success:
+                self.error_logger.log_info(f"[SCRIPT_SEND_HEX] Sent {bytes_written} bytes: {hex_string}",
+                                           "SCRIPTING")
+                self._append_to_basic_receive_text_edit(data_to_write,source="TX (ScriptHex)")
+                self.data_recorder.record_raw_frame(
+                    datetime.now(), data_to_write.data(), "TX (ScriptHex)")
+            else:
+                self.error_logger.log_warning(
+                    f"[SCRIPT_SEND_HEX] Partial write. Expected {data_to_write.size()}, wrote {bytes_written}",
+                    "SCRIPTING")
+            return success
+        except Exception as e:
+            self.error_logger.log_error(f"[SCRIPT_SEND_HEX] Error sending hex data '{hex_string}': {e}",
+                                        "SCRIPTING"); return False
+
+    def send_serial_data_from_script_text(self, text_string: str, encoding: str = 'utf-8') -> bool:
+        if not self.serial_manager.is_connected: self.error_logger.log_warning(
+            "[SCRIPT_SEND] Serial port not connected. Cannot send text data.", "SCRIPTING"); return False
+        try:
+            data_to_write = QByteArray(text_string.encode(encoding, errors='replace'))
+            bytes_written = self.serial_manager.write_data(data_to_write)
+            success = bytes_written == data_to_write.size()
+            if success:
+                self.error_logger.log_info(
+                    f"[SCRIPT_SEND_TEXT] Sent {bytes_written} bytes (encoding: {encoding}): {text_string[:50]}...",
+                    "SCRIPTING")
+                self._append_to_basic_receive_text_edit(data_to_write,source="TX (ScriptTxt)")
+
+                self.data_recorder.record_raw_frame(
+                    datetime.now(), data_to_write.data(), f"TX (ScriptTxt {encoding})")
+            else:
+                self.error_logger.log_warning(
+                    f"[SCRIPT_SEND_TEXT] Partial write. Expected {data_to_write.size()}, wrote {bytes_written}",
+                    "SCRIPTING")
+            return success
+        except Exception as e:
+            self.error_logger.log_error(f"[SCRIPT_SEND_TEXT] Error sending text data '{text_string[:50]}...': {e}",
+                                        "SCRIPTING"); return False
+
+    def get_dynamic_panel_instance_by_id(self, panel_id: int) -> Optional[PanelInterface]:
+        return self.dynamic_panel_instances.get(panel_id)
+
+    @Slot(str, QByteArray)
+    def on_data_processor_processed_data(self, original_func_id: str, processed_payload: QByteArray):
+        if self.error_logger: self.error_logger.log_info(
+            f"DataProcessor result for FID {original_func_id}: Processed payload size {processed_payload.size()}")
+
+    @Slot(str)
+    def on_data_processor_error(self, error_message: str):
+        if self.error_logger:
+            self.error_logger.log_error(f"DataProcessor Error: {error_message}", "DATA_PROCESSOR")
+
+    @Slot(dict)
+    def on_data_processor_stats(self, stats: dict):
+        if self.error_logger:
+            self.error_logger.log_debug(f"[DATA_PROCESSOR] Stats: {stats}")
+
+    @Slot(str, bool)
+    def send_basic_serial_data_action(self, text_to_send: str, is_hex: bool) -> None:
+        self._flash_button("tx")
+        data_to_write = QByteArray()
+        if not self.serial_manager.is_connected: 
+            QMessageBox.warning(self, "警告", "串口未打开。");
+            if self.basic_comm_panel_widget: 
+                self.basic_comm_panel_widget.append_receive_text("错误: 串口未打开。\n")
+            return
+        if not text_to_send:
+            return; data_to_write = QByteArray()
+        if is_hex:
+            hex_clean = "".join(text_to_send.replace("0x", "").replace("0X", "").split());
+            hex_clean = re.sub(r'[\s\-:,]', '', hex_clean.upper())
+            if len(hex_clean) % 2 != 0: hex_clean = "0" + hex_clean
+            try:
+                data_to_write = QByteArray.fromHex(hex_clean.encode('ascii'))
+            except ValueError:
+                msg = f"Hex发送错误: '{text_to_send}' 包含无效Hex字符."
+                QMessageBox.warning(self, "Hex格式错误", msg)
+                if self.basic_comm_panel_widget:
+                    self.basic_comm_panel_widget.append_receive_text(f"错误: {msg}\n")
+                    return
+        else:
+            data_to_write.append(text_to_send.encode('utf-8', errors='replace'))
+        if data_to_write:
+            bytes_written = self.serial_manager.write_data(data_to_write)
+            if bytes_written == data_to_write.size():
+                display_sent_data = data_to_write.toHex(' ').data().decode('ascii').upper() if is_hex else text_to_send
+                if len(display_sent_data) > 60: display_sent_data = display_sent_data[:60] + "..."
+                self.status_bar_label.setText(f"基本发送 {bytes_written} 字节: {display_sent_data}")
+                if self.error_logger: self.error_logger.log_info(f"基本发送 {bytes_written} 字节")
+                self._append_to_basic_receive_text_edit(data_to_write, source="TX (Basic)")
+                self.data_recorder.record_raw_frame(datetime.now(), data_to_write.data(), "TX (Basic)")
+            else:
+                self.status_bar_label.setText(f"基本发送错误: 写入{bytes_written}/{data_to_write.size()}字节")
+
+    def _flash_button(self, direction: str):
+        if self.serial_config_panel_widget:
+            button = self.serial_config_panel_widget.connect_button
+            if direction == "rx":
+                button.setStyleSheet("background-color: blue; color: white;")
+            else:
+                button.setStyleSheet("background-color: orange; color: white;")
+            self.flash_timer.start(100)
+
+    def _stop_flash(self):
+        if self.serial_config_panel_widget:
+            button = self.serial_config_panel_widget.connect_button
+            if self.serial_manager.is_connected:
+                button.setStyleSheet("background-color: green; color: white;")
+            else:
+                button.setStyleSheet("")
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.error_logger.log_info("关闭应用程序，正在停止后台线程...")
+        if hasattr(self, 'data_processor') and self.data_processor.isRunning(): self.data_processor.stop();
+        if not self.data_processor.wait(2000): self.error_logger.log_warning(
+            "DataProcessor 线程未优雅停止，正在终止。"); self.data_processor.terminate(); self.data_processor.wait()
         if self.serial_manager.is_connected: self.serial_manager.disconnect_port()
-        if self.data_recorder.recording_raw: self.data_recorder.stop_raw_recording()
-        current_ui_cfg = self.gather_current_ui_config()
-        self.config_manager.save_config(current_ui_cfg)
-        if self.error_logger: self.error_logger.log_info("配置已自动保存。")
+        if hasattr(self, 'data_recorder') and self.data_recorder.recording_raw: self.data_recorder.stop_raw_recording()
+        config_to_save = self._gather_current_configuration()
+        self.config_manager.save_config(config_to_save)
+        settings = QSettings("MyCompany", "SerialDebuggerProV2")
+        settings.setValue("window_geometry", self.saveGeometry().toBase64().data().decode())
+        settings.setValue("window_state", self.saveState().toBase64().data().decode())
+        self.error_logger.log_info("配置已自动保存。应用程序退出。")
         event.accept()
 
-    def _clear_all_parse_panels(self):
-        for panel_id in list(self.parse_panel_docks.keys()):
-            dock = self.parse_panel_docks.get(panel_id)
-            if dock: self.remove_parse_panel_and_update(panel_id, dock)
-        self._next_parse_panel_id = 1;
-        self._next_global_receive_container_id = 1
-
-    def _clear_all_send_panels(self):
-        for panel_id in list(self.send_panel_docks.keys()):
-            dock = self.send_panel_docks.get(panel_id)
-            if dock: self.remove_send_panel_and_update(panel_id, dock)
-        self._next_send_panel_id = 1
-
-    @Slot()
-    def add_new_send_panel_action(self, config: Optional[Dict] = None, from_config: bool = False,
-                                  panel_name_suggestion: Optional[str] = None, is_migration: bool = False):
-        panel_id_to_use = self._next_send_panel_id
-        self._next_send_panel_id += 1
-        actual_panel_name = panel_name_suggestion
-        if config and config.get("dock_name"):
-            actual_panel_name = config["dock_name"]
-        elif not actual_panel_name:
-            default_func_id_for_name = config.get("panel_func_id",
-                                                  f"S{panel_id_to_use}") if config else f"S{panel_id_to_use}"
-            actual_panel_name = f"发送面板 {panel_id_to_use} (ID: {default_func_id_for_name.upper()})"
-        if not from_config:
-            text, ok = QInputDialog.getText(self, "新建发送面板", "名称:", QLineEdit.EchoMode.Normal, actual_panel_name)
-            if not ok or not text.strip(): self._next_send_panel_id -= 1; return
-            actual_panel_name = text.strip()
-        panel_widget = SendPanelWidget(panel_id_to_use, main_window_ref=self, initial_config=config)
-        if hasattr(panel_widget, 'send_data_group'): actual_panel_name = panel_widget.send_data_group.title()
-        dw_send_panel = QDockWidget(actual_panel_name, self)
-        dw_send_panel.setObjectName(f"SendPanelDock_{panel_id_to_use}");
-        dw_send_panel.setWidget(panel_widget);
-        dw_send_panel.installEventFilter(self)
-        existing_send_docks = [self.send_panel_docks.get(pid) for pid in sorted(self.send_panel_docks.keys()) if
-                               pid in self.send_panel_docks]
-        if not existing_send_docks:
-            if self.dw_serial_config:
-                self.tabifyDockWidget(self.dw_serial_config, dw_send_panel)
-            else:
-                self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dw_send_panel)
-        else:
-            self.tabifyDockWidget(existing_send_docks[-1], dw_send_panel)
-        self.send_panel_widgets[panel_id_to_use] = panel_widget;
-        self.send_panel_docks[panel_id_to_use] = dw_send_panel
-        if hasattr(self, 'view_menu'): self.view_menu.addAction(dw_send_panel.toggleViewAction())
-        dw_send_panel.show()
-        if self.error_logger: self.error_logger.log_info(
-            f"Added Send Panel: ID={panel_id_to_use}, Name='{actual_panel_name}'")
-
-    @Slot()
-    def add_new_parse_panel_action(self, config: Optional[Dict] = None, from_config: bool = False,
-                                   panel_name_suggestion: Optional[str] = None, is_migration: bool = False):
-        panel_id_to_use = self._next_parse_panel_id
-        self._next_parse_panel_id += 1
-        actual_panel_name = panel_name_suggestion
-        if config and config.get("dock_name"):
-            actual_panel_name = config["dock_name"]
-        elif not actual_panel_name:
-            default_parse_id_for_name = config.get("parse_func_id",
-                                                   f"P{panel_id_to_use}") if config else f"P{panel_id_to_use}"
-            actual_panel_name = f"解析面板 {panel_id_to_use} (ID: {default_parse_id_for_name.upper()})"
-        if not from_config:
-            text, ok = QInputDialog.getText(self, "新建解析面板", "名称:", QLineEdit.EchoMode.Normal, actual_panel_name)
-            if not ok or not text.strip(): self._next_parse_panel_id -= 1; return
-            actual_panel_name = text.strip()
-        panel_widget = ParsePanelWidget(panel_id_to_use, main_window_ref=self, initial_config=config)
-        if hasattr(panel_widget, 'recv_display_group'): actual_panel_name = panel_widget.recv_display_group.title()
-        dw_parse_panel = QDockWidget(actual_panel_name, self)
-        dw_parse_panel.setObjectName(f"ParsePanelDock_{panel_id_to_use}");
-        dw_parse_panel.setWidget(panel_widget);
-        dw_parse_panel.installEventFilter(self)
-        all_dyn_docks = (
-                    [d for d in self.parse_panel_docks.values()] + [d for d in self.send_panel_docks.values()] + [d for
-                                                                                                                  d in
-                                                                                                                  self.plot_docks_map.values()])
-        if all_dyn_docks:
-            self.tabifyDockWidget(all_dyn_docks[-1], dw_parse_panel)
-        else:
-            self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dw_parse_panel)
-        self.parse_panel_widgets[panel_id_to_use] = panel_widget;
-        self.parse_panel_docks[panel_id_to_use] = dw_parse_panel
-        if hasattr(self, 'view_menu'): self.view_menu.addAction(dw_parse_panel.toggleViewAction())
-        panel_widget.update_children_plot_targets();
-        dw_parse_panel.show()
-        if self.error_logger: self.error_logger.log_info(
-            f"Added Parse Panel: ID={panel_id_to_use}, Name='{actual_panel_name}'")
-
-    # ... (ensure _assemble_custom_frame is complete as per previous fix)
-    def _assemble_custom_frame(self, panel_target_func_id_str: str,
-                               panel_send_data_containers: List[SendDataContainerWidget]) -> Optional[QByteArray]:
-        # This should be the full implementation from the previous fix
-        cfg = self.current_frame_config
-        try:
-            head_ba = QByteArray.fromHex(cfg.head.encode('ascii'))
-            saddr_ba = QByteArray.fromHex(cfg.s_addr.encode('ascii'))
-            daddr_ba = QByteArray.fromHex(cfg.d_addr.encode('ascii'))
-            id_ba = QByteArray.fromHex(panel_target_func_id_str.encode('ascii'))
-        except ValueError as e:
-            msg = f"帧头/地址/面板功能码({panel_target_func_id_str}) Hex格式错误: {e}"
-            if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(msg)
-            if self.error_logger: self.error_logger.log_warning(msg)
-            return None
-        if not (
-                head_ba.size() == 1 and saddr_ba.size() == 1 and daddr_ba.size() == 1 and id_ba.size() == 1):  # Use .size() for QByteArray
-            msg = "帧头/地址/面板功能码 Hex长度必须为1字节 (2个Hex字符)"
-            if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(msg)
-            if self.error_logger: self.error_logger.log_warning(msg)
-            return None
-        data_content_ba = QByteArray()
-        for scw_widget in panel_send_data_containers:
-            item_bytes = scw_widget.get_bytes()
-            if item_bytes is None:
-                msg = f"发送面板(ID:{panel_target_func_id_str}) 项 '{scw_widget.name_edit.text()}' 数值错误"
-                if hasattr(self, 'status_bar_label'): self.status_bar_label.setText(msg)
-                if self.error_logger: self.error_logger.log_warning(msg)
-                return None
-            data_content_ba.append(item_bytes)
-        len_val = data_content_ba.size()  # Use .size() for QByteArray
-        len_ba = QByteArray(struct.pack('<H', len_val))
-        frame_part_for_checksum = QByteArray()
-        frame_part_for_checksum.append(head_ba)
-        frame_part_for_checksum.append(saddr_ba)
-        frame_part_for_checksum.append(daddr_ba)
-        frame_part_for_checksum.append(id_ba)
-        frame_part_for_checksum.append(len_ba)
-        frame_part_for_checksum.append(data_content_ba)
-        checksum_bytes_to_append = QByteArray()
-        active_mode = self.active_checksum_mode
-        sum_check_text = ""
-        add_check_text = ""
-        if active_mode == ChecksumMode.CRC16_CCITT_FALSE:
-            crc_val = calculate_frame_crc16(frame_part_for_checksum)
-            checksum_bytes_to_append.append(struct.pack('>H', crc_val))
-            sum_check_text = f"0x{crc_val:04X}"
-        else:
-            sc_val, ac_val = calculate_original_checksums_python(frame_part_for_checksum)
-            checksum_bytes_to_append.append(bytes([sc_val]))
-            checksum_bytes_to_append.append(bytes([ac_val]))
-            sum_check_text = f"0x{sc_val:02X}";
-            add_check_text = f"0x{ac_val:02X}"
-        if self.serial_config_panel_widget:
-            self.serial_config_panel_widget.update_checksum_display(sum_check_text, add_check_text)
-        final_frame = QByteArray(frame_part_for_checksum);
-        final_frame.append(checksum_bytes_to_append)
-        return final_frame
-
-
-
-    def _setup_application_icon(self,window, icon_filename):
-        """
-        设置应用程序窗口的图标。
-
-        参数:
-            window: PyQt5窗口对象，例如QMainWindow或QWidget。
-            icon_filename: 图标文件的文件名，例如"app_icon.png"。
-        """
-        try:
-            # 获取脚本所在目录
-            script_dir = Path(__file__).resolve().parent
-            # 构建图标文件的完整路径
-            icon_path = script_dir / icon_filename
-
-            if icon_path.exists():
-                # 如果图标文件存在，设置窗口图标
-                app_icon = QIcon(str(icon_path))  # QIcon 需要字符串路径
-                window.setWindowIcon(app_icon)
-            else:
-                # 如果图标文件未找到，记录警告
-                if hasattr(window, 'error_logger') and window.error_logger:
-                    window.error_logger.log_warning(f"应用程序图标文件未找到: {icon_path}")
-                else:
-                    print(f"警告: 应用程序图标文件未找到: {icon_path}")
-        except Exception as e:
-            # 记录设置图标时可能发生的任何其他错误
-            if hasattr(window, 'error_logger') and window.error_logger:
-                window.error_logger.log_error(f"设置应用程序图标时出错: {e}")
-            else:
-                print(f"错误: 设置应用程序图标时出错: {e}")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

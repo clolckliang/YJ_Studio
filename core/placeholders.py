@@ -1,6 +1,6 @@
 import ast
 from datetime import datetime
-from typing import Optional, Any, List, Dict, Callable, Tuple
+from typing import Optional, Any, List, Dict, Callable, Tuple, Union
 from contextlib import contextmanager
 
 import struct
@@ -16,7 +16,7 @@ import numpy
 
 # 假设 PySide6 可用，如果环境不同，QMutex 可能需要替换
 try:
-    from PySide6.QtCore import QThread, Signal, QMutex, QByteArray, QTimer, QObject
+    from PySide6.QtCore import QThread, Signal, QMutex, QByteArray, QTimer, QObject,QRecursiveMutex
 except ImportError:
     print("Warning: PySide6 not found. Using basic threading.Lock for QMutex.")
 
@@ -81,8 +81,11 @@ except ImportError:
 
 
     class QByteArray:  # Basic QByteArray placeholder
-        def __init__(self, initial_data=None):
-            if isinstance(initial_data, QByteArray):
+        def __init__(self, initial_data=None, fill_value=None):
+            if isinstance(initial_data, int) and fill_value is not None:
+                # Handle QByteArray(size, fill_value) constructor
+                self._data = bytearray([fill_value] * initial_data)
+            elif isinstance(initial_data, QByteArray):
                 self._data = bytearray(initial_data._data)
             elif isinstance(initial_data, (bytes, bytearray)):
                 self._data = bytearray(initial_data)
@@ -92,6 +95,7 @@ except ImportError:
                 self._data = bytearray()
             else:
                 raise TypeError("Invalid data type for QByteArray")
+                
 
         def size(self) -> int:
             return len(self._data)
@@ -133,6 +137,12 @@ except ImportError:
 
         def __str__(self):
             return self.toStdString()
+
+        def __getitem__(self, index):
+            return self._data[index]
+
+        def __setitem__(self, index, value):
+            self._data[index] = value
 
 
 class ProtocolManager:
@@ -191,76 +201,180 @@ class ProtocolManager:
             self._mutex.unlock()
 
 
-class CircularBuffer:
-    """线程安全的循环缓冲区实现"""
 
+
+
+class CircularBuffer:
+    """基于 bytearray 的线程安全环形缓冲区实现，优化内存管理和数据拷贝操作"""
+    
     def __init__(self, size: int):
         if size <= 0:
-            raise ValueError("CircularBuffer size must be positive.")
-
-        self.buffer = QByteArray()
-        self.buffer.resize(size)
+            raise ValueError("Buffer size must be positive")
+        
+        # 使用 bytearray 作为内部存储，更高效且支持索引赋值
+        self._internal_buffer = bytearray(size)
         self.max_size = size
+        self.capacity = size  # 添加 capacity 属性以兼容现有代码
         self.head = 0
         self.tail = 0
         self.count = 0
-        self.mutex = QMutex()
+        self.mutex = QRecursiveMutex()  # 使用递归锁防止嵌套调用死锁
+        
+        # 性能优化：预分配临时缓冲区，避免频繁内存分配
+        self._temp_buffer_size = min(size // 4, 4096)  # 最大4KB临时缓冲区
+        self._temp_buffer = bytearray(self._temp_buffer_size)
+        
+        # 性能统计
+        self._stats = {
+            'total_writes': 0,
+            'total_reads': 0,
+            'bytes_written': 0,
+            'bytes_read': 0,
+            'buffer_overflows': 0
+        }
 
     def write(self, data: QByteArray) -> int:
-        if not data or data.size() == 0:
+        """写入数据，返回实际写入字节数，优化批量写入操作"""
+        if data.size() == 0:
             return 0
+
         self.mutex.lock()
         try:
-            data_len = data.size()
-            bytes_written = 0
-            for i in range(data_len):
-                if self.count == self.max_size:
-                    self.tail = (self.tail + 1) % self.max_size
-                    self.count -= 1
-                byte_to_write = bytes([data.at(i)])
-                self.buffer.replace(self.head, 1, byte_to_write)
-                self.head = (self.head + 1) % self.max_size
-                self.count += 1
-                bytes_written += 1
-            return bytes_written
+            data_bytes = data.data()  # 获取字节数据
+            data_len = len(data_bytes)
+            
+            # 更新统计信息
+            self._stats['total_writes'] += 1
+            self._stats['bytes_written'] += data_len
+            
+            # 处理缓冲区溢出
+            if data_len > self.max_size:
+                # 数据太大，只保留最后的部分
+                data_bytes = data_bytes[-self.max_size:]
+                data_len = self.max_size
+                self._stats['buffer_overflows'] += 1
+            
+            # 计算可写入的数据量
+            available = self.max_size - self.count
+            if data_len > available:
+                # 缓冲区满，覆盖旧数据
+                overflow = data_len - available
+                self.tail = (self.tail + overflow) % self.max_size
+                self.count = self.max_size - data_len
+                self._stats['buffer_overflows'] += 1
+            
+            # 优化：批量写入数据，减少循环开销
+            if self.head + data_len <= self.max_size:
+                # 数据可以连续写入
+                self._internal_buffer[self.head:self.head + data_len] = data_bytes
+                self.head = (self.head + data_len) % self.max_size
+            else:
+                # 数据需要分两段写入
+                first_part = self.max_size - self.head
+                self._internal_buffer[self.head:] = data_bytes[:first_part]
+                self._internal_buffer[:data_len - first_part] = data_bytes[first_part:]
+                self.head = data_len - first_part
+            
+            self.count = min(self.count + data_len, self.max_size)
+            return data_len
         finally:
             self.mutex.unlock()
 
     def read(self, length: int) -> QByteArray:
-        if length <= 0 or self.count == 0:
-            return QByteArray()
+        """读取并移除数据，返回 QByteArray，优化内存分配"""
         self.mutex.lock()
         try:
-            bytes_to_read = min(length, self.count)
-            result = QByteArray()
-            for _ in range(bytes_to_read):
-                byte_value = self.buffer.at(self.tail)
-                result.append(bytes([byte_value]))
-                self.tail = (self.tail + 1) % self.max_size
-                self.count -= 1
-            return result
+            # 更新统计信息
+            self._stats['total_reads'] += 1
+            
+            data = self.peek(length)
+            actual_read = min(length, self.count)
+            self.discard(actual_read)
+            
+            # 更新读取字节统计
+            self._stats['bytes_read'] += actual_read
+            return data
         finally:
             self.mutex.unlock()
 
     def peek(self, length: int) -> QByteArray:
+        """查看但不移除数据，返回 QByteArray，优化批量数据拷贝"""
         if length <= 0 or self.count == 0:
             return QByteArray()
+
         self.mutex.lock()
         try:
             bytes_to_peek = min(length, self.count)
-            result = QByteArray()
-            current_tail = self.tail
-            for _ in range(bytes_to_peek):
-                byte_value = self.buffer.at(current_tail)
-                result.append(bytes([byte_value]))
-                current_tail = (current_tail + 1) % self.max_size
-            return result
+            
+            # 优化：使用预分配的临时缓冲区或直接分配
+            if bytes_to_peek <= self._temp_buffer_size:
+                result_bytes = self._temp_buffer[:bytes_to_peek]
+            else:
+                result_bytes = bytearray(bytes_to_peek)
+            
+            # 优化：批量拷贝数据，减少循环开销
+            if self.tail + bytes_to_peek <= self.max_size:
+                # 数据是连续的，可以直接拷贝
+                result_bytes[:] = self._internal_buffer[self.tail:self.tail + bytes_to_peek]
+            else:
+                # 数据跨越缓冲区边界，需要分两段拷贝
+                first_part = self.max_size - self.tail
+                result_bytes[:first_part] = self._internal_buffer[self.tail:]
+                result_bytes[first_part:] = self._internal_buffer[:bytes_to_peek - first_part]
+                
+            return QByteArray(bytes(result_bytes))
         finally:
             self.mutex.unlock()
 
+    def mid(self, pos: int, length: int = -1) -> QByteArray:
+        """从指定位置提取数据（不移动指针），优化批量拷贝"""
+        self.mutex.lock()
+        try:
+            if pos < 0 or pos >= self.count:
+                return QByteArray()
+            
+            available_length = self.count - pos
+            if length < 0 or length > available_length:
+                length = available_length
+            
+            if length <= 0:
+                return QByteArray()
+            
+            physical_pos = (self.tail + pos) % self.max_size
+            
+            # 优化：使用预分配的临时缓冲区或直接分配
+            if length <= self._temp_buffer_size:
+                result_bytes = self._temp_buffer[:length]
+            else:
+                result_bytes = bytearray(length)
+            
+            # 优化：批量拷贝数据
+            if physical_pos + length <= self.max_size:
+                # 数据是连续的，可以直接拷贝
+                result_bytes[:] = self._internal_buffer[physical_pos:physical_pos + length]
+            else:
+                # 数据跨越缓冲区边界，需要分两段拷贝
+                first_part = self.max_size - physical_pos
+                result_bytes[:first_part] = self._internal_buffer[physical_pos:]
+                result_bytes[first_part:] = self._internal_buffer[:length - first_part]
+            
+            return QByteArray(bytes(result_bytes))
+        finally:
+            self.mutex.unlock()
+
+    def left(self, length: int) -> QByteArray:
+        """获取缓冲区开头的数据"""
+        return self.mid(0, length)
+
+    def right(self, length: int) -> QByteArray:
+        """获取缓冲区末尾的数据"""
+        return self.mid(max(0, self.count - length))
+
     def discard(self, length: int) -> int:
-        if length <= 0 or self.count == 0:
+        """丢弃指定长度的数据，返回实际丢弃字节数"""
+        if length <= 0:
             return 0
+
         self.mutex.lock()
         try:
             bytes_to_discard = min(length, self.count)
@@ -271,6 +385,7 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def clear(self):
+        """清空缓冲区"""
         self.mutex.lock()
         try:
             self.head = 0
@@ -280,6 +395,7 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def get_count(self) -> int:
+        """获取当前数据量"""
         self.mutex.lock()
         try:
             return self.count
@@ -287,6 +403,7 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def get_free_space(self) -> int:
+        """获取剩余空间"""
         self.mutex.lock()
         try:
             return self.max_size - self.count
@@ -294,16 +411,55 @@ class CircularBuffer:
             self.mutex.unlock()
 
     def is_empty(self) -> bool:
+        """检查是否为空"""
         return self.get_count() == 0
 
     def is_full(self) -> bool:
+        """检查是否已满"""
         return self.get_count() == self.max_size
 
-    def get_utilization(self) -> float:
-        if self.max_size == 0: return 0.0
-        return self.get_count() / self.max_size
+    def get_stats(self) -> dict:
+        """获取性能统计信息"""
+        self.mutex.lock()
+        try:
+            stats = self._stats.copy()
+            stats.update({
+                'current_usage': self.count,
+                'usage_percentage': (self.count / self.max_size) * 100,
+                'buffer_size': self.max_size,
+                'free_space': self.max_size - self.count
+            })
+            return stats
+        finally:
+            self.mutex.unlock()
+    
+    def reset_stats(self):
+        """重置性能统计信息"""
+        self.mutex.lock()
+        try:
+            self._stats = {
+                'total_writes': 0,
+                'total_reads': 0,
+                'bytes_written': 0,
+                'bytes_read': 0,
+                'buffer_overflows': 0
+            }
+        finally:
+            self.mutex.unlock()
 
-
+    def debug_dump(self) -> str:
+        """调试用：打印缓冲区状态和性能统计"""
+        self.mutex.lock()
+        try:
+            stats = self.get_stats()
+            return (f"CircularBuffer(size={self.max_size}, used={self.count})\n"
+                   f"Head: {self.head}, Tail: {self.tail}\n"
+                   f"Usage: {stats['usage_percentage']:.1f}%\n"
+                   f"Stats: Writes={stats['total_writes']}, Reads={stats['total_reads']}, "
+                   f"Overflows={stats['buffer_overflows']}\n"
+                   f"Data: {self._internal_buffer.hex(' ')}")
+        finally:
+            self.mutex.unlock()
 class DataProcessor(QThread):
     """数据处理线程类"""
     processed_data_signal = Signal(str, QByteArray)
@@ -1174,4 +1330,3 @@ write_data("thread_messages", " | ".join(thread_messages))
     print("\n--- Execution Stats (Final) ---")
     stats = script_engine.get_stats()
     for k, v in stats.items(): print(f"{k}: {v}")
-

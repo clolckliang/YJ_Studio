@@ -1,0 +1,26 @@
+# -----------------------------------------------
+# 强化学习超参数配置文件 (config.yaml)
+# -----------------------------------------------
+
+# DQN (Deep Q-Network) Agent 的参数
+dqn_agent:
+  learning_rate: 0.0005      # 学习率，可以根据损失函数曲线的稳定性来调整
+  gamma: 0.99              # 折扣因子，越高AI越有远见
+  epsilon_start: 1.0         # 初始探索率
+  epsilon_end: 0.01          # 最终探索率
+  epsilon_decay: 0.9995      # 探索率衰减速度，越高探索时间越长
+  memory_capacity: 20000     # 经验回放池容量
+  batch_size: 256            # 每次学习时从池中抽样的数量
+
+# PPO (Proximal Policy Optimization) Agent 的参数
+ppo_agent:
+  lr: 0.0003
+  gamma: 0.99
+  eps_clip: 0.2              # PPO 核心的裁剪参数
+  k_epochs: 4                # 每次更新时，对同一批数据学习的次数
+  update_interval: 2048      # 每隔多少步执行一次学习更新
+
+# A2C (Advantage Actor-Critic) Agent 的参数
+a2c_agent:
+  lr: 0.0007
+  gamma: 0.99

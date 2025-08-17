@@ -1,0 +1,137 @@
+{
+  "theme_presets": {
+    "modern_dark": {
+      "name": "现代深色",
+      "description": "现代化的深色主题，适合长时间使用",
+      "colors": {
+        "primary": "#3498db",
+        "secondary": "#2c3e50",
+        "background": "#34495e",
+        "text": "#ecf0f1",
+        "accent": "#e74c3c",
+        "success": "#2ecc71",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #34495e; color: #ecf0f1; font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #2c3e50; color: #ecf0f1; border: 1px solid #3498db; border-radius: 4px; padding: 4px; } QPushButton { background-color: #3498db; border: 1px solid #2980b9; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #5dade2; } QPushButton:pressed { background-color: #2980b9; } QGroupBox { border: 1px solid #3498db; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #3498db; } QMenuBar { background-color: #2c3e50; color: #ecf0f1; } QStatusBar { background-color: #2c3e50; color: #ecf0f1; } QDockWidget::title { background-color: #34495e; padding: 4px; color: #ecf0f1; } QTabWidget::pane { border: 1px solid #3498db; } QTabBar::tab { background-color: #2c3e50; padding: 5px; border: 1px solid #3498db; border-bottom: none; color: #ecf0f1; } QTabBar::tab:selected { background-color: #34495e; }"
+    },
+    "fresh_light": {
+      "name": "清新浅色",
+      "description": "清新明亮的浅色主题",
+      "colors": {
+        "primary": "#2ecc71",
+        "secondary": "#ecf0f1",
+        "background": "#ffffff",
+        "text": "#2c3e50",
+        "accent": "#3498db",
+        "success": "#27ae60",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #ffffff; color: #2c3e50; font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #ecf0f1; color: #2c3e50; border: 1px solid #2ecc71; border-radius: 4px; padding: 4px; } QPushButton { background-color: #2ecc71; border: 1px solid #27ae60; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #58d68d; } QPushButton:pressed { background-color: #27ae60; } QGroupBox { border: 1px solid #2ecc71; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #2ecc71; } QMenuBar { background-color: #ecf0f1; color: #2c3e50; } QStatusBar { background-color: #ecf0f1; color: #2c3e50; } QDockWidget::title { background-color: #ffffff; padding: 4px; color: #2c3e50; } QTabWidget::pane { border: 1px solid #2ecc71; } QTabBar::tab { background-color: #ecf0f1; padding: 5px; border: 1px solid #2ecc71; border-bottom: none; color: #2c3e50; } QTabBar::tab:selected { background-color: #ffffff; }"
+    },
+    "tech_blue": {
+      "name": "科技蓝",
+      "description": "科技感十足的蓝色主题",
+      "colors": {
+        "primary": "#3498db",
+        "secondary": "#34495e",
+        "background": "#2c3e50",
+        "text": "#ecf0f1",
+        "accent": "#9b59b6",
+        "success": "#1abc9c",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #2c3e50; color: #ecf0f1; font-family: 'Consolas', 'Courier New', monospace; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #34495e; color: #ecf0f1; border: 1px solid #3498db; border-radius: 4px; padding: 4px; } QPushButton { background-color: #3498db; border: 1px solid #2980b9; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #5dade2; } QPushButton:pressed { background-color: #2980b9; } QGroupBox { border: 1px solid #3498db; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #3498db; } QMenuBar { background-color: #34495e; color: #ecf0f1; } QStatusBar { background-color: #34495e; color: #ecf0f1; } QDockWidget::title { background-color: #2c3e50; padding: 4px; color: #ecf0f1; } QTabWidget::pane { border: 1px solid #3498db; } QTabBar::tab { background-color: #34495e; padding: 5px; border: 1px solid #3498db; border-bottom: none; color: #ecf0f1; } QTabBar::tab:selected { background-color: #2c3e50; }"
+    },
+    "warm_orange": {
+      "name": "温暖橙",
+      "description": "温暖舒适的橙色主题",
+      "colors": {
+        "primary": "#e67e22",
+        "secondary": "#f39c12",
+        "background": "#fdf2e9",
+        "text": "#2c3e50",
+        "accent": "#d35400",
+        "success": "#27ae60",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #fdf2e9; color: #2c3e50; font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #ffffff; color: #2c3e50; border: 1px solid #e67e22; border-radius: 4px; padding: 4px; } QPushButton { background-color: #e67e22; border: 1px solid #d35400; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #f39c12; } QPushButton:pressed { background-color: #d35400; } QGroupBox { border: 1px solid #e67e22; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #e67e22; } QMenuBar { background-color: #ffffff; color: #2c3e50; } QStatusBar { background-color: #ffffff; color: #2c3e50; } QDockWidget::title { background-color: #fdf2e9; padding: 4px; color: #2c3e50; } QTabWidget::pane { border: 1px solid #e67e22; } QTabBar::tab { background-color: #ffffff; padding: 5px; border: 1px solid #e67e22; border-bottom: none; color: #2c3e50; } QTabBar::tab:selected { background-color: #fdf2e9; }"
+    },
+    "nature_green": {
+      "name": "自然绿",
+      "description": "自然清新的绿色主题",
+      "colors": {
+        "primary": "#27ae60",
+        "secondary": "#2ecc71",
+        "background": "#e8f8f5",
+        "text": "#1e8449",
+        "accent": "#16a085",
+        "success": "#27ae60",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #e8f8f5; color: #1e8449; font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #ffffff; color: #1e8449; border: 1px solid #27ae60; border-radius: 4px; padding: 4px; } QPushButton { background-color: #27ae60; border: 1px solid #1e8449; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #2ecc71; } QPushButton:pressed { background-color: #1e8449; } QGroupBox { border: 1px solid #27ae60; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #27ae60; } QMenuBar { background-color: #ffffff; color: #1e8449; } QStatusBar { background-color: #ffffff; color: #1e8449; } QDockWidget::title { background-color: #e8f8f5; padding: 4px; color: #1e8449; } QTabWidget::pane { border: 1px solid #27ae60; } QTabBar::tab { background-color: #ffffff; padding: 5px; border: 1px solid #27ae60; border-bottom: none; color: #1e8449; } QTabBar::tab:selected { background-color: #e8f8f5; }"
+    },
+    "elegant_purple": {
+      "name": "优雅紫",
+      "description": "优雅神秘的紫色主题",
+      "colors": {
+        "primary": "#9b59b6",
+        "secondary": "#8e44ad",
+        "background": "#f4ecf7",
+        "text": "#6c3483",
+        "accent": "#e91e63",
+        "success": "#27ae60",
+        "warning": "#f39c12",
+        "error": "#e74c3c"
+      },
+      "css": "QWidget { background-color: #f4ecf7; color: #6c3483; font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #ffffff; color: #6c3483; border: 1px solid #9b59b6; border-radius: 4px; padding: 4px; } QPushButton { background-color: #9b59b6; border: 1px solid #8e44ad; padding: 6px 12px; color: #ffffff; border-radius: 4px; } QPushButton:hover { background-color: #bb8fce; } QPushButton:pressed { background-color: #8e44ad; } QGroupBox { border: 1px solid #9b59b6; margin-top: 0.5em; border-radius: 4px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #9b59b6; } QMenuBar { background-color: #ffffff; color: #6c3483; } QStatusBar { background-color: #ffffff; color: #6c3483; } QDockWidget::title { background-color: #f4ecf7; padding: 4px; color: #6c3483; } QTabWidget::pane { border: 1px solid #9b59b6; } QTabBar::tab { background-color: #ffffff; padding: 5px; border: 1px solid #9b59b6; border-bottom: none; color: #6c3483; } QTabBar::tab:selected { background-color: #f4ecf7; }"
+    },
+    "high_contrast": {
+      "name": "高对比度",
+      "description": "高对比度主题，适合视力不佳的用户",
+      "colors": {
+        "primary": "#ffff00",
+        "secondary": "#ffffff",
+        "background": "#000000",
+        "text": "#ffffff",
+        "accent": "#00ff00",
+        "success": "#00ff00",
+        "warning": "#ffff00",
+        "error": "#ff0000"
+      },
+      "css": "QWidget { background-color: #000000; color: #ffffff; font-family: 'Arial', sans-serif; font-size: 12pt; font-weight: bold; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #000000; color: #ffffff; border: 2px solid #ffff00; border-radius: 2px; padding: 6px; } QPushButton { background-color: #ffff00; border: 2px solid #ffffff; padding: 8px 16px; color: #000000; border-radius: 2px; font-weight: bold; } QPushButton:hover { background-color: #ffffff; color: #000000; } QPushButton:pressed { background-color: #00ff00; color: #000000; } QGroupBox { border: 2px solid #ffff00; margin-top: 0.5em; border-radius: 2px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px 0 5px; color: #ffff00; font-weight: bold; } QMenuBar { background-color: #000000; color: #ffffff; } QStatusBar { background-color: #000000; color: #ffffff; } QDockWidget::title { background-color: #000000; padding: 6px; color: #ffffff; } QTabWidget::pane { border: 2px solid #ffff00; } QTabBar::tab { background-color: #000000; padding: 8px; border: 2px solid #ffff00; border-bottom: none; color: #ffffff; } QTabBar::tab:selected { background-color: #ffff00; color: #000000; }"
+    },
+    "retro_terminal": {
+      "name": "复古终端",
+      "description": "复古绿色终端风格主题",
+      "colors": {
+        "primary": "#00ff00",
+        "secondary": "#008000",
+        "background": "#000000",
+        "text": "#00ff00",
+        "accent": "#ffff00",
+        "success": "#00ff00",
+        "warning": "#ffff00",
+        "error": "#ff0000"
+      },
+      "css": "QWidget { background-color: #000000; color: #00ff00; font-family: 'Courier New', 'Consolas', monospace; } QLineEdit, QTextEdit, QComboBox, QPlainTextEdit { background-color: #000000; color: #00ff00; border: 1px solid #008000; border-radius: 0px; padding: 4px; } QPushButton { background-color: #008000; border: 1px solid #00ff00; padding: 6px 12px; color: #000000; border-radius: 0px; } QPushButton:hover { background-color: #00ff00; color: #000000; } QPushButton:pressed { background-color: #004000; color: #00ff00; } QGroupBox { border: 1px solid #008000; margin-top: 0.5em; border-radius: 0px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; color: #00ff00; } QMenuBar { background-color: #000000; color: #00ff00; } QStatusBar { background-color: #000000; color: #00ff00; } QDockWidget::title { background-color: #000000; padding: 4px; color: #00ff00; } QTabWidget::pane { border: 1px solid #008000; } QTabBar::tab { background-color: #000000; padding: 5px; border: 1px solid #008000; border-bottom: none; color: #00ff00; } QTabBar::tab:selected { background-color: #004000; }"
+    }
+  },
+  "theme_categories": {
+    "light": ["fresh_light", "warm_orange", "nature_green", "elegant_purple"],
+    "dark": ["modern_dark", "tech_blue", "retro_terminal"],
+    "accessibility": ["high_contrast"],
+    "colorful": ["warm_orange", "nature_green", "elegant_purple", "tech_blue"]
+  },
+  "theme_settings": {
+    "default_font_family": "Segoe UI, Microsoft YaHei UI, sans-serif",
+    "default_font_size": "9pt",
+    "animation_duration": 200,
+    "border_radius": 4,
+    "padding": 4
+  }
+}

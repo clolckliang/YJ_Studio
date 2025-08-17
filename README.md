@@ -40,7 +40,7 @@ YJ Studio 是一个功能强大的串口调试工具，采用模块化架构设�
 ### 安装步骤
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/your-repo/YJ_Studio.git
+   git clone https://github.com/clolckliang/YJ_Studio.git
    cd YJ_Studio
    ```
 

@@ -1,0 +1,59 @@
+2025-07-24 22:10:05,002-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-07-24 22:10:05,003-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-07-24 22:10:05,003-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-07-24 22:10:05,021-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-07-24 22:10:06,158-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-07-24 22:10:06,159-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-07-24 22:10:06,173-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-07-24 22:10:06,228-INFO-logger-log_info-[INFO] Created instance of panel 'core_plot_widget_panel' (ID: 104) from module __main__
+2025-07-24 22:10:06,246-INFO-logger-log_info-[INFO] 接收容器 1 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:06,246-INFO-logger-log_info-[INFO] Created instance of panel 'core_parse_panel' (ID: 106) from module __main__
+2025-07-24 22:10:06,254-INFO-logger-log_info-[INFO] 接收容器 1 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:06,258-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-07-24 22:10:06,258-INFO-logger-log_info-[INFO] 接收容器 1 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:06,259-INFO-logger-log_info-[INFO] Parse Panel 106 功能码已强制设置为 F1
+2025-07-24 22:10:06,259-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-07-24 22:10:06,259-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-07-24 22:10:06,261-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-07-24 22:10:06,286-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-07-24 22:10:06,286-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-07-24 22:10:06,286-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-07-24 22:10:06,286-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-07-24 22:10:06,286-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-07-24 22:10:06,287-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-07-24 22:10:10,281-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-07-24 22:10:10,281-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-07-24 22:10:10,281-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-07-24 22:10:10,281-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-07-24 22:10:10,282-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM1
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-07-24 22:10:10,302-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM1
+2025-07-24 22:10:10,303-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM1 的索引: 10
+2025-07-24 22:10:10,303-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 10
+2025-07-24 22:10:10,303-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-07-24 22:10:10,303-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM1 (Virtual Test Port) (data: COM1)
+2025-07-24 22:10:10,303-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-07-24 22:10:20,856-INFO-logger-log_info-[INFO] Parse Panel 106: Add container action triggered
+2025-07-24 22:10:20,858-INFO-logger-log_info-[INFO] 接收容器 12 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:20,859-INFO-logger-log_info-[INFO] Parse Panel 106: Added receive container 12
+2025-07-24 22:10:21,595-INFO-logger-log_info-[INFO] Parse Panel 106: Add container action triggered
+2025-07-24 22:10:21,598-INFO-logger-log_info-[INFO] 接收容器 13 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:21,598-INFO-logger-log_info-[INFO] Parse Panel 106: Added receive container 13
+2025-07-24 22:10:22,048-INFO-logger-log_info-[INFO] Parse Panel 106: Add container action triggered
+2025-07-24 22:10:22,051-INFO-logger-log_info-[INFO] 接收容器 14 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:22,051-INFO-logger-log_info-[INFO] Parse Panel 106: Added receive container 14
+2025-07-24 22:10:22,463-INFO-logger-log_info-[INFO] Parse Panel 106: Add container action triggered
+2025-07-24 22:10:22,466-INFO-logger-log_info-[INFO] 接收容器 15 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:22,467-INFO-logger-log_info-[INFO] Parse Panel 106: Added receive container 15
+2025-07-24 22:10:22,797-INFO-logger-log_info-[INFO] Parse Panel 106: Add container action triggered
+2025-07-24 22:10:22,800-INFO-logger-log_info-[INFO] 接收容器 16 的绘图目标已更改为 Plot Panel ID: 104
+2025-07-24 22:10:22,801-INFO-logger-log_info-[INFO] Parse Panel 106: Added receive container 16
+2025-07-24 22:10:29,125-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-07-24 22:10:29,125-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-07-24 22:10:29,164-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-07-24 22:10:29,166-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-07-24 22:10:29,168-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。

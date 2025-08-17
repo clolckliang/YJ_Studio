@@ -1,0 +1,2163 @@
+2025-06-10 00:26:04,693-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:26:04,693-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:26:04,693-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:26:04,702-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:26:05,125-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:26:05,137-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:26:05,145-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:26:05,147-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:26:05,237-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:26:05,237-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 00:26:05,238-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:26:05,239-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:26:05,244-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:26:05,244-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:26:05,244-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:26:05,244-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:26:05,244-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:26:05,244-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:26:06,943-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:26:06,945-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:26:06,945-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:26:06,945-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:26:06,945-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:26:06,952-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:26:06,953-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:26:06,953-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:26:06,953-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:26:06,953-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:26:06,953-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:26:08,934-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:26:08,935-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:26:08,935-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:26:08,948-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:26:09,345-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:09,345-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:09,357-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:09,357-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:09,357-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:09.357] RX: �
+
+2025-06-10 00:26:09,367-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:10,346-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:10,346-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:10,347-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:10,348-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:10,348-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:10.348] RX: �
+
+2025-06-10 00:26:10,358-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:11,337-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:11,337-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:11,337-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:11,338-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:11,338-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:11.338] RX: �
+
+2025-06-10 00:26:11,338-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:12,354-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:12,354-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:12,355-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:12,355-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:12,355-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:12.355] RX: �
+
+2025-06-10 00:26:12,355-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:13,349-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:13,349-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:13,350-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:13,350-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:13,350-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:13.350] RX: �
+
+2025-06-10 00:26:13,350-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:14,353-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:14,353-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:14,354-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:14,354-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:14,355-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:14.354] RX: �
+
+2025-06-10 00:26:14,355-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:15,362-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:15,362-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:15,362-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:15,363-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:15,363-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:15.363] RX: �
+
+2025-06-10 00:26:15,363-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:16,384-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:16,384-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:16,386-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:16,386-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:16,386-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:16.386] RX: �
+
+2025-06-10 00:26:16,386-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:17,385-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:26:17,385-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:26:17,386-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:26:17,386-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:26:17,386-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:26:17.386] RX: �
+
+2025-06-10 00:26:17,386-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:26:18,124-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:26:18,124-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:26:18,169-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:26:18,171-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:26:18,185-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:26:18,188-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:26:18,189-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:26:18,189-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:27:37,863-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:27:37,863-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:27:37,863-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:27:37,875-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:27:38,397-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:27:38,410-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:27:38,418-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:27:38,420-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:27:38,537-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:27:38,537-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.snake_game'}
+2025-06-10 00:27:38,538-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:27:38,540-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:27:38,546-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:27:38,546-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:27:38,546-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:27:38,546-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:27:38,546-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:27:38,547-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:27:40,249-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:27:40,249-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:27:40,249-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:27:40,249-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:27:40,249-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:27:40,257-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:27:40,258-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:27:40,258-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:27:40,258-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:27:40,258-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:27:40,258-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:27:41,700-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:27:41,700-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:27:41,701-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:27:41,703-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:27:41,956-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:41,956-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:41,956-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:41,958-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:41,958-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:41.958] RX: �
+
+2025-06-10 00:27:41,962-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:41,962-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:42,965-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:42,965-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:42,965-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:42,967-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:42,967-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:42.967] RX: �
+
+2025-06-10 00:27:42,967-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:42,967-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:43,973-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:43,973-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:43,974-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:43,974-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:43,974-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:43.974] RX: �
+
+2025-06-10 00:27:43,974-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:43,974-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:44,980-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:44,980-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:44,981-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:44,981-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:44,981-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:44.981] RX: �
+
+2025-06-10 00:27:44,981-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:44,981-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:45,998-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:45,998-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:46,000-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:46,001-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:46,001-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:46.001] RX: �
+
+2025-06-10 00:27:46,001-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:46,001-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:46,992-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:46,992-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:46,995-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:46,995-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:46,996-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:27:46.995] RX: �
+
+2025-06-10 00:27:46,996-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:46,996-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:48,007-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:48,007-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:48,007-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:48,007-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:48,008-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:27:48,008-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:48,008-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:49,013-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:49,013-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:49,014-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:49,014-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:49,014-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:27:49,015-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:49,015-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:50,021-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:50,021-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:50,021-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:50,022-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:50,022-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:27:50,022-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:50,022-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:51,032-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:27:51,032-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:27:51,033-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:27:51,033-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:27:51,033-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:27:51,033-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:27:51,033-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:27:51,480-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:27:51,480-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:27:51,525-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:27:51,527-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:27:51,541-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:27:51,543-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:27:51,544-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:27:51,545-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:29:04,349-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:29:04,349-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:29:04,349-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:29:04,364-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:29:04,881-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:29:04,895-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:29:04,910-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:29:04,914-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:29:05,028-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:29:05,028-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 00:29:05,028-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:29:05,030-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:29:05,037-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:29:05,037-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:29:05,037-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:29:05,037-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:29:05,037-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:29:05,037-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:29:06,750-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:29:06,750-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:29:06,750-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:29:06,750-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:29:06,750-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:06,758-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:29:06,759-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:29:06,759-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:29:06,759-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:29:06,759-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:29:06,759-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:29:08,894-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:29:08,895-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:29:08,943-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:29:08,945-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:29:08,946-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:29:30,537-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:29:30,537-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:29:30,538-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:29:30,549-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:29:31,023-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:29:31,037-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:29:31,044-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:29:31,046-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:29:31,137-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:29:31,137-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.snake_game'}
+2025-06-10 00:29:31,137-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:29:31,139-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:29:31,144-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:29:31,144-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:29:31,144-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:29:31,144-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:29:31,144-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:29:31,144-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:29:32,721-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:29:32,721-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:29:32,721-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:29:32,721-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:29:32,722-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:29:32,729-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:29:32,730-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:29:32,730-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:29:32,730-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:29:32,730-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:29:34,260-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:29:34,260-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:29:34,261-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:29:34,263-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:29:34,851-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:34,851-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:34,852-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:34,852-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:34,852-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:29:34,855-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:34,855-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:35,849-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:35,849-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:35,850-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:35,850-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:35,850-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:29:35,850-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:35,851-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:36,859-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:36,859-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:36,859-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:36,859-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:36,860-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:29:36,860-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:36,860-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:37,877-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:37,877-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:37,877-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:37,877-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:37,877-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:29:37,878-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:37,878-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:38,870-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:38,870-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:38,870-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:38,870-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:38,870-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:29:38,873-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:38,873-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:39,890-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:39,890-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:39,891-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:39,891-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:39,891-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:29:39,891-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:39,891-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:40,885-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:40,885-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:40,886-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:40,886-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:40,886-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:29:40,886-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:40,886-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:41,893-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:41,893-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:41,895-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:41,895-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:41,895-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:29:41,895-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:41,895-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:42,913-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:29:42,913-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:29:42,914-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:29:42,914-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:29:42,915-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:29:42,915-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:29:42,915-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:29:43,028-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:29:43,029-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:29:43,066-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:29:43,067-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:29:43,081-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:29:43,084-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:29:43,085-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:29:43,085-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:30:58,421-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:30:58,422-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:30:58,422-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:30:58,437-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:30:58,862-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:30:58,873-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:30:58,881-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:30:58,883-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:30:58,974-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:30:58,975-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 00:30:58,975-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:30:58,976-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:30:58,982-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:30:58,982-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:30:58,982-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:30:58,982-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:30:58,982-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:30:58,983-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:31:00,512-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:31:00,512-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:31:00,512-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:31:00,512-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:31:00,512-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:31:00,519-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:31:00,519-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:31:00,520-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:31:02,269-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:31:02,269-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:31:02,270-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:31:02,271-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:31:02,511-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:02,511-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:02,512-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:02,512-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:02,512-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:02,512-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:02,512-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:03,504-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:03,504-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:03,505-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:03,505-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:03,505-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:03,505-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:03,506-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:04,508-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:04,508-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:04,509-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:04,509-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:04,509-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:04,510-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:04,510-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:05,516-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:05,516-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:05,516-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:05,516-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:05,517-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:05,517-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:05,517-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:06,526-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:06,526-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:06,528-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:06,528-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:06,528-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:06,528-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:06,528-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:07,543-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:07,553-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:07,553-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:07,553-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:07,553-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:07,553-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:07,555-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:08,548-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:08,548-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:08,549-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:08,549-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:08,549-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:08,550-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:08,550-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:09,551-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:09,551-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:09,553-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:09,553-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:09,553-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:09,553-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:09,553-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:10,539-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:10,539-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:10,540-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:10,540-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:10,540-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:10,540-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:10,540-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:11,554-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:11,554-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:11,556-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:11,556-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:11,556-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:11,557-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:11,557-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:12,560-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:12,560-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:12,560-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:12,561-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:12,561-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:12,561-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:12,561-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:13,569-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:13,569-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:13,570-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:13,570-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:13,570-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:13,571-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:13,571-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:14,576-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:14,576-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:14,577-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:14,577-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:14,577-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:14,578-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:14,578-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:15,586-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:15,586-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:15,588-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:15,588-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:15,588-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:15,588-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:15,588-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:16,594-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:16,594-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:16,596-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:16,596-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:16,596-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:16,597-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:16,597-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:17,614-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:17,614-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:17,616-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:17,616-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:17,617-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:17,617-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:17,617-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:18,617-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:18,617-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:18,617-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:18,619-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:18,619-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:18,619-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:18,619-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:19,611-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:19,611-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:19,612-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:19,612-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:19,612-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:19,612-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:19,612-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:20,631-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:20,631-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:20,631-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:20,631-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:20,632-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:20,632-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:20,632-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:21,624-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:21,624-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:21,624-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:21,626-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:21,626-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:21,626-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:21,626-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:22,631-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:22,631-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:22,632-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:22,632-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:22,632-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:22,633-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:22,633-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:23,635-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:23,635-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:23,636-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:23,636-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:23,636-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:31:23,636-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:23,636-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:24,646-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:24,646-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:24,648-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:24,648-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:24,648-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:24.648] RX: FF
+
+2025-06-10 00:31:24,648-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:24,648-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:25,654-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:25,654-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:25,655-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:25,655-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:25,655-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:25.655] RX: FF
+
+2025-06-10 00:31:25,655-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:25,655-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:26,671-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:26,671-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:26,672-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:26,672-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:26,672-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:26.672] RX: FF
+
+2025-06-10 00:31:26,672-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:26,673-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:27,660-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:27,660-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:27,661-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:27,661-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:27,661-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:27.661] RX: FF
+
+2025-06-10 00:31:27,661-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:27,662-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:28,678-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:28,678-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:28,679-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:28,679-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:28,679-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:28.679] RX: FF
+
+2025-06-10 00:31:28,679-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:28,679-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:29,669-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:29,669-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:29,669-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:29,669-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:29,670-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:29.670] RX: FF
+
+2025-06-10 00:31:29,670-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:29,670-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:30,678-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:30,678-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:30,679-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:30,679-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:30,679-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:30.679] RX: FF
+
+2025-06-10 00:31:30,680-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:30,680-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:31,684-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:31,684-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:31,685-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:31,685-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:31,685-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:31.685] RX: FF
+
+2025-06-10 00:31:31,685-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:31,686-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:32,699-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:32,699-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:32,700-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:32,700-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:32,700-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:32.700] RX: FF
+
+2025-06-10 00:31:32,700-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:32,701-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:33,703-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:33,703-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:33,705-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:33,705-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:33,705-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:33.705] RX: FF
+
+2025-06-10 00:31:33,706-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:33,706-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:34,708-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:34,708-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:34,708-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:34,708-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:34,708-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:34.708] RX: FF
+
+2025-06-10 00:31:34,709-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:34,709-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:35,733-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:35,733-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:35,735-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:35,735-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:35,735-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:35.735] RX: FF
+
+2025-06-10 00:31:35,735-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:35,735-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:36,736-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:36,736-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:36,737-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:36,737-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:36,738-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:36.738] RX: FF
+
+2025-06-10 00:31:36,738-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:36,738-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:37,731-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:37,731-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:37,732-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:37,732-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:37,732-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:37.732] RX: FF
+
+2025-06-10 00:31:37,733-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:37,733-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:38,733-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:38,733-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:38,733-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:38,733-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:38,733-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:38.733] RX: FF
+
+2025-06-10 00:31:38,735-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:38,735-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:39,745-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:39,745-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:39,746-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:39,746-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:39,746-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:39.746] RX: FF
+
+2025-06-10 00:31:39,746-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:39,746-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:40,751-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:40,751-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:40,752-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:40,752-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:40,753-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:40.752] RX: FF
+
+2025-06-10 00:31:40,753-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:40,753-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:41,762-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:41,762-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:41,763-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:41,763-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:41,763-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:41.763] RX: FF
+
+2025-06-10 00:31:41,764-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:41,764-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:42,780-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:42,780-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:42,782-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:42,782-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:42,782-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:42.782] RX: FF
+
+2025-06-10 00:31:42,782-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:42,783-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:43,772-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:43,772-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:43,773-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:43,773-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:43,773-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:43.773] RX: FF
+
+2025-06-10 00:31:43,774-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:43,774-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:44,776-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:44,776-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:44,777-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:44,777-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:44,777-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:44.777] RX: FF
+
+2025-06-10 00:31:44,778-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:44,778-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:45,783-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:45,783-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:45,784-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:45,784-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:45,784-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:45.784] RX: FF
+
+2025-06-10 00:31:45,784-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:45,784-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:46,790-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:46,790-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:46,791-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:46,791-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:46,791-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:46.791] RX: FF
+
+2025-06-10 00:31:46,792-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:46,792-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:47,809-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:47,809-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:47,810-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:47,810-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:47,810-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:47.810] RX: FF
+
+2025-06-10 00:31:47,811-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:47,811-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:48,799-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:48,799-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:48,800-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:48,800-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:48,801-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:48.800] RX: FF
+
+2025-06-10 00:31:48,801-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:48,801-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:49,805-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:49,805-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:49,806-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:49,806-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:49,806-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:49.806] RX: FF
+
+2025-06-10 00:31:49,807-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:49,807-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:50,831-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:50,831-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:50,834-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:50,834-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:50,834-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:50.834] RX: FF
+
+2025-06-10 00:31:50,835-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:50,835-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:51,823-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:51,823-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:51,823-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:51,823-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:51,823-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:51.823] RX: FF
+
+2025-06-10 00:31:51,825-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:51,825-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:52,831-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:52,831-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:52,832-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:52,832-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:52,832-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:52.832] RX: FF
+
+2025-06-10 00:31:52,833-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:52,833-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:53,842-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:53,842-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:53,843-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:53,843-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:53,843-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:53.843] RX: FF
+
+2025-06-10 00:31:53,844-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:53,844-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:54,851-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:31:54,851-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:31:54,852-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:31:54,852-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:31:54,852-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:31:54.852] RX: FF
+
+2025-06-10 00:31:54,852-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:31:54,853-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:31:55,331-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:31:55,331-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:31:55,379-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:31:55,380-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:31:55,393-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:31:55,397-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:31:55,399-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:31:55,400-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:36:04,971-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:36:04,971-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:36:04,971-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:36:04,984-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:36:05,415-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:36:05,427-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:36:05,437-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:36:05,439-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:36:05,530-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:36:05,530-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 00:36:05,531-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:36:05,532-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:36:05,538-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:36:05,538-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:36:05,538-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:36:05,538-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:36:05,538-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:36:05,538-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:36:07,045-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:36:07,045-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:36:07,045-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:36:07,045-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:36:07,045-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:36:07,054-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:36:07,055-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:36:10,292-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:36:10,292-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:36:10,293-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:36:10,294-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:36:10,600-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:10,600-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:10,601-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:10,601-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:10,601-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:10.601] RX: FF
+
+2025-06-10 00:36:10,601-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:10,602-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:11,606-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:11,606-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:11,607-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:11,607-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:11,607-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:11.607] RX: FF
+
+2025-06-10 00:36:11,607-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:11,607-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:12,614-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:12,614-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:12,614-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:12,614-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:12,614-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:12.614] RX: �
+
+2025-06-10 00:36:12,619-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:12,619-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:13,634-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:13,634-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:13,635-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:13,635-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:13,635-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:13.635] RX: �
+
+2025-06-10 00:36:13,635-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:13,636-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:14,628-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:14,628-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:14,629-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:14,629-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:14,629-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:36:14,630-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:14,630-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:15,639-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:15,639-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:15,641-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:15,641-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:15,641-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:36:15,641-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:15,641-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:16,648-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:16,648-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:16,649-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:16,649-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:16,649-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:36:16,649-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:16,649-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:17,654-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:17,654-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:17,654-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:17,654-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:17,654-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:36:17,655-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:17,655-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:18,676-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:18,676-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:18,677-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:18,677-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:18,677-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: �
+
+2025-06-10 00:36:18,677-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:18,677-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:19,678-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:19,678-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:19,679-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:19,679-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:19,679-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:19,679-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:19,679-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:20,670-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:20,670-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:20,670-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:20,671-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:20,671-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:20,671-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:20,671-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:21,701-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:21,701-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:21,702-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:21,702-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:21,702-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:21,702-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:21,703-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:22,695-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:22,695-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:22,695-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:22,695-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:22,696-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:22,696-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:22,696-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:23,704-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:23,704-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:23,705-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:23,705-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:23,705-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:23,705-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:23,706-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:24,719-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:24,719-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:24,720-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:24,720-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:24,720-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:24,720-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:24,720-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:25,730-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:25,730-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:25,731-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:25,731-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:25,731-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:25,732-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:25,732-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:26,740-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:26,740-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:26,740-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:26,742-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:26,742-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:26,742-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:26,742-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:27,747-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:27,747-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:27,749-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:27,749-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:27,749-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:27,750-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:27,750-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:28,757-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:28,757-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:28,757-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:28,757-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:28,757-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:28,758-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:28,758-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:29,781-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:29,781-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:29,783-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:29,783-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:29,783-INFO-logger-log_info-[INFO] append_receive_text triggered with text: RX: FF
+
+2025-06-10 00:36:29,783-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:29,783-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:30,775-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:30,775-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:30,776-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:30,776-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:30,776-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:30.776] RX: FF
+
+2025-06-10 00:36:30,777-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:30,777-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:31,782-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:31,782-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:31,782-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:31,783-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:31,783-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:31.783] RX: FF
+
+2025-06-10 00:36:31,783-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:31,783-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:32,791-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:32,791-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:32,792-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:32,792-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:32,792-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:32.792] RX: FF
+
+2025-06-10 00:36:32,792-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:32,792-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:33,794-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:33,794-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:33,794-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:33,794-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:33,794-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:33.794] RX: FF
+
+2025-06-10 00:36:33,796-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:33,796-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:34,807-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:34,807-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:34,811-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:34,811-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:34,811-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:34.811] RX: FF
+
+2025-06-10 00:36:34,812-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:34,812-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:35,817-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:35,817-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:35,818-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:35,818-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:35,818-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:35.818] RX: FF
+
+2025-06-10 00:36:35,818-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:35,819-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:36,825-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:36,825-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:36,826-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:36,826-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:36,826-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:36.826] RX: FF
+
+2025-06-10 00:36:36,826-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:36,827-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:37,833-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:37,833-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:37,834-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:37,834-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:37,834-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:37.834] RX: FF
+
+2025-06-10 00:36:37,836-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:37,836-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:38,840-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:38,840-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:38,841-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:38,841-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:38,841-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:38.841] RX: FF
+
+2025-06-10 00:36:38,841-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:38,842-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:39,850-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:39,850-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:39,852-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:39,852-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:39,852-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:39.852] RX: FF
+
+2025-06-10 00:36:39,853-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:39,853-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:40,857-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:40,857-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:40,858-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:40,858-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:40,858-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:40.858] RX: FF
+
+2025-06-10 00:36:40,859-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:40,859-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:41,864-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:41,864-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:41,865-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:41,866-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:41,866-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:41.866] RX: FF
+
+2025-06-10 00:36:41,866-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:41,866-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:42,883-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:42,883-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:42,884-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:42,884-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:42,884-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:42.884] RX: FF
+
+2025-06-10 00:36:42,885-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:42,885-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:43,875-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:43,875-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:43,876-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:43,876-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:43,876-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:43.876] RX: FF
+
+2025-06-10 00:36:43,876-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:43,878-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:44,895-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:44,895-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:44,896-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:44,896-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:44,896-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:44.896] RX: FF
+
+2025-06-10 00:36:44,897-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:44,897-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:45,889-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:45,889-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:45,889-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:45,891-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:45,891-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:45.891] RX: FF
+
+2025-06-10 00:36:45,891-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:45,891-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:46,899-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:46,899-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:46,900-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:46,900-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:46,900-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:46.900] RX: FF
+
+2025-06-10 00:36:46,901-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:46,901-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:47,906-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:47,906-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:47,907-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:47,907-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:47,907-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:47.907] RX: FF
+
+2025-06-10 00:36:47,908-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:47,908-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:48,916-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:48,916-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:48,917-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:48,917-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:48,917-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:48.917] RX: FF
+
+2025-06-10 00:36:48,918-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:48,918-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:49,936-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:49,936-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:49,937-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:49,937-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:49,937-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:49.937] RX: FF
+
+2025-06-10 00:36:49,938-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:49,938-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:50,928-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:50,928-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:50,928-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:50,928-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:50,930-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:50.928] RX: FF
+
+2025-06-10 00:36:50,930-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:50,930-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:51,939-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:51,939-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:51,940-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:51,940-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:51,940-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:51.940] RX: FF
+
+2025-06-10 00:36:51,941-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:51,941-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:52,948-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:52,949-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:52,950-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:52,950-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:52,950-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:52.950] RX: FF
+
+2025-06-10 00:36:52,951-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:52,951-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:53,950-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:53,951-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:53,951-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:53,951-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:53,951-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:53.951] RX: FF
+
+2025-06-10 00:36:53,952-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:53,952-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:54,962-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:54,962-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:54,963-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:54,963-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:54,963-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:54.963] RX: FF
+
+2025-06-10 00:36:54,964-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:54,964-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:55,969-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:55,969-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:55,971-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:55,971-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:55,971-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:55.971] RX: FF
+
+2025-06-10 00:36:55,971-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:55,971-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:56,989-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:56,990-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:56,991-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:56,991-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:56,991-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:56.991] RX: FF
+
+2025-06-10 00:36:56,991-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:56,991-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:57,983-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:57,983-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:57,984-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:57,984-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:57,984-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:57.984] RX: FF
+
+2025-06-10 00:36:57,985-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:57,985-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:36:58,993-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:36:58,993-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:36:58,993-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:36:58,994-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:36:58,994-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:36:58.994] RX: FF
+
+2025-06-10 00:36:58,994-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:36:58,994-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:00,013-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:00,013-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:00,014-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:00,014-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:00,015-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:00.015] RX: FF
+
+2025-06-10 00:37:00,015-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:00,015-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:01,006-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:01,006-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:01,007-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:01,007-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:01,007-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:01.007] RX: FF
+
+2025-06-10 00:37:01,008-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:01,008-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:02,025-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:02,025-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:02,026-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:02,026-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:02,027-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:02.027] RX: FF
+
+2025-06-10 00:37:02,027-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:02,027-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:03,021-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:03,021-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:03,022-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:03,022-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:03,022-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:03.022] RX: FF
+
+2025-06-10 00:37:03,023-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:03,023-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:04,033-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:04,033-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:04,033-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:04,034-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:04,034-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:04.034] RX: FF
+
+2025-06-10 00:37:04,034-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:04,035-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:05,036-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:05,036-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:05,037-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:05,037-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:05,037-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:05.037] RX: FF
+
+2025-06-10 00:37:05,037-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:05,038-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:06,054-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:06,054-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:06,055-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:06,055-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:06,055-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:06.055] RX: FF
+
+2025-06-10 00:37:06,056-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:06,056-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:07,047-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:07,047-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:07,048-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:07,048-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:07,048-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:07.048] RX: FF
+
+2025-06-10 00:37:07,049-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:07,049-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:08,065-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:08,065-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:08,068-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:08,068-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:08,068-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:08.068] RX: FF
+
+2025-06-10 00:37:08,069-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:08,069-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:09,072-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:09,072-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:09,075-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:09,075-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:09,075-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:09.075] RX: FF
+
+2025-06-10 00:37:09,075-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:09,076-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:10,075-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:10,075-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:10,078-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:10,078-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:10,078-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:10.078] RX: FF
+
+2025-06-10 00:37:10,078-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:10,078-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:11,068-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:11,068-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:11,069-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:11,069-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:11,069-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:11.069] RX: FF
+
+2025-06-10 00:37:11,071-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:11,071-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:12,074-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:12,074-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:12,076-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:12,076-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:12,076-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:12.076] RX: FF
+
+2025-06-10 00:37:12,076-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:12,077-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:13,081-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:13,081-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:13,082-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:13,082-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:13,083-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:13.083] RX: FF
+
+2025-06-10 00:37:13,083-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:13,083-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:14,096-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:14,096-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:14,097-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:14,097-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:14,097-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:14.097] RX: FF
+
+2025-06-10 00:37:14,097-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:14,098-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:15,103-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:15,103-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:15,104-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:15,104-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:15,104-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:15.104] RX: FF
+
+2025-06-10 00:37:15,105-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:15,105-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:16,129-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:16,129-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:16,130-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:16,130-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:16,130-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:16.130] RX: FF
+
+2025-06-10 00:37:16,131-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:16,131-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:17,115-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:17,115-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:17,116-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:17,116-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:17,116-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:17.116] RX: FF
+
+2025-06-10 00:37:17,118-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:17,118-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:18,123-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:18,123-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:18,124-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:18,125-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:18,125-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:18.125] RX: FF
+
+2025-06-10 00:37:18,126-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:18,126-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:19,142-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:19,142-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:19,143-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:19,143-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:19,143-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:19.143] RX: FF
+
+2025-06-10 00:37:19,144-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:19,144-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:20,134-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:20,134-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:20,135-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:20,135-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:20,136-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:20.136] RX: FF
+
+2025-06-10 00:37:20,136-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:20,136-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:21,144-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:21,144-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:21,145-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:21,145-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:21,145-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:21.145] RX: FF
+
+2025-06-10 00:37:21,145-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:21,146-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:22,148-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:22,148-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:22,152-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:22,152-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:22,152-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:22.152] RX: FF
+
+2025-06-10 00:37:22,154-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:22,154-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:23,157-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:23,157-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:23,158-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:23,158-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:23,158-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:23.158] RX: FF
+
+2025-06-10 00:37:23,159-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:23,159-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:24,177-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:24,177-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:24,178-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:24,178-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:24,178-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:24.178] RX: FF
+
+2025-06-10 00:37:24,179-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:24,179-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:25,168-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:25,168-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:25,169-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:25,169-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:25,169-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:25.169] RX: FF
+
+2025-06-10 00:37:25,170-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:25,170-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:26,169-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:26,169-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:26,170-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:26,170-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:26,170-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:26.170] RX: FF
+
+2025-06-10 00:37:26,172-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:26,172-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:27,176-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:27,176-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:27,177-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:27,177-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:27,177-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:27.177] RX: FF
+
+2025-06-10 00:37:27,178-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:27,178-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:28,185-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:28,185-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:28,186-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:28,186-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:28,186-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:28.186] RX: FF
+
+2025-06-10 00:37:28,187-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:28,187-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:29,188-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:29,188-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:29,189-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:29,189-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:29,190-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:29.189] RX: FF
+
+2025-06-10 00:37:29,190-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:29,191-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:30,194-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:30,194-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:30,195-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:30,195-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:30,195-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:30.195] RX: FF
+
+2025-06-10 00:37:30,196-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:30,196-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:31,203-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:31,203-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:31,204-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:31,204-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:31,204-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:31.204] RX: FF
+
+2025-06-10 00:37:31,205-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:31,205-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:32,211-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:32,211-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:32,212-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:32,212-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:32,212-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:32.212] RX: FF
+
+2025-06-10 00:37:32,213-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:32,213-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:33,225-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:33,225-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:33,226-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:33,226-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:33,226-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:33.226] RX: FF
+
+2025-06-10 00:37:33,227-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:33,227-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:34,228-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:34,228-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:34,228-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:34,229-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:34,229-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:34.229] RX: FF
+
+2025-06-10 00:37:34,230-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:34,230-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:35,235-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:35,235-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:35,236-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:35,236-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:35,236-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:35.236] RX: FF
+
+2025-06-10 00:37:35,237-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:35,237-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:36,240-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:36,240-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:36,241-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:36,241-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:36,241-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:36.241] RX: FF
+
+2025-06-10 00:37:36,242-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:36,242-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:37,261-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:37,261-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:37,262-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:37,262-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:37,263-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:37.263] RX: FF
+
+2025-06-10 00:37:37,263-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:37,264-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:38,264-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:38,264-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:38,265-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:38,265-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:38,266-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:38.266] RX: FF
+
+2025-06-10 00:37:38,267-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:38,267-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:39,252-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:39,252-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:39,253-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:39,253-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:39,253-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:39.253] RX: FF
+
+2025-06-10 00:37:39,254-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:39,254-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:40,260-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:40,260-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:40,261-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:40,261-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:40,262-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:40.261] RX: FF
+
+2025-06-10 00:37:40,263-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:40,263-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:41,267-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:41,267-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:41,269-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:41,269-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:41,269-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:41.269] RX: FF
+
+2025-06-10 00:37:41,269-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:41,269-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:42,278-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:42,278-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:42,280-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:42,280-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:42,280-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:42.280] RX: FF
+
+2025-06-10 00:37:42,280-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:42,280-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:43,282-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:43,282-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:43,283-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:43,283-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:43,283-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:43.283] RX: FF
+
+2025-06-10 00:37:43,284-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:43,284-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:44,311-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:44,311-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:44,313-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:44,313-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:44,313-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:44.313] RX: FF
+
+2025-06-10 00:37:44,314-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:44,314-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:45,302-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:45,302-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:45,303-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:45,303-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:45,303-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:45.303] RX: FF
+
+2025-06-10 00:37:45,303-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:45,304-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:46,315-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:46,315-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:46,316-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:46,316-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:46,316-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:46.316] RX: FF
+
+2025-06-10 00:37:46,317-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:46,317-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:47,325-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:47,325-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:47,326-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:47,326-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:47,326-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:47.326] RX: FF
+
+2025-06-10 00:37:47,327-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:47,327-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:48,348-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:48,348-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:48,349-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:48,349-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:48,350-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:48.350] RX: FF
+
+2025-06-10 00:37:48,350-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:48,350-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:49,337-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:49,337-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:49,338-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:49,338-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:49,338-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:49.338] RX: FF
+
+2025-06-10 00:37:49,339-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:49,339-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:50,350-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:50,350-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:50,350-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:50,350-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:50,351-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:50.351] RX: FF
+
+2025-06-10 00:37:50,351-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:50,351-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:51,355-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:51,355-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:51,356-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:51,356-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:51,356-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:51.356] RX: FF
+
+2025-06-10 00:37:51,357-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:51,357-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:52,362-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:52,362-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:52,363-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:52,363-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:52,363-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:52.363] RX: FF
+
+2025-06-10 00:37:52,364-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:52,364-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:53,371-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:53,371-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:53,372-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:53,372-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:53,372-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:53.372] RX: FF
+
+2025-06-10 00:37:53,373-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:53,373-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:54,379-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:54,379-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:54,380-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:54,381-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:54,381-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:54.381] RX: FF
+
+2025-06-10 00:37:54,381-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:54,381-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:55,389-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:55,389-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:55,390-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:55,390-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:55,390-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:55.390] RX: FF
+
+2025-06-10 00:37:55,392-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:55,392-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:56,398-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:56,398-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:56,399-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:56,399-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:56,399-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:56.399] RX: FF
+
+2025-06-10 00:37:56,400-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:56,400-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:57,418-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:57,419-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:57,420-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:57,420-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:57,420-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:57.420] RX: FF
+
+2025-06-10 00:37:57,421-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:57,421-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:58,408-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:58,408-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:58,411-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:58,411-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:58,411-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:58.411] RX: FF
+
+2025-06-10 00:37:58,412-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:58,412-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:37:59,413-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:37:59,413-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:37:59,414-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:37:59,414-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:37:59,414-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:37:59.414] RX: FF
+
+2025-06-10 00:37:59,415-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:37:59,415-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:00,422-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:38:00,433-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:38:00,434-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:38:00,434-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:38:00,434-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:38:00.434] RX: FF
+
+2025-06-10 00:38:00,434-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:38:00,435-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:01,434-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:38:01,434-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:38:01,436-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:38:01,436-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:38:01,436-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:38:01.436] RX: FF
+
+2025-06-10 00:38:01,436-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:38:01,436-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:02,447-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:38:02,447-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:38:02,448-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:38:02,448-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:38:02,448-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:38:02.448] RX: FF
+
+2025-06-10 00:38:02,448-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:38:02,450-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:03,456-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:38:03,456-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:38:03,457-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:38:03,457-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:38:03,457-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:38:03.457] RX: FF
+
+2025-06-10 00:38:03,458-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:38:03,458-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:04,477-INFO-logger-log_info-[INFO] 接收到 1 字节数据 (pyserial): FF
+2025-06-10 00:38:04,477-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 1 字节数据
+2025-06-10 00:38:04,481-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 1 bytes: FF
+2025-06-10 00:38:04,481-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:38:04,481-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:38:04.481] RX: FF
+
+2025-06-10 00:38:04,482-INFO-logger-log_info-[INFO] 传递 1 字节数据给 frame_parser
+2025-06-10 00:38:04,482-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:38:05,451-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:38:05,451-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:38:05,452-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:38:05,453-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:38:08,716-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:38:08,716-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:38:08,749-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:38:08,752-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:38:08,753-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:40:05,406-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:40:05,406-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:40:05,406-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:40:05,415-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:40:05,921-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:40:05,939-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:40:05,950-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:40:05,952-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:40:06,051-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:40:06,051-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.snake_game'}
+2025-06-10 00:40:06,051-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:40:06,053-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:40:06,058-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:40:06,058-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:40:06,058-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:40:06,058-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:40:06,058-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:40:06,058-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:40:07,692-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:40:07,692-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:40:07,692-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:40:07,692-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:40:07,692-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:40:07,700-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:40:07,700-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:40:07,700-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:40:07,701-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:40:41,031-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:40:41,032-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:40:41,032-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:40:41,034-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:41:16,847-INFO-logger-log_info-[INFO] 接收到 2 字节数据 (pyserial): 01 11
+2025-06-10 00:41:16,847-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 2 字节数据
+2025-06-10 00:41:16,849-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 2 bytes: 01 11
+2025-06-10 00:41:16,850-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 2 bytes: 01 11
+2025-06-10 00:41:16,850-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:41:16.850] RX: 01 11
+
+2025-06-10 00:41:16,852-INFO-logger-log_info-[INFO] 传递 2 字节数据给 frame_parser
+2025-06-10 00:41:16,852-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:41:31,747-INFO-logger-log_info-[INFO] 发送数据 (pyserial): FF
+2025-06-10 00:41:31,747-INFO-logger-log_info-[INFO] 基本发送 1 字节
+2025-06-10 00:41:31,747-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:41:31,748-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:41:31.748] TX (Basic): FF
+
+2025-06-10 00:41:51,598-INFO-logger-log_info-[INFO] 接收到 2 字节数据 (pyserial): 01 11
+2025-06-10 00:41:51,598-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 2 字节数据
+2025-06-10 00:41:51,599-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 2 bytes: 01 11
+2025-06-10 00:41:51,599-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 2 bytes: 01 11
+2025-06-10 00:41:51,599-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:41:51.599] RX: 01 11
+
+2025-06-10 00:41:51,599-INFO-logger-log_info-[INFO] 传递 2 字节数据给 frame_parser
+2025-06-10 00:41:51,599-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:41:52,297-INFO-logger-log_info-[INFO] 接收到 2 字节数据 (pyserial): 01 11
+2025-06-10 00:41:52,297-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 2 字节数据
+2025-06-10 00:41:52,298-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 2 bytes: 01 11
+2025-06-10 00:41:52,298-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 2 bytes: 01 11
+2025-06-10 00:41:52,298-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:41:52.298] RX: 01 11
+
+2025-06-10 00:41:52,299-INFO-logger-log_info-[INFO] 传递 2 字节数据给 frame_parser
+2025-06-10 00:41:52,299-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 00:42:01,629-INFO-logger-log_info-[INFO] 发送数据 (pyserial): FF
+2025-06-10 00:42:01,629-INFO-logger-log_info-[INFO] 基本发送 1 字节
+2025-06-10 00:42:01,629-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: FF
+2025-06-10 00:42:01,629-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:42:01.629] TX (Basic): FF
+
+2025-06-10 00:42:18,448-INFO-logger-log_info-[INFO] 发送数据 (pyserial): 41 41 41
+2025-06-10 00:42:18,448-INFO-logger-log_info-[INFO] 基本发送 3 字节
+2025-06-10 00:42:18,448-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 3 bytes: 41 41 41
+2025-06-10 00:42:18,448-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [00:42:18.448] TX (Basic): 41 41 41
+
+2025-06-10 00:42:57,865-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:42:57,866-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:42:57,877-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 00:42:57,879-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:42:57,892-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:42:57,897-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:42:57,898-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 00:42:57,899-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 00:44:09,119-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 00:44:09,119-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 00:44:09,119-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 00:44:09,130-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 00:44:09,563-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 00:44:09,576-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 00:44:09,587-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 00:44:09,589-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 00:44:09,679-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 00:44:09,679-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 00:44:09,679-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 00:44:09,681-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 00:44:09,685-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 00:44:09,685-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 00:44:09,686-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 00:44:09,686-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 00:44:09,686-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 00:44:09,686-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 00:44:11,138-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 00:44:11,138-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 00:44:11,138-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 00:44:11,138-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 00:44:11,139-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 00:44:11,146-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 00:44:11,146-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:44:11,146-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:44:11,146-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 00:44:11,147-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 00:44:15,037-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:44:15,038-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:44:15,038-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:44:15,040-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:44:44,615-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 99) from module __main__
+2025-06-10 00:44:46,354-INFO-logger-log_info-[INFO] [UI_ACTION] 已添加动态面板: 类型='core_send_panel', ID=99, 名称='数据发送面板 99 (ID: S63)'
+2025-06-10 00:45:05,917-INFO-logger-log_info-[INFO] Send Panel 99: Added send data container 1
+2025-06-10 00:46:22,751-INFO-logger-log_info-[INFO] 发送数据 (pyserial): AB 01 02 62 00 00 10 35
+2025-06-10 00:46:22,751-INFO-logger-log_info-[INFO] 发送面板 98 (ID:S62) 发送 8 字节: AB 01 02 62 00 00 10 35
+2025-06-10 00:46:29,601-INFO-logger-log_info-[INFO] [UI_ACTION] 已移除动态面板 ID: 98, 名称: '数据发送面板 98 (ID: S62)'
+2025-06-10 00:46:32,925-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:46:32,925-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:46:32,927-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:46:32,929-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:46:33,590-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:46:33,590-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:46:33,590-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:46:33,592-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:46:34,076-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:46:34,076-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:46:34,080-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:46:34,082-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:46:34,587-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:46:34,587-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:46:34,588-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:46:34,590-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:46:35,145-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:46:35,145-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:46:35,160-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:46:35,162-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:46:35,611-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:46:35,611-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:46:35,612-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:46:35,613-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:46:36,541-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:46:36,541-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:46:36,547-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:46:36,548-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:46:37,009-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 00:46:37,009-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 00:46:37,010-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 00:46:37,012-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 00:46:37,759-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=False
+2025-06-10 00:46:37,759-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 00:46:37,765-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 00:46:37,767-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 00:46:41,694-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 00:46:41,695-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 00:46:41,705-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 23:39:02,024-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 23:39:02,024-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 23:39:02,024-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 23:39:02,044-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 23:39:05,295-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 23:39:05,305-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 23:39:05,320-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 23:39:05,324-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 23:39:05,446-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 23:39:05,446-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.pid_code_generator', 'panel_plugins.snake_game'}
+2025-06-10 23:39:05,446-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 23:39:05,466-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 23:39:05,514-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 23:39:05,514-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 23:39:05,514-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 23:39:05,514-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 23:39:05,514-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 23:39:05,515-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 23:39:09,272-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 23:39:09,272-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 23:39:09,272-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 23:39:09,272-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 23:39:09,273-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:39:09,290-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 23:39:09,291-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 23:39:09,291-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 23:39:09,292-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 23:39:09,292-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 23:39:09,292-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 23:39:14,153-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 23:39:14,153-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 23:39:14,154-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 23:39:14,157-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 23:39:50,050-INFO-logger-log_info-[INFO] 接收到 3 字节数据 (pyserial): 31 31 31
+2025-06-10 23:39:50,050-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 3 字节数据
+2025-06-10 23:39:50,051-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 3 bytes: 31 31 31
+2025-06-10 23:39:50,051-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 3 bytes: 31 31 31
+2025-06-10 23:39:50,051-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:39:50.051] RX: 31 31 31
+
+2025-06-10 23:39:50,053-INFO-logger-log_info-[INFO] 传递 3 字节数据给 frame_parser
+2025-06-10 23:39:50,053-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 23:45:10,309-INFO-logger-log_info-[INFO] Send Panel 98: Added send data container 1
+2025-06-10 23:47:54,799-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 23:47:54,799-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 23:47:54,826-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 23:47:54,827-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 23:47:54,840-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 23:47:54,842-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 23:47:54,844-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 23:47:54,846-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 23:48:02,419-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 23:48:02,419-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 23:48:02,419-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 23:48:02,439-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 23:48:02,956-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 23:48:02,971-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 23:48:02,981-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 23:48:02,985-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 23:48:02,994-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 23:48:02,995-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 23:48:02,995-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 23:48:02,998-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 23:48:03,005-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 23:48:03,006-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 23:48:03,006-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 23:48:03,006-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 23:48:03,006-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 23:48:03,006-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 23:48:04,725-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 23:48:04,726-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 23:48:04,726-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 23:48:04,726-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 23:48:04,726-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 23:48:04,735-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 23:48:04,736-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 23:48:04,736-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 23:48:04,736-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 23:48:06,945-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 23:48:06,945-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 23:48:06,946-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 23:48:06,948-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 23:48:10,139-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:48:28,182-INFO-logger-log_info-[INFO] 接收到 3 字节数据 (pyserial): 31 31 31
+2025-06-10 23:48:28,182-INFO-logger-log_info-[INFO] 发射 data_received 信号，包含 3 字节数据
+2025-06-10 23:48:28,183-INFO-logger-log_info-[INFO] on_serial_data_received triggered with 3 bytes: 31 31 31
+2025-06-10 23:48:28,183-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 3 bytes: 31 31 31
+2025-06-10 23:48:28,183-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:48:28.183] RX: 31 31 31
+
+2025-06-10 23:48:28,183-INFO-logger-log_info-[INFO] 传递 3 字节数据给 frame_parser
+2025-06-10 23:48:28,183-INFO-logger-log_info-[INFO] 调用 frame_parser.try_parse_frames
+2025-06-10 23:48:44,883-INFO-logger-log_info-[INFO] 发送数据 (pyserial): 31 31 31
+2025-06-10 23:48:44,883-INFO-logger-log_info-[INFO] 基本发送 3 字节
+2025-06-10 23:48:44,883-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 3 bytes: 31 31 31
+2025-06-10 23:48:44,883-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:48:44.883] TX (Basic): 31 31 31
+
+2025-06-10 23:49:10,813-INFO-logger-log_info-[INFO] 发送数据 (pyserial): 11
+2025-06-10 23:49:10,813-INFO-logger-log_info-[INFO] 基本发送 1 字节
+2025-06-10 23:49:10,813-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: 11
+2025-06-10 23:49:10,813-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:49:10.813] TX (Basic): 11
+
+2025-06-10 23:49:34,775-INFO-logger-log_info-[INFO] 发送数据 (pyserial): 11
+2025-06-10 23:49:34,775-INFO-logger-log_info-[INFO] 基本发送 1 字节
+2025-06-10 23:49:34,776-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: 11
+2025-06-10 23:49:34,776-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:49:34.776] TX (Basic): 11
+
+2025-06-10 23:49:43,844-INFO-logger-log_info-[INFO] 发送数据 (pyserial): F1
+2025-06-10 23:49:43,845-INFO-logger-log_info-[INFO] 基本发送 1 字节
+2025-06-10 23:49:43,845-INFO-logger-log_info-[INFO] _append_to_basic_receive_text_edit triggered with 1 bytes: F1
+2025-06-10 23:49:43,845-INFO-logger-log_info-[INFO] append_receive_text triggered with text: [23:49:43.845] TX (Basic): F1
+
+2025-06-10 23:49:58,999-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:49:59,864-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:50:00,212-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:50:00,482-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:50:00,706-WARNING-logger-log_warning-[WARNING] 
+2025-06-10 23:50:30,352-INFO-logger-log_info-[INFO] 关闭应用程序，正在停止后台线程...
+2025-06-10 23:50:30,352-INFO-logger-log_info-[INFO] DataProcessor: Stop requested.
+2025-06-10 23:50:30,379-INFO-logger-log_info-[INFO] DataProcessor thread stopped. Processed: 0, Errors: 0.
+2025-06-10 23:50:30,381-INFO-logger-log_info-[INFO] 尝试断开串口连接
+2025-06-10 23:50:30,393-INFO-logger-log_info-[INFO] SerialReadThread stopped
+2025-06-10 23:50:30,395-INFO-logger-log_info-[INFO] 串口已关闭 (pyserial)
+2025-06-10 23:50:30,397-INFO-logger-log_info-[INFO] 配置已保存到 'serial_debugger_config_v2.json'。
+2025-06-10 23:50:30,397-INFO-logger-log_info-[INFO] 配置已自动保存。应用程序退出。
+2025-06-10 23:54:55,326-INFO-logger-log_info-[INFO] Registered panel type: 'core_parse_panel' (数据解析面板) from class AdaptedParsePanelWidget in module __main__
+2025-06-10 23:54:55,326-INFO-logger-log_info-[INFO] DataProcessor thread started.
+2025-06-10 23:54:55,326-INFO-logger-log_info-[INFO] Registered panel type: 'core_send_panel' (数据发送面板) from class AdaptedSendPanelWidget in module __main__
+2025-06-10 23:54:55,327-INFO-logger-log_info-[INFO] Registered panel type: 'core_plot_widget_panel' (波形图面板) from class AdaptedPlotWidgetPanel in module __main__
+2025-06-10 23:54:55,990-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板'}
+2025-06-10 23:54:55,991-INFO-logger-log_info-[INFO] 配置已从 'serial_debugger_config_v2.json' 加载。
+2025-06-10 23:54:56,005-INFO-logger-log_info-[INFO] 主题已应用: light
+2025-06-10 23:54:56,009-INFO-logger-log_info-[INFO] Created instance of panel 'core_send_panel' (ID: 98) from module __main__
+2025-06-10 23:54:56,021-INFO-logger-log_info-[INFO] [CONFIG] 配置已加载并应用到UI。
+2025-06-10 23:54:56,021-INFO-logger-log_info-[INFO] PluginManager: Enabled plugins list updated: {'panel_plugins.snake_game', 'panel_plugins.pid_code_generator'}
+2025-06-10 23:54:56,021-INFO-logger-log_info-[INFO] 正在扫描插件目录: E:\MY_projects\YJ_Studio\panel_plugins
+2025-06-10 23:54:56,024-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.pid_code_generator
+2025-06-10 23:54:56,032-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.pid_code_generator
+2025-06-10 23:54:56,032-INFO-__init__-register_plugin_panels-开始注册插件面板: panel_plugins.pid_code_generator
+2025-06-10 23:54:56,033-INFO-logger-log_info-[INFO] Registered panel type: 'advanced_pid_code_generator' (PID代码生成器) from class AdvancedPIDGeneratorWidget in module panel_plugins.pid_code_generator
+2025-06-10 23:54:56,033-INFO-__init__-register_plugin_panels-面板类型注册成功: PID代码生成器
+2025-06-10 23:54:56,033-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.pid_code_generator. 类型: ['advanced_pid_code_generator']
+2025-06-10 23:54:56,033-INFO-logger-log_info-[PLUGIN_DISCOVERY] 尝试导入新模块: panel_plugins.snake_game
+2025-06-10 23:54:58,652-INFO-logger-log_info-[INFO] 成功导入模块: panel_plugins.snake_game
+2025-06-10 23:54:58,652-INFO-__init__-register_plugin_panels-开始注册贪吃蛇游戏面板: panel_plugins.snake_game
+2025-06-10 23:54:58,652-INFO-logger-log_info-[INFO] Registered panel type: 'snake_game' (贪吃蛇游戏) from class SnakeGamePanel in module panel_plugins.snake_game
+2025-06-10 23:54:58,652-INFO-logger-log_info-[PLUGIN_DISCOVERY] 成功注册模块: panel_plugins.snake_game. 类型: ['snake_game']
+2025-06-10 23:54:58,653-INFO-logger-log_info-[INFO] [UI_SETUP] 可用动态面板插件: {'core_parse_panel': '数据解析面板', 'core_send_panel': '数据发送面板', 'core_plot_widget_panel': '波形图面板', 'advanced_pid_code_generator': 'PID代码生成器', 'snake_game': '贪吃蛇游戏'}
+2025-06-10 23:54:58,661-INFO-logger-log_info-[INFO] pyserial找到的串口: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17']
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] 返回的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 获取到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] populate_serial_ports_ui: 当前选中的串口: COM2
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 接收到的串口列表: ['COM28', 'COM33', 'COM4', 'COM25', 'COM19', 'COM26', 'COM27', 'COM22', 'COM5', 'COM17', 'COM1', 'COM2']
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中的串口: COM2
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 查找当前串口 COM2 的索引: 11
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 设置当前索引为 11
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 最终下拉框项: ['COM28 (蓝牙链接上的标准串行 (COM28)) (data: COM28)', 'COM33 (蓝牙链接上的标准串行 (COM33)) (data: COM33)', 'COM4 (蓝牙链接上的标准串行 (COM4)) (data: COM4)', 'COM25 (蓝牙链接上的标准串行 (COM25)) (data: COM25)', 'COM19 (蓝牙链接上的标准串行 (COM19)) (data: COM19)', 'COM26 (蓝牙链接上的标准串行 (COM26)) (data: COM26)', 'COM27 (蓝牙链接上的标准串行 (COM27)) (data: COM27)', 'COM22 (蓝牙链接上的标准串行 (COM22)) (data: COM22)', 'COM5 (蓝牙链接上的标准串行 (COM5)) (data: COM5)', 'COM17 (蓝牙链接上的标准串行 (COM17)) (data: COM17)', 'COM1 (Virtual Test Port) (data: COM1)', 'COM2 (Virtual Test Port) (data: COM2)']
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] update_port_combo_display: 当前选中项: COM2 (Virtual Test Port) (data: COM2)
+2025-06-10 23:54:58,662-INFO-logger-log_info-[INFO] 应用程序启动 (插件管理增强)。
+2025-06-10 23:55:03,782-INFO-logger-log_info-[INFO] toggle_connection_action_handler: connect_request=True
+2025-06-10 23:55:03,782-INFO-logger-log_info-[INFO] connect_port: 尝试连接串口: COM2 @ 9600
+2025-06-10 23:55:03,783-INFO-logger-log_info-[INFO] 已连接 COM2 @ 9600 (pyserial)
+2025-06-10 23:55:03,785-INFO-logger-log_info-[INFO] SerialReadThread started
+2025-06-10 23:55:15,856-WARNING-logger-log_warning-[WARNING] 

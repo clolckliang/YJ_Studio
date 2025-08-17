@@ -105,6 +105,15 @@ class ThemeManager(QObject):
                 qss_content = f.read()
             self.app.setStyleSheet(qss_content)
             self._current_theme_info = {"type": "external", "name": Path(qss_file_path).name, "path": qss_file_path} # Store name and path
+            
+            # 保存外部QSS文件路径到设置中，以便下次启动时恢复
+            self.settings.setValue("last_theme", Path(qss_file_path).name)
+            self.settings.setValue("last_theme_type", "external")
+            self.settings.setValue("last_external_qss_path", qss_file_path)
+            
+            # 发射主题变化信号
+            self.theme_changed.emit(Path(qss_file_path).name)
+            
             if self.error_logger:
                 self.error_logger.log_info(f"已从外部文件加载并应用QSS样式: {qss_file_path}")
         except FileNotFoundError:
@@ -375,7 +384,23 @@ class ThemeManager(QObject):
         last_theme = self.settings.value("last_theme", "light")
         last_theme_type = self.settings.value("last_theme_type", "internal")
         
-        if last_theme_type == "preset" and hasattr(self, 'preset_themes') and last_theme in self.preset_themes:
+        if last_theme_type == "external":
+            # 恢复外部QSS文件
+            last_external_qss_path = self.settings.value("last_external_qss_path", "")
+            if last_external_qss_path and os.path.exists(last_external_qss_path):
+                try:
+                    self.apply_external_qss(last_external_qss_path)
+                    if self.error_logger:
+                        self.error_logger.log_info(f"已恢复外部QSS主题: {last_external_qss_path}")
+                    return
+                except Exception as e:
+                    if self.error_logger:
+                        self.error_logger.log_error(f"恢复外部QSS主题失败: {e}", "THEME_RESTORE")
+                    # 如果外部QSS文件加载失败，继续使用默认主题
+            else:
+                if self.error_logger:
+                    self.error_logger.log_warning(f"外部QSS文件不存在或路径为空: {last_external_qss_path}")
+        elif last_theme_type == "preset" and hasattr(self, 'preset_themes') and last_theme in self.preset_themes:
             self.apply_theme(last_theme)
         elif last_theme_type == "internal" and last_theme in self.themes:
             self.apply_theme(last_theme)

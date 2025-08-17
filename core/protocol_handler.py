@@ -10,6 +10,9 @@ from utils.constants import Constants,ChecksumMode
 from utils.data_models import FrameConfig
 from utils.logger import ErrorLogger
 from utils.protocol_config_manager import get_global_config_manager, ProtocolConfigManager
+from core.protocol_errors import ProtocolError, ProtocolException, ChecksumMismatchError, FrameParseError, BufferOverflowError
+from core.protocol_decoder import ProtocolDecoder
+from utils.config_accessor import ConfigManager
 import crcmod
 
 
@@ -44,19 +47,6 @@ class PendingFrame:
     seq_num: int = 0
     max_retries: int = 3
     timeout_ms: int = 1000
-
-class ProtocolError(Enum):
-    """协议错误类型枚举"""
-    CHECKSUM_MISMATCH = "checksum_mismatch"
-    FRAME_TOO_LONG = "frame_too_long"
-    INVALID_LENGTH = "invalid_length"
-    BUFFER_OVERFLOW = "buffer_overflow"
-    TIMEOUT = "timeout"
-    INVALID_SEQUENCE = "invalid_sequence"
-
-def calculate_frame_crc16(frame_part_for_crc: QByteArray) -> int:
-    """Calculates CRC-16/CCITT-FALSE over the QByteArray data."""
-    return crc16_ccitt_false_func(frame_part_for_crc.data())
 
 def calculate_original_checksums_python(frame_part_data: QByteArray) -> Tuple[int, int]:
     """Python 实现的原始求和/累加校验算法，与 C 语言实现保持一致"""
@@ -213,16 +203,17 @@ class FrameParser(QObject):
         
         # 配置管理器
         self.config_manager = config_manager or get_global_config_manager()
+        self.config = ConfigManager(self.config_manager)
         
         # 根据配置初始化缓冲区
-        actual_buffer_size = self.config_manager.performance.buffer_size if hasattr(self.config_manager, 'performance') else buffer_size
+        actual_buffer_size = self.config.performance.buffer_size
         self.buffer = CircularBuffer(actual_buffer_size)  # Using CircularBuffer
         
         # 重传和ACK机制
         self._pending_frames: Dict[int, PendingFrame] = {}
         self._next_seq_num = 0
-        self._ack_enabled = self.config_manager.ack_mechanism.enabled if hasattr(self.config_manager, 'ack_mechanism') else True
-        self._window_size = self.config_manager.ack_mechanism.window_size if hasattr(self.config_manager, 'ack_mechanism') else 8
+        self._ack_enabled = self.config.ack_mechanism.enabled
+        self._window_size = self.config.ack_mechanism.window_size
         self._retry_timer = QTimer()
         self._retry_timer.timeout.connect(self._check_timeouts)
         self._retry_timer.start(100)  # 每100ms检查一次超时
@@ -232,9 +223,61 @@ class FrameParser(QObject):
         self._parse_time_samples = []
         self._analyzer = ProtocolAnalyzer(error_logger, self)
         
+        # 初始化协议解码器
+        self._decoder = ProtocolDecoder(error_logger=self.error_logger, parent=self)
+        self._decoder.frame_decoded.connect(self._on_frame_decoded)
+        self._decoder.decode_error.connect(self._on_decode_error)
+        self._decoder.checksum_error.connect(self._on_checksum_error)
+        
         # 连接配置更新信号
-        if hasattr(self.config_manager, 'config_updated'):
-            self.config_manager.config_updated.connect(self._on_config_updated)
+        self.config.connect_config_updated(self._on_config_updated)
+    
+    def __del__(self):
+        """析构函数，确保资源正确释放"""
+        self.cleanup()
+    
+    def cleanup(self):
+        """清理资源，防止内存泄漏"""
+        try:
+            # 停止并清理定时器
+            if hasattr(self, '_retry_timer') and self._retry_timer:
+                self._retry_timer.stop()
+                self._retry_timer.timeout.disconnect()
+                self._retry_timer.deleteLater()
+                self._retry_timer = None
+            
+            # 断开配置管理器信号连接
+            if hasattr(self, 'config') and self.config.has_config_updated_signal():
+                try:
+                    self.config.disconnect_config_updated(self._on_config_updated)
+                except (TypeError, RuntimeError):
+                    pass  # 信号可能已经断开
+            
+            # 清理缓冲区
+            if hasattr(self, 'buffer'):
+                self.buffer.clear()
+            
+            # 清理待重传帧
+            if hasattr(self, '_pending_frames'):
+                self._pending_frames.clear()
+            
+            # 清理分析器
+            if hasattr(self, '_analyzer'):
+                self._analyzer = None
+            
+            # 清理解码器
+            if hasattr(self, '_decoder'):
+                try:
+                    self._decoder.frame_decoded.disconnect(self._on_frame_decoded)
+                    self._decoder.decode_error.disconnect(self._on_decode_error)
+                    self._decoder.checksum_error.disconnect(self._on_checksum_error)
+                except (TypeError, RuntimeError):
+                    pass
+                self._decoder = None
+                
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"FrameParser cleanup error: {e}", "CLEANUP")
 
     def append_data(self, new_data: QByteArray):
         if not new_data:
@@ -244,7 +287,7 @@ class FrameParser(QObject):
         current_usage = (self.buffer.get_count() + new_data.size()) / self.buffer.capacity * 100
         self._max_buffer_usage = max(self._max_buffer_usage, current_usage)
         
-        warning_threshold = self.config_manager.performance.buffer_usage_warning_percent if hasattr(self.config_manager, 'performance') else 90
+        warning_threshold = self.config.performance.buffer_usage_warning_percent
         if current_usage > warning_threshold:  # 缓冲区使用率超过阈值警告
             self._analyzer.performance_warning.emit(f"缓冲区使用率过高: {current_usage:.1f}%")
         
@@ -269,7 +312,7 @@ class FrameParser(QObject):
         current_time = time.time() * 1000  # 转换为毫秒
         timeout_frames = []
         
-        default_timeout = self.config_manager.ack_mechanism.default_timeout_ms if hasattr(self.config_manager, 'ack_mechanism') else 1000
+        default_timeout = self.config.ack_mechanism.default_timeout_ms
         
         for seq_num, frame in self._pending_frames.items():
             timeout_ms = getattr(frame, 'timeout_ms', default_timeout)
@@ -278,17 +321,17 @@ class FrameParser(QObject):
         
         for seq_num in timeout_frames:
             frame = self._pending_frames[seq_num]
-            max_retries = self.config_manager.ack_mechanism.max_retries if hasattr(self.config_manager, 'ack_mechanism') else 3
+            max_retries = self.config.ack_mechanism.max_retries
             if frame.retry_count < max_retries:
                 frame.retry_count += 1
                 frame.send_time = current_time
                 self.retransmission_needed.emit(seq_num)
-                if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+                if self.error_logger and self.config.debugging.verbose_error_messages:
                     self.error_logger.log_warning(f"帧重传 seq={seq_num}, 重试次数={frame.retry_count}")
             else:
                 del self._pending_frames[seq_num]
                 self._analyzer.analyze_frame(QByteArray(), "tx", True, 0.0, ProtocolError.TIMEOUT)
-                if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+                if self.error_logger and self.config.debugging.verbose_error_messages:
                     self.error_logger.log_error(f"帧传输失败 seq={seq_num}, 超过最大重试次数")
     
     def send_frame_with_ack(self, dest_addr: int, func_id: int, data: bytes, 
@@ -298,7 +341,7 @@ class FrameParser(QObject):
             return -1
         
         if len(self._pending_frames) >= self._window_size:
-            if self.error_logger and hasattr(self.config_manager, 'debugging') and self.config_manager.debugging.verbose_error_messages:
+            if self.error_logger and self.config.debugging.verbose_error_messages:
                 self.error_logger.log_warning("发送窗口已满，无法发送新帧")
             return -1
         
@@ -307,9 +350,9 @@ class FrameParser(QObject):
         
         # 使用配置管理器的默认值
         if max_retries is None:
-            max_retries = self.config_manager.ack_mechanism.max_retries if hasattr(self.config_manager, 'ack_mechanism') else 3
+            max_retries = self.config.ack_mechanism.max_retries
         if timeout_ms is None:
-            timeout_ms = self.config_manager.ack_mechanism.default_timeout_ms if hasattr(self.config_manager, 'ack_mechanism') else 1000
+            timeout_ms = self.config.ack_mechanism.default_timeout_ms
         
         frame = PendingFrame(
             data=data,
@@ -371,230 +414,153 @@ class FrameParser(QObject):
     
     def _on_config_updated(self):
         """配置更新时的回调函数"""
-        if hasattr(self.config_manager, 'ack_mechanism'):
-            self._ack_enabled = self.config_manager.ack_mechanism.enabled
-            self._window_size = self.config_manager.ack_mechanism.window_size
+        self._ack_enabled = self.config.ack_mechanism.enabled
+        self._window_size = self.config.ack_mechanism.window_size
         
         if self.error_logger:
             self.error_logger.log_info("协议处理器配置已更新")
+    
+    def _on_frame_decoded(self, parsed_frame):
+        """处理解码成功的帧"""
+        # 发射原有的信号以保持兼容性
+        self.frame_successfully_parsed.emit(parsed_frame.func_id_hex, parsed_frame.data_payload)
+        
+        # 检查是否为ACK/NACK帧
+        if parsed_frame.func_id_hex in ['ACK', 'NACK']:  # 根据实际协议调整
+            self._handle_ack_nack_frame(parsed_frame)
+    
+    def _on_decode_error(self, error_message: str, frame_data):
+        """处理解码错误"""
+        self.frame_parse_error.emit(error_message, frame_data)
+    
+    def _on_checksum_error(self, error_message: str, frame_data):
+        """处理校验和错误"""
+        self.checksum_error.emit(error_message, frame_data)
+    
+    def _handle_ack_nack_frame(self, parsed_frame):
+        """处理ACK/NACK帧"""
+        try:
+            # 这里需要根据实际协议格式解析序列号
+            # 示例实现，需要根据具体协议调整
+            if len(parsed_frame.data_payload) >= 2:
+                seq_num = struct.unpack('>H', parsed_frame.data_payload[:2])[0]
+                
+                if parsed_frame.func_id_hex == 'ACK':
+                    self.ack_received.emit(seq_num)
+                elif parsed_frame.func_id_hex == 'NACK':
+                    error_reason = parsed_frame.data_payload[2:].data().decode('utf-8', errors='ignore') if len(parsed_frame.data_payload) > 2 else "Unknown error"
+                    self.nack_received.emit(seq_num, error_reason)
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"ACK/NACK frame handling error: {e}", "ACK_NACK")
 
     def try_parse_frames(self, current_frame_config: FrameConfig,
                          parse_target_func_id_hex: str,  # Kept as per your FrameParser
                          active_checksum_mode: ChecksumMode):
-        """尝试解析缓冲区中的帧数据"""
+        """尝试解析缓冲区中的帧数据（使用ProtocolDecoder）"""
         parse_start_time = time.time()
         frames_parsed_this_call = 0
         
         # 限制单次解析的帧数，防止阻塞
-        max_frames_per_parse = self.config_manager.performance.max_frames_per_parse if hasattr(self.config_manager, 'performance') else 10
+        max_frames_per_parse = self.config.performance.max_frames_per_parse
         
-        frame_head_byte = bytes.fromhex(current_frame_config.head)  # 'AB' -> b'\xab'
-        frame_head_len = len(frame_head_byte)  # 现在 frame_head_len = 1
+        frame_head_byte = bytes.fromhex(current_frame_config.head)
+        frame_head_len = len(frame_head_byte)
 
-        # 检查帧头配置是否为空或长度不为1
+        # 检查帧头配置
         if not frame_head_byte or frame_head_len != 1:
             if self.error_logger:
                 self.error_logger.log_error(f"帧头配置无效或长度不为1 ({frame_head_len})，无法解析。", "FRAME_PARSE")
             self.frame_parse_error.emit("帧头配置无效", self.buffer.peek(self.buffer.get_count()))
             return
 
-        head_byte_value = frame_head_byte[0] # 获取帧头字节的整数值
-
-        MAX_ATTEMPTS = max_frames_per_parse
-        for _ in range(MAX_ATTEMPTS):
-            # 需要至少有帧头长度 (1) 的数据才能尝试匹配帧头
+        head_byte_value = frame_head_byte[0]
+        
+        # 使用新的解析逻辑
+        for _ in range(max_frames_per_parse):
+            # 检查是否有足够数据
             if self.buffer.get_count() < 1:
-                break  # Not enough data for frame head
+                break
 
-            # 1. Find Frame Head (single byte)
-            # Peek one byte to check if it matches the frame head
+            # 查找帧头
             first_byte_ba = self.buffer.peek(1)
             first_byte = first_byte_ba.data() if hasattr(first_byte_ba, 'data') else bytes(first_byte_ba)
 
             if len(first_byte) < 1 or first_byte[0] != head_byte_value:
-                # If the first byte is not the frame head, discard it and continue searching
                 self.buffer.discard(1)
                 if self.error_logger and len(first_byte) > 0:
-                     self.error_logger.log_debug(f"FrameParser: Discarded byte 0x{first_byte[0]:02X}, not frame head 0x{head_byte_value:02X}.")
-                elif self.error_logger:
-                     self.error_logger.log_debug("FrameParser: Buffer empty or peek failed while looking for head.")
-                continue # Continue the while loop to check the next byte
-
-            # At this point, the first byte in the buffer is the frame head.
-            # Ensure we have enough data for the minimal header (head + s_addr + d_addr + func_id + len)
-            # The minimal header length is Constants.MIN_HEADER_LEN_FOR_DATA_LEN (6 bytes: HEAD(1) + S_ADDR(1) + D_ADDR(1) + FUNC_ID(1) + LEN(2))
-            min_header_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN
-
-            if self.buffer.get_count() < min_header_len:
-                if self.error_logger:
-                    self.error_logger.log_debug(f"FrameParser: 数据不足以构成最小头部。当前: {self.buffer.get_count()}, 需要: {min_header_len}")
-                break
-
-            # Peek the minimal header to get the length field
-            header_peek = self.buffer.peek(min_header_len)
-
-            # 2. Extract data length using the correct offset (Constants.OFFSET_LEN = 4 relative to the start of the frame)
-            len_field_offset = Constants.OFFSET_LEN # Should be 4
-
-            try:
-                # 从 len_field_offset 位置读取2字节长度字段
-                len_bytes = header_peek[len_field_offset:len_field_offset + 2]
-                if len(len_bytes) < 2:  # This check should ideally be covered by the min_header_len check
-                     if self.error_logger: self.error_logger.log_debug("FrameParser: 长度字段不完整")
-                     break # Should not happen if previous check passed
-
-                data_len = struct.unpack('<H', len_bytes)[0]  # 小端序 (协议要求)
-            except struct.error as e:
-                if self.error_logger:
-                    self.error_logger.log_error(f"FrameParser: 解析数据长度字段时出错: {e}", "FRAME_PARSE")
-                self.frame_parse_error.emit("长度字段解析错误", header_peek)
-                self.buffer.discard(1)  # Discard the frame head byte and continue searching
+                    self.error_logger.log_debug(f"FrameParser: Discarded byte 0x{first_byte[0]:02X}, not frame head 0x{head_byte_value:02X}.")
                 continue
 
-            # 3. 计算完整帧长度并检查缓冲区数据是否足够
-            # 帧总长度 = 最小头部长度 + 数据长度 + 校验和(2字节)
-            expected_total_frame_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN + data_len + Constants.CHECKSUM_FIELD_LENGTH
-
-            if self.buffer.get_count() < expected_total_frame_len:
-                # 数据不足以构成完整帧
-                if self.error_logger:
-                    self.error_logger.log_debug(
-                        f"FrameParser: 帧不完整。当前: {self.buffer.get_count()}, 需要: {expected_total_frame_len}")
-                break
-
-            # 4. 获取完整帧数据
-            current_frame_ba = self.buffer.peek(expected_total_frame_len)
-            frame_part_for_calc = current_frame_ba.left(expected_total_frame_len - Constants.CHECKSUM_FIELD_LENGTH)
-            received_checksum_ba = current_frame_ba.mid(expected_total_frame_len - Constants.CHECKSUM_FIELD_LENGTH,
-                                                        Constants.CHECKSUM_FIELD_LENGTH)
-
-            is_valid = False
-            error_msg = ""
-
-            # 在 try_parse_frames 方法中的校验和验证部分
-            if active_checksum_mode == ChecksumMode.CRC16_CCITT_FALSE:
-                if received_checksum_ba.size() == 2:
-                    # 修正：根据协议规范确定字节序
-                    # 假设 CRC16 使用小端序存储（与数据长度字段一致）
-                    received_crc_val = struct.unpack('<H', received_checksum_ba.data())[0]
-                    calculated_crc_val = calculate_frame_crc16(frame_part_for_calc)
-                    if received_crc_val == calculated_crc_val:
-                        is_valid = True
-                    else:
-                        error_msg = f"CRC校验失败! Recv:0x{received_crc_val:04X}, Calc:0x{calculated_crc_val:04X}"
-                else:
-                    error_msg = f"CRC校验错误: 校验和长度不足 (需要 2 字节)"
-            else:  # ORIGINAL_SUM_ADD
-                if received_checksum_ba.size() == Constants.CHECKSUM_FIELD_LENGTH:
-                    received_checksum_data = received_checksum_ba.data()
-                    received_sc_val = received_checksum_data[0]
-                    received_ac_val = received_checksum_data[1]
-                    
-                    # 确保字节值正确转换
-                    if isinstance(received_sc_val, str):
-                        received_sc_val = ord(received_sc_val)
-                    if isinstance(received_ac_val, str):
-                        received_ac_val = ord(received_ac_val)
-                    
-                    calculated_sc, calculated_ac = calculate_original_checksums_python(frame_part_for_calc)
-                    
-                    if received_sc_val == calculated_sc and received_ac_val == calculated_ac:
-                        is_valid = True
-                    else:
-                        error_msg = (f"原始校验失败! RecvSC:0x{received_sc_val:02X},CalcSC:0x{calculated_sc:02X}; "
-                                   f"RecvAC:0x{received_ac_val:02X},CalcAC:0x{calculated_ac:02X}")
-                else:
-                    error_msg = f"原始校验和错误: 校验和长度不足 (需要 {Constants.CHECKSUM_FIELD_LENGTH} 字节)"
-
-            if is_valid:
-                self._parsed_frame_count += 1
+            # 尝试提取完整帧
+            frame_data = self._extract_complete_frame(current_frame_config)
+            if not frame_data:
+                break  # 数据不足，等待更多数据
+            
+            # 使用ProtocolDecoder解析帧
+            parsed_frame = self._decoder.decode_frame(
+                frame_data, current_frame_config, active_checksum_mode, parse_target_func_id_hex
+            )
+            
+            if parsed_frame:
                 frames_parsed_this_call += 1
-                
-                # 功能码位置：Constants.OFFSET_FUNC_ID (5)
-                func_id_offset = Constants.OFFSET_FUNC_ID
-                func_id_recv_ba = frame_part_for_calc.mid(func_id_offset, 1)
-
-                # 数据段位置：Constants.OFFSET_DATA_START (6)
-                data_content_offset = Constants.OFFSET_DATA_START
-                data_content_recv_ba = frame_part_for_calc.mid(data_content_offset, data_len)
-
-                # 将功能码字节数组转换为十六进制字符串（大写）
-                func_id_hex_str = func_id_recv_ba.toHex().data().decode('ascii').upper()
-                
-                # 检查是否为ACK/NACK帧
-                func_id_int = int(func_id_hex_str, 16)
-                ack_func_id = int(self.config_manager.ack_mechanism.ack_func_id, 16) if hasattr(self.config_manager, 'ack_mechanism') else 0xF0
-                nack_func_id = int(self.config_manager.ack_mechanism.nack_func_id, 16) if hasattr(self.config_manager, 'ack_mechanism') else 0xF1
-                
-                if func_id_int == ack_func_id:  # ACK
-                    if data_len >= 2:
-                        seq_num = struct.unpack('<H', data_content_recv_ba.data()[:2])[0]
-                        self.handle_ack(seq_num)
-                elif func_id_int == nack_func_id:  # NACK
-                    if data_len >= 2:
-                        seq_num = struct.unpack('<H', data_content_recv_ba.data()[:2])[0]
-                        error_reason = data_content_recv_ba.data()[2:].decode('utf-8', errors='ignore') if data_len > 2 else "Unknown"
-                        self.handle_nack(seq_num, error_reason)
-
-                # 调试日志：记录解析结果
-                if self.error_logger:
-                    hex_frame = current_frame_ba.toHex(' ').data().decode()
-                    self.error_logger.log_info(f"FrameParser: 成功解析帧! FID={func_id_hex_str}, 长度={data_len}, 数据={data_content_recv_ba.toHex(' ').data().decode()}, 完整帧: {hex_frame}")
-
-                # Filter by target FuncID if provided (as per your original FrameParser logic)
-                try:
-                    target_fid_ba = QByteArray.fromHex(parse_target_func_id_hex.encode('ascii'))
-                except ValueError:  # Handle case where parse_target_func_id_hex is invalid hex
-                    target_fid_ba = QByteArray()
-                    if self.error_logger and parse_target_func_id_hex:
-                        self.error_logger.log_warning(
-                            f"FrameParser: Invalid target FuncID hex '{parse_target_func_id_hex}' in config.")
-
-                if not parse_target_func_id_hex or func_id_recv_ba == target_fid_ba:  # If no target, or target matches
-                    self.frame_successfully_parsed.emit(func_id_hex_str, data_content_recv_ba)
-
-                self.buffer.discard(expected_total_frame_len)  # Consume the valid frame
-                
                 # 性能统计
                 frame_parse_time = (time.time() - parse_start_time) * 1000
-                self._analyzer.analyze_frame(current_frame_ba, "rx", False, frame_parse_time)
-                
-                if self.error_logger:
-                    self.error_logger.log_debug(
-                        f"FrameParser: Successfully parsed frame FID {func_id_hex_str}, discarded {expected_total_frame_len} bytes.")
-            else:
-                # 确定错误类型
-                error_type = ProtocolError.CHECKSUM_MISMATCH
-                if "长度" in error_msg:
-                    error_type = ProtocolError.INVALID_LENGTH
-                elif "超过最大值" in error_msg:
-                    error_type = ProtocolError.FRAME_TOO_LONG
-                
-                self.checksum_error.emit(error_msg, current_frame_ba)  # Emit with specific error message
-                
-                # 性能统计
-                frame_parse_time = (time.time() - parse_start_time) * 1000
-                self._analyzer.analyze_frame(current_frame_ba, "rx", True, frame_parse_time, error_type)
-                
-                if self.error_logger:
-                    hex_frame = current_frame_ba.toHex(' ').data().decode()
-                    self.error_logger.log_warning(
-                        f"FrameParser: {error_msg} Frame: {hex_frame}")
-                # Discard the frame head byte and continue searching
-                self.buffer.discard(1)
-                
-            # 防止单次调用解析过多帧导致阻塞
-            if frames_parsed_this_call >= max_frames_per_parse:
-                if self.error_logger:
-                    self.error_logger.log_debug(f"FrameParser: 单次解析帧数达到限制({frames_parsed_this_call})，暂停解析")
-                break
+                self._analyzer.analyze_frame(frame_data, "rx", False, frame_parse_time)
+            
+            # 从缓冲区移除已处理的帧
+            self.buffer.discard(len(frame_data))
         
         # 总体性能统计
         total_parse_time = (time.time() - parse_start_time) * 1000
-        parse_warning_threshold = self.config_manager.performance.parse_timeout_warning_ms if hasattr(self.config_manager, 'performance') else 5.0
+        parse_warning_threshold = self.config.performance.parse_timeout_warning_ms
         if total_parse_time > parse_warning_threshold:
             self._analyzer.performance_warning.emit(f"帧解析总耗时过长: {total_parse_time:.2f}ms, 解析帧数: {frames_parsed_this_call}")
-        # End of while loop
+    
+    def _extract_complete_frame(self, frame_config: FrameConfig) -> Optional[QByteArray]:
+        """从缓冲区提取完整的帧数据"""
+        try:
+            # 检查最小头部长度
+            min_header_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN
+            if self.buffer.get_count() < min_header_len:
+                return None
+            
+            # 获取头部数据以解析数据长度
+            header_peek = self.buffer.peek(min_header_len)
+            
+            # 解析数据长度（偏移量为Constants.OFFSET_LEN）
+            len_field_offset = Constants.OFFSET_LEN
+            
+            # 从头部数据中提取数据长度
+            len_bytes = header_peek[len_field_offset:len_field_offset + 2]
+            if len(len_bytes) < 2:
+                return None
+            
+            try:
+                data_len = struct.unpack('<H', len_bytes)[0]  # 小端序
+            except struct.error:
+                return None
+            
+            # 计算完整帧长度
+            expected_total_frame_len = Constants.MIN_HEADER_LEN_FOR_DATA_LEN + data_len + Constants.CHECKSUM_FIELD_LENGTH
+            
+            # 检查缓冲区是否有足够数据
+            if self.buffer.get_count() < expected_total_frame_len:
+                return None
+            
+            # 检查帧长度是否超过最大限制
+            if expected_total_frame_len > frame_config.max_frame_length:
+                if self.error_logger:
+                    self.error_logger.log_warning(f"Frame too long: {expected_total_frame_len} > {frame_config.max_frame_length}")
+                return None
+            
+            # 提取完整帧数据
+            return self.buffer.peek(expected_total_frame_len)
+            
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"Extract frame error: {str(e)}", "EXTRACT")
+            return None
 
 
 class ProtocolSender(QObject):
@@ -608,15 +574,41 @@ class ProtocolSender(QObject):
         self.send_func = send_func  # 实际发送函数
         self.error_logger = error_logger
         self.config_manager = config_manager or get_global_config_manager()
+        self.config = ConfigManager(self.config_manager)
         
         # 连接信号
         self.frame_parser.retransmission_needed.connect(self._handle_retransmission)
         self.frame_parser.ack_received.connect(self._handle_ack_received)
         self.frame_parser.nack_received.connect(self._handle_nack_received)
+    
+    def __del__(self):
+        """析构函数，确保资源正确释放"""
+        self.cleanup()
+    
+    def cleanup(self):
+        """清理资源，防止内存泄漏"""
+        try:
+            # 断开与FrameParser的信号连接
+            if hasattr(self, 'frame_parser') and self.frame_parser:
+                try:
+                    self.frame_parser.retransmission_needed.disconnect(self._handle_retransmission)
+                    self.frame_parser.ack_received.disconnect(self._handle_ack_received)
+                    self.frame_parser.nack_received.disconnect(self._handle_nack_received)
+                except (TypeError, RuntimeError):
+                    pass  # 信号可能已经断开
+            
+            # 清理引用
+            self.frame_parser = None
+            self.send_func = None
+            self.error_logger = None
+            self.config_manager = None
+                
+        except Exception as e:
+            if self.error_logger:
+                self.error_logger.log_error(f"ProtocolSender cleanup error: {e}", "CLEANUP")
         
         # 连接配置更新信号
-        if hasattr(self.config_manager, 'config_updated'):
-            self.config_manager.config_updated.connect(self._on_config_updated)
+        self.config.connect_config_updated(self._on_config_updated)
     
     def send_frame(self, dest_addr: int, func_id: int, data: bytes, 
                   use_ack: bool = True, max_retries: int = 3, timeout_ms: int = 1000) -> bool:
